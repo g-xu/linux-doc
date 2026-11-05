@@ -1,76 +1,175 @@
-# Linux 内核笔记：Zensical 试验版
+# Linux 内核笔记
 
-这是 `../Linux-html` 的独立副本。原 Docsify 站点及 Linux 源码没有修改。
+使用 Zensical 将 Markdown 文档构建为静态网站，支持自动导航、全文搜索和本地实时预览。
 
-## 本地浏览
+在线阅读：<https://g-xu.github.io/linux-doc/>
 
-双击 `serve.cmd`，在浏览器打开终端中显示的地址，默认是 `http://127.0.0.1:8001/`。
-保存 Markdown 后，Zensical 自动重建并刷新预览。关闭预览窗口或按 Ctrl+C 停止服务。
-本次试验留下的后台预览可以双击 `stop.cmd` 停止，再用 `serve.cmd` 重新启动。
+以下命令均在仓库根目录执行。环境需要 Python 3.11 或以上版本，建议使用与线上构建一致的 Python 3.12。
 
-也可以在本目录运行：
+## 添加和修改文档
+
+将 `.md` 文件放到 `docs/` 内对应分类，也可以创建新的主题目录：
+
+```text
+docs/
+├── driver/                 # 设备驱动子系统
+│   └── new-topic/
+│       ├── 00-overview.md
+│       └── 01-api.md
+├── core/                   # 内核核心机制
+│   └── 新主题.md
+├── lib/                    # 内核库与数据结构
+├── summary/                # 专题总结
+├── books/                  # 读书笔记
+├── Linux_APIs/             # API 参考
+└── tools/                  # 调试与工具相关文档
+```
+
+普通文章使用一级标题开头即可：
+
+```markdown
+# 新主题
+
+## 基本概念
+
+正文内容。
+```
+
+需要简短的侧栏名称时，可以选用头部元数据；它不是必填项：
+
+```markdown
+---
+title: 扩展机制
+---
+
+# GPIO 子系统的扩展框架
+```
+
+新增、删除或重命名文档后，预览或构建会自动更新导航和搜索，不需要维护 `_sidebar.md`。
+`.nav.yml` 用于设置分类名称和顺序，根目录导航中的 `*` 会收录新增分类。
+现有首页和分类页的 `index.md` 使用 `directory_index` 元数据显示自动目录，修改标题时保留该字段。
+
+图片放在 `docs/assets/` 或文章附近；图片和站内文档链接使用相对路径。例如，在 `docs/core/新主题.md` 中：
+
+```markdown
+![示意图](../assets/topic.png)
+[GPIO 总览](../driver/gpio/00-overview.md)
+```
+
+文件名和链接中的大小写应一致，不使用 Docsify 的 `#/` 路由。
+`docs/` 下的内容用于公开网站，不要把临时草稿、私密资料或仅供本地使用的脚本放在这里。
+
+## 本地预览
+
+### Windows
+
+首次使用双击 `setup.cmd` 安装依赖，再双击 `serve.cmd` 启动预览。
+也可以在 PowerShell 中运行：
 
 ```powershell
+.\site.ps1 setup
 .\site.ps1 serve
 ```
 
-## 新增文档
+默认访问 <http://127.0.0.1:8001/linux-doc/>。端口已占用时，脚本会选择后续可用端口，按终端显示的端口访问。
+也可以指定起始端口：
 
-正文放在 `docs/` 内，例如 `docs/core/新主题.md` 或 `docs/driver/new-topic/00-overview.md`。
-使用普通 Markdown，以 `# 标题` 开头即可，不强制添加 YAML 元数据。
-导航、全文搜索和首页的分类列表由构建流程自动更新，不需要生成 `_sidebar.md`。
+```powershell
+.\site.ps1 serve -Port 8002
+```
 
-`.nav.yml` 只定义初始分类名称及顺序；`*` 会自动收录后续新增内容。
-编号文章在迁移时添加了简短的 `title` 元数据，用于侧栏显示，正文标题保持不变。
+保存 Markdown、样式或配置后，预览会自动重建并刷新。按 `Ctrl+C` 停止前台预览。
+`stop.cmd` 仅用于停止本机已记录的后台预览。
 
-图片建议放在 `docs/assets/` 或文章附近，使用相对路径。
-站内链接使用 `[标题](相对路径.md)`，不要使用 Docsify 的 `#/` 路由。
+### WSL / Linux
 
-## 构建和发布
+先确认 `python3 --version` 为 3.11 或以上版本，并已安装 `venv` 支持。
+首次使用创建独立环境并安装依赖：
 
-双击 `build.cmd`，或运行 `.\site.ps1 build`。
-构建结果位于 `site/`，把这个目录的内容部署到静态 Web 服务器即可。
-服务器不需要安装 Python 或 Zensical。
+```bash
+python3 -m venv ~/.venvs/linux-doc
+source ~/.venvs/linux-doc/bin/activate
+python -m pip install -r requirements.txt
+zensical serve --dev-addr 127.0.0.1:8001
+```
 
-当前版本使用目录式 URL，应通过 HTTP 浏览，不以双击 `site/index.html` 作为浏览方式。
-样式、搜索代码、图片和 Mermaid 图表库均保存在本地，阅读时不依赖 CDN。
+访问 <http://127.0.0.1:8001/linux-doc/>，按 `Ctrl+C` 停止。
+之后每次使用只需激活环境并启动预览：
 
-## 检查结果
+```bash
+source ~/.venvs/linux-doc/bin/activate
+zensical serve --dev-addr 127.0.0.1:8001
+```
 
-已经验证新增目录自动进入首页和侧栏，新增文章正文自动进入全文搜索。
-同时测试了中文关键词、内核函数名、桌面和手机宽度下的排版，以及已有图片和图表。
+端口被占用时，手动改为 `8002` 等其他端口。
+Windows 与 WSL / Linux 需要分别安装依赖；这里将 Linux 环境放在主目录，避免共享仓库时发生冲突。
 
-原文仍有五类缺失资源，保留原文引用，不补造缺失内容：
+## 构建和检查
 
-- ARM64 读书笔记中的一张粘贴图片未保存在原目录。
-- 调度文档引用了已不存在的旧 `.qoder` 方法论文件。
-- 调度入门导读链接到尚未收录的 `sub/core`、`sub/topology`、`sub/cpu-prio-heaps` 三篇文章。
+Windows 双击 `build.cmd`，或运行：
 
-详情在 `known-source-issues.json`。构建警告会继续提示缺失文章，便于后续补齐。
-运行 `.\site.ps1 check` 可以检查构建结果，区分原文缺失项和新增的坏链接。
+```powershell
+.\site.ps1 build
+.\site.ps1 check
+```
 
-## 环境和迁移
+WSL / Linux 激活环境后运行：
 
-依赖安装在本项目的 `.venv/`，版本固定在 `requirements.txt`。
-换一台电脑后安装 Python 3.11 或以上版本，再运行 `setup.cmd`。
+```bash
+zensical build --clean
+python tools/check_site.py
+```
 
-迁移复制了正式分类下的正文与图片，没有复制 `.git`、`output` 草稿、工具脚本、
-旧站点生成的首页、侧栏、搜索索引和分类 README。
-调度文档引用的 `.evidence/` 已复制到 `docs/core/sched/evidence/`，对应链接已调整。
-为避免 Windows 与 Linux 的路径大小写差异，`books/奔跑吧Linux内核.md` 已作为
-`docs/books/奔跑吧linux内核/index.md`，与章节笔记放在同一目录，内容保持不变。
-`migration-report.json` 保存每个复制文件的源文件校验值，便于核对。
-`tools/migrate.py` 是一次性迁移工具，遇到已有正文会拒绝覆盖，不用于日常更新。
-这两项以及 `tools/test_migration.py` 仅保留在迁移时的本机目录，不纳入 Git。
+构建结果位于 `site/`，包含 HTML、图片、样式、脚本和搜索资源。
+链接检查会区分已记录的缺失资源与新问题。
+如果预览正在重建，等待完成后再检查；构建出现警告时，应查看具体原因，不代表构建一定失败。
 
-## Git 仓库
+当前网站使用目录式 URL，应通过 HTTP 服务浏览，不直接双击 `site/index.html`。
+部署到自己的静态服务器时，上传 `site/` 的内容，并与 `zensical.toml` 中的 `site_url` 路径保持一致。
+更换域名或部署路径时，先修改 `site_url`，再重新构建。静态服务器不需要安装 Python 或 Zensical。
 
-提交网站源文件：`docs/`（含 `.nav.yml`、图片与本地 Mermaid 库）、`overrides/`、
-`zensical.toml`、`requirements.txt`、`.gitignore`、`README.md`、Windows 操作入口，
-以及 `tools/check_site.py` 和 `known-source-issues.json`。
+## 发布到 GitHub Pages
 
-`.venv/`、`.cache/`、`site/`、`logs/`、`test-results/` 和 Python 缓存由 `.gitignore`
-排除，不提交。旧 Docsify 文档与 Linux 源码也不属于本仓库。
+先检查本次修改，只暂存需要发布的文件。例如：
 
-克隆后运行 `setup.cmd` 安装环境，再运行 `serve.cmd` 预览或 `build.cmd` 构建。
-`stop.cmd` 仅用于迁移时留下的后台预览；正常前台预览用 Ctrl+C 停止。
+```bash
+git status
+git diff
+git add -- docs/core/新主题.md docs/assets/topic.png
+git commit -m "Add new kernel notes"
+git push
+```
+
+示例文件路径应替换为实际修改的路径。文档、图片、样式、配置和工作流属于源文件；不提交生成的 `site/`。
+
+推送到 `main` 后，`.github/workflows/pages.yml` 会自动执行：
+
+1. 获取提交的源文件，准备 Python 并安装依赖。
+2. 运行 `zensical build --clean`，生成 `site/`。
+3. 上传构建产物并部署到 GitHub Pages。
+
+在 GitHub 仓库的 **Actions → Deploy Linux Docs** 中查看结果，`build` 和 `deploy` 均成功后访问在线网站。
+也可以通过 **Run workflow** 手动运行。发布只使用已推送的内容，不会读取本机未提交的修改。
+
+仓库的 **Settings → Pages → Source** 应保持为 **GitHub Actions**，无需指定 `/docs` 目录或创建 `gh-pages` 分支。
+线上工作流不运行 `tools/check_site.py`，需要时在本地检查后再推送。
+
+## 目录和文件说明
+
+以下只列出 Git 仓库中的目录和文件。
+
+| 路径 | 作用 |
+| --- | --- |
+| `docs/` | Markdown 正文、图片、首页和分类页；其中 `tools/` 也是网站内容 |
+| `docs/**/.nav.yml` | 自动导航的分类名称、顺序等配置 |
+| `docs/stylesheets/extra.css` | 自定义配色、宽屏布局和阅读排版 |
+| `docs/assets/vendor/` | 本地 Mermaid 图表库及版权说明 |
+| `overrides/main.html` | 首页和分类目录模板、本地图表库加载 |
+| `zensical.toml` | 网站地址、主题、输入输出目录、搜索和 Markdown 扩展配置 |
+| `requirements.txt` | 固定 Zensical 版本，供本地和线上安装依赖 |
+| `.github/workflows/pages.yml` | GitHub Actions 自动构建和部署流程 |
+| `site.ps1` | Windows 的安装、预览、构建、检查和停止入口 |
+| `setup.cmd` / `serve.cmd` / `build.cmd` / `stop.cmd` | 对应操作的 Windows 双击入口 |
+| `tools/check_site.py` / `tools/test_check_site.py` | 构建网站的链接检查脚本及其测试；不属于正文 |
+| `known-source-issues.json` | 链接检查中已知缺失资源的基线；修复对应问题后可更新 |
+| `.gitignore` / `.gitattributes` | 排除生成文件，并统一 Windows / Linux 换行规则 |
