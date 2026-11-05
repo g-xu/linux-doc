@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import posixpath
+import tomllib
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -37,7 +38,8 @@ class PageParser(HTMLParser):
             self.article = False
 
 
-def audit(site: Path) -> dict:
+def audit(site: Path, base_path: str = "") -> dict:
+    base_path = "/" + base_path.strip("/") if base_path.strip("/") else ""
     files = {file.relative_to(site).as_posix() for file in site.rglob("*") if file.is_file()}
     pages = {}
     for name in sorted(files):
@@ -58,6 +60,8 @@ def audit(site: Path) -> dict:
                 continue
             decoded = unquote(parsed.path)
             if decoded.startswith("/"):
+                if base_path and (decoded == base_path or decoded.startswith(base_path + "/")):
+                    decoded = decoded[len(base_path):]
                 target = posixpath.normpath(decoded.lstrip("/"))
             elif decoded:
                 target = posixpath.normpath(posixpath.join(posixpath.dirname(name), decoded))
@@ -85,8 +89,10 @@ def main() -> None:
     site = ROOT / "site"
     if not (site / "index.html").is_file():
         raise SystemExit("Build the website before running the audit.")
+    config = tomllib.loads((ROOT / "zensical.toml").read_text(encoding="utf-8"))
+    base_path = unquote(urlsplit(config["project"].get("site_url", "")).path)
     try:
-        result = audit(site)
+        result = audit(site, base_path)
     except FileNotFoundError:
         raise SystemExit("The preview is rebuilding the website. Run the check again after the rebuild finishes.") from None
     baseline = json.loads((ROOT / "known-source-issues.json").read_text(encoding="utf-8"))

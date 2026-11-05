@@ -8,6 +8,7 @@ use_directory_urls = true
 extra_css = ["stylesheets/extra.css"]
 
 [project.theme]
+variant = "modern"
 language = "zh"
 font = false
 custom_dir = "overrides"
@@ -33,7 +34,7 @@ logo = "lucide/book-open"
 media = "(prefers-color-scheme: light)"
 scheme = "default"
 primary = "teal"
-accent = "red"
+accent = "teal"
 toggle.icon = "lucide/moon"
 toggle.name = "切换深色模式"
 
@@ -41,7 +42,7 @@ toggle.name = "切换深色模式"
 media = "(prefers-color-scheme: dark)"
 scheme = "slate"
 primary = "teal"
-accent = "red"
+accent = "teal"
 toggle.icon = "lucide/sun"
 toggle.name = "切换浅色模式"
 
