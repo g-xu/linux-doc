@@ -1,4 +1,5 @@
 [project]
+site_url = "https://g-xu.github.io/linux-doc/"
 site_name = "Linux 内核笔记"
 site_description = "Linux 6.1 内核源码分析、子系统文档与读书笔记"
 docs_dir = "docs"
