@@ -1,0 +1,5 @@
+# Keep source text consistent across Windows and WSL.
+* text=auto eol=lf
+
+# Windows batch entry points use CRLF when checked out.
+*.cmd text eol=crlf
