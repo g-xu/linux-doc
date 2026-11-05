@@ -1,0 +1,11 @@
+.venv/
+.cache/
+site/
+logs/
+__pycache__/
+test-results/
+
+# One-time migration records and helpers stay local.
+/migration-report.json
+/tools/migrate.py
+/tools/test_migration.py

@@ -1,0 +1,7 @@
+Mermaid 12.3.0
+Source: https://unpkg.com/mermaid@12.3.0/dist/mermaid.min.js
+Project: https://github.com/mermaid-js/mermaid
+License: MIT. Upstream third-party license notices remain in mermaid.min.js.
+
+This copy is served locally before the Zensical UI bundle so that diagrams do
+not depend on a public CDN at reading time.

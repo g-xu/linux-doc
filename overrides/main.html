@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+  <script src="{{ 'assets/vendor/mermaid.min.js' | url }}"></script>
+  {{ super() }}
+{% endblock %}
+
+{% macro first_url(item) -%}
+  {%- if item.url -%}
+    {{- item.url | url -}}
+  {%- elif item.children -%}
+    {{- first_url(item.children[0]) -}}
+  {%- endif -%}
+{%- endmacro %}
+
+{% macro directory_entries(items) %}
+  <ul class="directory-index">
+    {% for item in items %}
+      {% if not item.is_index and item.url != page.url %}
+        <li>
+          <a class="directory-index__title" href="{{ first_url(item) }}">{{ item.title }}</a>
+          {% if item.children %}
+            <div class="directory-index__children">
+              {% for child in item.children[:8] %}
+                {% if not child.is_index and child.url != page.url %}
+                  <a href="{{ first_url(child) }}">{{ child.title }}</a>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endmacro %}
+
+{% block content %}
+  {{ super() }}
+  {% if page.meta.directory_index == "root" %}
+    {{ directory_entries(nav.items) }}
+  {% elif page.meta.directory_index %}
+    {% for section in nav.items %}
+      {% if section.title == page.meta.directory_index %}
+        {{ directory_entries(section.children) }}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endblock %}

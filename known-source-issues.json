@@ -1,0 +1,27 @@
+[
+  {
+    "kind": "asset",
+    "target": "books/assets/Pasted image 20260104193430.png",
+    "reason": "原 ARM64 读书笔记引用了此图片，但原文档目录中没有该文件。"
+  },
+  {
+    "kind": "link",
+    "target": ".qoder/skills/kernel-core-subsystem-docs/references/methodology",
+    "reason": "原调度文档引用了旧工具目录中的方法论文件，原目录中已不存在此目标。"
+  },
+  {
+    "kind": "link",
+    "target": "core/sched/sub/core/00-overview",
+    "reason": "原调度入门导读中的扩展阅读链接；正式文档目录没有对应文章。"
+  },
+  {
+    "kind": "link",
+    "target": "core/sched/sub/topology/00-overview",
+    "reason": "原调度入门导读中的扩展阅读链接；正式文档目录没有对应文章。"
+  },
+  {
+    "kind": "link",
+    "target": "core/sched/sub/cpu-prio-heaps/00-overview",
+    "reason": "原调度入门导读中的扩展阅读链接；正式文档目录没有对应文章。"
+  }
+]
