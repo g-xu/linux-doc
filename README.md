@@ -63,23 +63,26 @@ title: 扩展机制
 
 ### Windows
 
-首次使用双击 `setup.cmd` 安装依赖，再双击 `serve.cmd` 启动预览。
+进入 `tools/`，首次使用双击 `setup.cmd` 安装依赖，再双击 `serve.cmd` 启动预览。
 也可以在 PowerShell 中运行：
 
 ```powershell
-.\site.ps1 setup
-.\site.ps1 serve
+.\tools\site.ps1 setup
+.\tools\site.ps1 serve
 ```
+
+脚本会自动定位仓库根目录，不依赖调用时所在的目录。
+在 `tools/` 内运行时也可以直接使用 `.\site.ps1`。
 
 默认访问 <http://127.0.0.1:8001/linux-doc/>。端口已占用时，脚本会选择后续可用端口，按终端显示的端口访问。
 也可以指定起始端口：
 
 ```powershell
-.\site.ps1 serve -Port 8002
+.\tools\site.ps1 serve -Port 8002
 ```
 
 保存 Markdown、样式或配置后，预览会自动重建并刷新。按 `Ctrl+C` 停止前台预览。
-`stop.cmd` 仅用于停止本机已记录的后台预览。
+`tools/stop.cmd` 仅用于停止本机已记录的后台预览。
 
 ### WSL / Linux
 
@@ -106,11 +109,11 @@ Windows 与 WSL / Linux 需要分别安装依赖；这里将 Linux 环境放在�
 
 ## 构建和检查
 
-Windows 双击 `build.cmd`，或运行：
+Windows 双击 `tools/build.cmd`，或运行：
 
 ```powershell
-.\site.ps1 build
-.\site.ps1 check
+.\tools\site.ps1 build
+.\tools\site.ps1 check
 ```
 
 WSL / Linux 激活环境后运行：
@@ -156,6 +159,8 @@ git push
 
 ## 目录和文件说明
 
+站点辅助文件集中在根目录的 `tools/`；`docs/tools/` 仍是公开的工具文档分类，两者用途不同。
+根目录保留 `zensical.toml` 和 `requirements.txt`，方便直接构建及 GitHub Actions 使用。
 以下只列出 Git 仓库中的目录和文件。
 
 | 路径 | 作用 |
@@ -164,12 +169,13 @@ git push
 | `docs/**/.nav.yml` | 自动导航的分类名称、顺序等配置 |
 | `docs/stylesheets/extra.css` | 自定义配色、宽屏布局和阅读排版 |
 | `docs/assets/vendor/` | 本地 Mermaid 图表库及版权说明 |
-| `overrides/main.html` | 首页和分类目录模板、本地图表库加载 |
+| `tools/overrides/main.html` | 首页和分类目录模板、本地图表库加载 |
 | `zensical.toml` | 网站地址、主题、输入输出目录、搜索和 Markdown 扩展配置 |
 | `requirements.txt` | 固定 Zensical 版本，供本地和线上安装依赖 |
 | `.github/workflows/pages.yml` | GitHub Actions 自动构建和部署流程 |
-| `site.ps1` | Windows 的安装、预览、构建、检查和停止入口 |
-| `setup.cmd` / `serve.cmd` / `build.cmd` / `stop.cmd` | 对应操作的 Windows 双击入口 |
+| `tools/site.ps1` | Windows 的安装、预览、构建、检查和停止入口 |
+| `tools/setup.cmd` / `tools/serve.cmd` / `tools/build.cmd` / `tools/stop.cmd` | 对应操作的 Windows 双击入口 |
 | `tools/check_site.py` / `tools/test_check_site.py` | 构建网站的链接检查脚本及其测试；不属于正文 |
+| `tools/preview_port.py` / `tools/test_preview_port.py` | 本机预览端口探测和测试 |
 | `known-source-issues.json` | 链接检查中已知缺失资源的基线；修复对应问题后可更新 |
 | `.gitignore` / `.gitattributes` | 排除生成文件，并统一 Windows / Linux 换行规则 |

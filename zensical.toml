@@ -11,7 +11,7 @@ extra_css = ["stylesheets/extra.css"]
 variant = "modern"
 language = "zh"
 font = false
-custom_dir = "overrides"
+custom_dir = "tools/overrides"
 features = [
   "navigation.instant",
   "navigation.instant.prefetch",
