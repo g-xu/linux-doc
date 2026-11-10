@@ -3,6 +3,85 @@
   --md-code-font: "Cascadia Code", Consolas, "Courier New", monospace;
 }
 
+.kernel-home__hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 300px;
+  margin-bottom: 1.6rem;
+  overflow: hidden;
+  background: #181f21;
+  isolation: isolate;
+}
+
+.md-typeset .kernel-home__background {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 48%;
+}
+
+.kernel-home__hero::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  background: rgb(12 20 22 / 48%);
+}
+
+.kernel-home__intro {
+  max-width: 660px;
+  padding: 36px;
+  color: #f8fbfa;
+}
+
+.md-typeset .kernel-home__intro h1 {
+  margin: 0 0 16px;
+  color: #fff;
+  font-size: 36px;
+}
+
+.kernel-home__intro > p {
+  margin: 12px 0 0;
+  color: #e5eeeb;
+  font-size: 16px;
+}
+
+.kernel-home__version {
+  display: block;
+  margin-bottom: 14px;
+  color: #a4e2ce;
+  font-family: var(--md-code-font);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.kernel-home__intro .headerlink {
+  color: #a4e2ce;
+}
+
+.kernel-home__section-title {
+  scroll-margin-top: 80px;
+}
+
+@media (max-width: 600px) {
+  .kernel-home__hero {
+    min-height: 250px;
+  }
+
+  .kernel-home__intro {
+    padding: 24px;
+  }
+
+  .md-typeset .kernel-home__intro h1 {
+    font-size: 28px;
+  }
+
+}
+
 html {
   font-size: 20px;
 }
@@ -203,6 +282,81 @@ body {
   color: var(--md-default-fg-color--light);
   overflow-wrap: anywhere;
   text-decoration: none !important;
+}
+
+.directory-index--home > li {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 12px;
+  padding: 24px 0;
+}
+
+.directory-index__body {
+  min-width: 0;
+}
+
+.directory-index__number {
+  padding-top: 3px;
+  color: var(--md-default-fg-color--light);
+  font-family: var(--md-code-font);
+  font-size: 12px;
+  line-height: 28px;
+}
+
+.directory-index--home .directory-index__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--md-default-fg-color);
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.directory-index--home .directory-index__title svg {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  color: var(--md-default-fg-color--light);
+  transition: color 150ms ease;
+}
+
+.md-typeset .directory-index__description {
+  margin: 5px 0 12px;
+  color: var(--md-default-fg-color--light);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.directory-index--home .directory-index__children {
+  gap: 4px 12px;
+  margin-top: 0;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.directory-index--home .directory-index__children a {
+  color: var(--md-typeset-a-color);
+}
+
+.directory-index--home > li:focus-within,
+.directory-index--home > li:hover {
+  border-bottom-color: var(--md-typeset-a-color);
+}
+
+.directory-index--home .directory-index__title:hover,
+.directory-index--home .directory-index__title:hover svg {
+  color: var(--md-typeset-a-color);
+}
+
+.directory-index--home .directory-index__title:hover {
+  text-decoration: none !important;
+}
+
+.directory-index--home a:focus-visible {
+  outline: 2px solid var(--md-typeset-a-color);
+  outline-offset: 4px;
 }
 
 /* Match the theme's drawer breakpoints; never resize the mobile overlay. */

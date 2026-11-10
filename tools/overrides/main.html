@@ -13,21 +13,45 @@
   {%- endif -%}
 {%- endmacro %}
 
-{% macro directory_entries(items) %}
-  <ul class="directory-index">
+{% macro directory_entries(items, homepage=false) %}
+  {% set sequence = namespace(value=0) %}
+  {% set descriptions = {
+    "设备驱动子系统": "设备模型、总线协议与驱动实现",
+    "内核库与数据结构": "基础容器、原子操作与并发原语",
+    "内核核心机制": "调度、内存、中断与系统运行机制",
+    "专题总结": "跨子系统分析与实践中的问题整理",
+    "读书笔记": "体系结构、内核源码与经典书籍",
+    "Linux API 参考": "内核接口、模块开发与调用约定",
+    "调试与工具": "问题定位、运行观测与开发工具"
+  } %}
+  <ul class="directory-index{% if homepage %} directory-index--home{% endif %}">
     {% for item in items %}
       {% if not item.is_index and item.url != page.url %}
         <li>
-          <a class="directory-index__title" href="{{ first_url(item) }}">{{ item.title }}</a>
-          {% if item.children %}
-            <div class="directory-index__children">
-              {% for child in item.children[:8] %}
-                {% if not child.is_index and child.url != page.url %}
-                  <a href="{{ first_url(child) }}">{{ child.title }}</a>
-                {% endif %}
-              {% endfor %}
-            </div>
+          {% set sequence.value = sequence.value + 1 %}
+          {% if homepage %}
+            <span class="directory-index__number" aria-hidden="true">{% if sequence.value < 10 %}0{% endif %}{{ sequence.value }}</span>
           {% endif %}
+          <div class="directory-index__body">
+            <a class="directory-index__title" href="{{ first_url(item) }}">
+              <span>{{ item.title }}</span>
+              {% if homepage %}
+                {% include ".icons/lucide/arrow-up-right.svg" %}
+              {% endif %}
+            </a>
+            {% if homepage and descriptions[item.title] %}
+              <p class="directory-index__description">{{ descriptions[item.title] }}</p>
+            {% endif %}
+            {% if item.children %}
+              <div class="directory-index__children">
+                {% for child in item.children[:8] %}
+                  {% if not child.is_index and child.url != page.url %}
+                    <a href="{{ first_url(child) }}">{{ child.title }}</a>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
         </li>
       {% endif %}
     {% endfor %}
@@ -35,14 +59,19 @@
 {% endmacro %}
 
 {% block content %}
-  {{ super() }}
-  {% if page.meta.directory_index == "root" %}
-    {{ directory_entries(nav.items) }}
-  {% elif page.meta.directory_index %}
-    {% for section in nav.items %}
-      {% if section.title == page.meta.directory_index %}
-        {{ directory_entries(section.children) }}
-      {% endif %}
-    {% endfor %}
+  {% if page.meta.homepage %}
+    {% include "partials/kernel-home.html" %}
+    {{ directory_entries(nav.items, homepage=true) }}
+  {% else %}
+    {{ super() }}
+    {% if page.meta.directory_index == "root" %}
+      {{ directory_entries(nav.items) }}
+    {% elif page.meta.directory_index %}
+      {% for section in nav.items %}
+        {% if section.title == page.meta.directory_index %}
+          {{ directory_entries(section.children) }}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
   {% endif %}
 {% endblock %}

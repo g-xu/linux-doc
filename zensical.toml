@@ -5,7 +5,7 @@ site_description = "Linux 6.1 内核源码分析、子系统文档与读书笔�
 docs_dir = "docs"
 site_dir = "site"
 use_directory_urls = true
-extra_css = ["stylesheets/extra.css"]
+extra_css = ["assets/stylesheets/extra.css"]
 
 [project.theme]
 variant = "modern"

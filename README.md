@@ -48,6 +48,10 @@ title: 扩展机制
 新增、删除或重命名文档后，预览或构建会自动更新导航和搜索，不需要维护 `_sidebar.md`。
 `.nav.yml` 用于设置分类名称和顺序，根目录导航中的 `*` 会收录新增分类。
 现有首页和分类页的 `index.md` 使用 `directory_index` 元数据显示自动目录，修改标题时保留该字段。
+首页还通过 `homepage: true` 使用照片背景和带编号、分类简介的目录；正文和分类页保持普通阅读布局。
+修改首页介绍可直接编辑 `docs/index.md`，背景图片为 `docs/assets/kernel-board.jpg`，
+背景布局在 `tools/overrides/partials/kernel-home.html` 中维护，
+分类简介在 `tools/overrides/main.html` 中维护，目录与链接仍自动生成。
 
 图片放在 `docs/assets/` 或文章附近；图片和站内文档链接使用相对路径。例如，在 `docs/core/新主题.md` 中：
 
@@ -167,9 +171,11 @@ git push
 | --- | --- |
 | `docs/` | Markdown 正文、图片、首页和分类页；其中 `tools/` 也是网站内容 |
 | `docs/**/.nav.yml` | 自动导航的分类名称、顺序等配置 |
-| `docs/stylesheets/extra.css` | 自定义配色、宽屏布局和阅读排版 |
+| `tools/overrides/assets/stylesheets/extra.css` | 自定义配色、首页、宽屏布局和阅读排版；构建时复制为站点资源 |
 | `docs/assets/vendor/` | 本地 Mermaid 图表库及版权说明 |
+| `docs/assets/kernel-board.jpg` / `docs/assets/kernel-board-NOTICE.txt` | 首页照片背景及来源说明 |
 | `tools/overrides/main.html` | 首页和分类目录模板、本地图表库加载 |
+| `tools/overrides/partials/kernel-home.html` | 首页照片背景和目录标题 |
 | `zensical.toml` | 网站地址、主题、输入输出目录、搜索和 Markdown 扩展配置 |
 | `requirements.txt` | 固定 Zensical 版本，供本地和线上安装依赖 |
 | `.github/workflows/pages.yml` | GitHub Actions 自动构建和部署流程 |
