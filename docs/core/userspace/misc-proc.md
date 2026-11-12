@@ -2,6 +2,8 @@
 
 > B 级文档。`/proc` 是最古老的用户空间接口之一，提供进程信息和系统状态。
 
+常见文件的输出格式、字段单位和排查方法，参见 [/proc 文件与字段详解](proc-files.md)。本文侧重内核实现与创建 API。
+
 ### 定位
 
 **功能**：procfs 实现 `/proc` 虚拟文件系统，向用户空间暴露两类信息：一是 per-PID 的进程元数据（`/proc/<pid>/stat`、`maps`、`cmdline`、`fd/` 等），二是全局系统状态（`/proc/meminfo`、`cpuinfo`、`kcore`、`vmcore` 等）。它同时作为 sysctl 的用户空间入口（`/proc/sys/`），允许运行时调整内核参数。

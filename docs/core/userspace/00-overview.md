@@ -10,7 +10,7 @@ title: 总览
 |------|-----------|---------|------|
 | **sysfs** | 设备模型属性导出 | 将 kobject/kset/device 的属性和层级关系暴露为 `/sys` 文件系统，有 ABI 稳定性保证 | [sysfs.md](sysfs.md) |
 | **debugfs** | 调试信息导出 | 开发者调试用途，无 ABI 保证，使用 `simple_*` VFS 辅助函数，Lockdown 下可能受限 | [debugfs.md](debugfs.md) |
-| **procfs** | 进程与系统信息 | 最古老的接口（~16101 行），导出进程状态（`/proc/PID/`）和系统信息（`/proc/meminfo` 等） | [misc-proc.md](misc-proc.md) |
+| **procfs** | 进程与系统信息 | 最古老的接口（~16101 行），导出进程状态（`/proc/PID/`）和系统信息（`/proc/meminfo` 等） | [实现与 API](misc-proc.md)、[/proc 文件与字段详解](proc-files.md) |
 | **configfs** | 用户空间驱动的配置 | 与 sysfs 相反：目录由用户空间 `mkdir`/`rmdir` 创建，用于复杂配置场景（USB gadget、SCSI target） | [misc-config.md](misc-config.md) |
 | **sysctl** | 运行时内核参数控制 | 通过 `/proc/sys` 读写内核参数，旧 API 已废弃，使用新 API `register_sysctl(path, table)` | [sysctl.md](sysctl.md) |
 | **kernfs** | 伪文件系统基础框架 | 为 sysfs 提供底层层级管理，不直接面向用户空间 | [misc-kernfs.md](misc-kernfs.md) |
