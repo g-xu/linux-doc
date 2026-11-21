@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 320" role="img" aria-labelledby="title desc">
+  <title id="title">物理 RAM 与 VMEMMAP 的不同视图</title>
+  <desc id="desc">VMEMMAP 以 PFN 定位页描述符。物理地址空洞对应的索引位置不保证有有效描述符映射或可用页。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="320" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="30" font-size="22">资源布局与描述符访问方式分开</text>
+    <g font-size="18"><text x="150" y="62">物理资源</text><text x="150" y="195">描述符虚拟视图</text></g>
+    <rect x="24" y="77" width="264" height="73" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="336" y="77" width="288" height="73" rx="4" fill="#f3f4f6" stroke="#6b7280" stroke-dasharray="6 4"/>
+    <rect x="672" y="77" width="264" height="73" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <text x="156" y="107" font-size="19">RAM A</text><text x="480" y="107" font-size="19">RAM 空洞</text><text x="804" y="107" font-size="19">RAM B</text>
+    <text x="156" y="133" font-size="16">PFN 从 0x40000 开始</text><text x="804" y="133" font-size="16">PFN 从 0x100000 开始</text>
+    <rect x="24" y="211" width="264" height="73" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <rect x="336" y="211" width="288" height="73" rx="4" fill="#f3f4f6" stroke="#6b7280" stroke-dasharray="6 4"/>
+    <rect x="672" y="211" width="264" height="73" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="156" y="242" font-size="18">A 对应的描述符位置</text><text x="480" y="242" font-size="18">中间 PFN 索引范围</text><text x="804" y="242" font-size="18">B 对应的描述符位置</text>
+    <text x="480" y="270" font-size="16">不能据索引计算认定有效</text>
+    <path d="M156 211V158M804 211V158" stroke="#475569" stroke-dasharray="6 4" fill="none" marker-end="url(#a)"/>
+    <text x="480" y="309" font-size="15">虚线表示描述关系；图中没有画出描述符存储自身的物理映射</text>
+  </g>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 390" role="img" aria-labelledby="title desc">
+  <title id="title">物理位置、用户映射和 memcg charge</title>
+  <desc id="desc">两个用户映射可以访问同一个文件内容folio，它位于一个node并有适用charge关系，不是每个使用者各复制一页。未来分配的NUMA策略、组额度与承诺账分别约束新资源，不自动移动已有页。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="1000" height="390" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="500" y="32" font-size="23">位置、使用者和记账分别表达，不是一套专属物理池</text>
+    <rect x="28" y="84" width="240" height="58" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="28" y="202" width="240" height="58" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="388" y="125" width="250" height="95" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <rect x="754" y="65" width="218" height="55" rx="4" fill="#f1f5f9" stroke="#64748b"/>
+    <rect x="754" y="179" width="218" height="55" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <g font-size="19"><text x="148" y="120">用户映射 A</text><text x="148" y="238">用户映射 B</text><text x="513" y="162">同一个文件 folio</text><text x="513" y="195">物理位置：node 0</text><text x="863" y="100">祖先计数范围</text><text x="863" y="214">适用 memcg charge</text></g>
+    <path d="M270 113H319V154H383M270 231H319V191H383M640 173H687V207H749M863 177V125" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="500" y="294" font-size="18">新供给：NUMA 位置政策 · 组额度 / 保护 · 适用未来承诺</text>
+    <text x="500" y="330" font-size="17">切换 CPU 或改变后续政策，不自动改变这张已有页的位置</text>
+    <text x="500" y="367" font-size="15" fill="#475569">关系示意；共享页的 charge 按实际路径确定，图不规定所有映射者都重复 charge 一次</text>
+  </g>
+</svg>

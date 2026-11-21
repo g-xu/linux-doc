@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 320" role="img" aria-labelledby="title desc">
+  <title id="title">memblock 的登记、保留和 NOMAP</title>
+  <desc id="desc">独立十六 MiB 算例，前两 MiB 被保留，中间两 MiB 标记 NOMAP。Memory 登记不等于全部空闲，也不等于全部直接映射。</desc>
+  <rect width="960" height="320" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="30" font-size="22">同一物理范围：登记信息与使用条件分开</text>
+    <rect x="80" y="57" width="800" height="49" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <text x="480" y="88" font-size="19">memblock.memory：[B, B + 16 MiB)</text>
+    <g stroke="#6b7280">
+      <rect x="80" y="137" width="150" height="72" rx="4" fill="#fee2e2"/>
+      <rect x="240" y="137" width="270" height="72" rx="4" fill="#dcfce7"/>
+      <rect x="520" y="137" width="150" height="72" rx="4" fill="#e5e7eb"/>
+      <rect x="680" y="137" width="200" height="72" rx="4" fill="#dcfce7"/>
+    </g>
+    <g font-size="17"><text x="155" y="165">已保留 2 MiB</text><text x="375" y="165">候选 6 MiB</text><text x="595" y="165">NOMAP 2 MiB</text><text x="780" y="165">候选 6 MiB</text></g>
+    <g font-size="14"><text x="155" y="195">B 到 B + 2</text><text x="375" y="195">B + 2 到 B + 8</text><text x="595" y="195">B + 8 到 B + 10</text><text x="780" y="195">B + 10 到 B + 16</text></g>
+    <text x="155" y="245" font-size="15">保留不必取消直接映射</text>
+    <text x="595" y="245" font-size="15">不加入普通直接映射</text>
+    <text x="480" y="287" font-size="16">绿色仅表示本例过滤后的候选；最终交接还受元数据、其他保留和初始化条件影响</text>
+  </g>
+</svg>

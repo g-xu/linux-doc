@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 270" role="img" aria-labelledby="title desc">
+  <title id="title">基本页映射与 PMD 大页映射</title>
+  <desc id="desc">四 KiB 基本页配置下，二 MiB 范围可由五百一十二个 PTE 映射，也可由适用 PMD 大页映射。两种方式的物理形态和管理粒度要求不同。</desc>
+  <rect width="960" height="270" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="29" font-size="22">同样覆盖 2 MiB，映射与管理粒度不同</text>
+    <rect x="24" y="65" width="428" height="153" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="508" y="65" width="428" height="153" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <g font-size="21"><text x="238" y="102">PMD 指向 PTE 表</text><text x="722" y="102">适用 PMD 大页映射</text></g>
+    <g font-size="18"><text x="238" y="138">512 个 PTE，各映射 4 KiB</text><text x="722" y="138">一个条目覆盖 2 MiB</text></g>
+    <g font-size="16"><text x="238" y="171">数据页可分散，逐页处理更灵活</text><text x="722" y="171">对齐、连续性与操作粒度要求更强</text><text x="238" y="198">仍需页表和翻译资源</text><text x="722" y="198">可减少翻译条目，但分配代价可能增加</text></g>
+    <text x="480" y="252" font-size="15">仅为 4 KiB 配置的示例；大页物理对象与当前页表映射粒度不必永久一一对应</text>
+  </g>
+</svg>

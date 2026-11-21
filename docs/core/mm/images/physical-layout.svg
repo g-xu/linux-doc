@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 220" role="img" aria-labelledby="title desc">
+  <title id="title">两段 RAM 与物理地址空洞</title>
+  <desc id="desc">RAM A 在一到二 GiB，空洞在二到四 GiB，RAM B 在四到五 GiB。框宽不按容量比例绘制。</desc>
+  <rect width="960" height="220" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="30" font-size="22">物理地址跨度 4 GiB，实际 RAM 合计 2 GiB</text>
+    <rect x="24" y="64" width="240" height="104" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="288" y="64" width="384" height="104" rx="4" fill="#f3f4f6" stroke="#6b7280" stroke-dasharray="6 4"/>
+    <rect x="696" y="64" width="240" height="104" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <g font-size="20"><text x="144" y="96">RAM A</text><text x="480" y="96">普通 RAM 空洞</text><text x="816" y="96">RAM B</text></g>
+    <g font-size="17"><text x="144" y="126">1 GiB 到 2 GiB</text><text x="480" y="126">2 GiB 到 4 GiB</text><text x="816" y="126">4 GiB 到 5 GiB</text></g>
+    <g font-size="16"><text x="144" y="151">存在 1 GiB RAM</text><text x="480" y="151">不能当作普通 RAM 分配</text><text x="816" y="151">存在 1 GiB RAM</text></g>
+    <text x="480" y="203" font-size="16">地址从左向右递增；空洞不意味着实际平台没有其他类型资源</text>
+  </g>
+</svg>

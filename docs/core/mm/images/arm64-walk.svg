@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" role="img" aria-labelledby="title desc">
+  <title id="title">arm64 四级页表地址计算示例</title>
+  <desc id="desc">四 KiB 页和四十八位虚拟地址的示例，虚拟地址 0x123456789 的四级索引为 0、4、0x11a、0x56，偏移为 0x789。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="300" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="30" font-size="22">教学配置：4 KiB 基本页、48 位 VA、四级页映射</text>
+    <g fill="#dbeafe" stroke="#2563eb"><rect x="24" y="89" width="192" height="93" rx="4"/><rect x="264" y="89" width="192" height="93" rx="4"/><rect x="504" y="89" width="192" height="93" rx="4"/><rect x="744" y="89" width="192" height="93" rx="4"/></g>
+    <g font-size="20"><text x="120" y="119">L0 / PGD</text><text x="360" y="119">L1 / PUD</text><text x="600" y="119">L2 / PMD</text><text x="840" y="119">L3 / PTE</text></g>
+    <g font-size="18"><text x="120" y="148">索引 0</text><text x="360" y="148">索引 4</text><text x="600" y="148">索引 0x11a</text><text x="840" y="148">索引 0x56</text></g>
+    <g font-size="15"><text x="120" y="172">VA[47:39]</text><text x="360" y="172">VA[38:30]</text><text x="600" y="172">VA[29:21]</text><text x="840" y="172">VA[20:12]</text></g>
+    <path d="M216 135H256M456 135H496M696 135H736" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="480" y="65" font-size="17">TTBR0_EL1 给根表信息；下级表位置来自上级条目</text>
+    <text x="480" y="221" font-size="19">叶子映射页基址 0x90000000 + 偏移 0x789 = PA 0x90000789</text>
+    <text x="480" y="257" font-size="16">本配置 P4D 折叠；省略 TLB 命中、属性检查、失败与块映射</text>
+    <text x="480" y="284" font-size="16">索引来自 VA，但没有翻译配置和页表内容，不能单独决定数据物理位置</text>
+  </g>
+</svg>

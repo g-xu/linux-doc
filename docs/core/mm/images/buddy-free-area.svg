@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 490" role="img" aria-labelledby="title desc">
+  <title id="title">Buddy 按阶和迁移类型索引空闲块</title>
+  <desc id="desc">一个 zone 持有按阶的 free_area 数组，每一阶包含按迁移类型分组的空闲块链表。每个链表节点是整块首个页的描述符，记录 Buddy 类型和阶。nr_free 汇总该阶块数。</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="1000" height="490" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a">
+    <text x="500" y="32" text-anchor="middle" font-size="23">索引的是当前空闲块，不是所有潜在父子块的树节点</text>
+    <rect x="28" y="68" width="155" height="80" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="105" y="98" text-anchor="middle" font-size="22">zone</text>
+    <text x="105" y="129" text-anchor="middle" font-size="16">lock 保护组织状态</text>
+    <path d="M183 107H212" fill="none" stroke="#475569" marker-end="url(#arrow)"/>
+    <rect x="220" y="68" width="752" height="234" rx="4" fill="#f8fafc" stroke="#94a3b8"/>
+    <g text-anchor="middle" font-size="17">
+      <text x="308" y="96">free_area[order]</text>
+      <text x="486" y="96">UNMOVABLE</text>
+      <text x="651" y="96">MOVABLE</text>
+      <text x="840" y="96">RECLAIMABLE / 其他</text>
+    </g>
+    <g stroke="#cbd5e1" fill="none">
+      <path d="M220 113H972M220 176H972M220 239H972M389 68V302M573 68V302M728 68V302"/>
+    </g>
+    <g text-anchor="middle" font-size="18">
+      <text x="305" y="148">order 0</text>
+      <text x="305" y="211">order 1</text>
+      <text x="305" y="274">order …</text>
+      <text x="651" y="148">链表</text>
+      <text x="840" y="148">链表</text>
+      <text x="651" y="211">链表</text>
+      <text x="840" y="211">链表</text>
+      <text x="486" y="274">链表</text>
+      <text x="651" y="274">链表</text>
+      <text x="840" y="274">链表</text>
+    </g>
+    <rect x="405" y="125" width="151" height="37" rx="3" fill="#dcfce7" stroke="#15803d"/>
+    <text x="480" y="149" text-anchor="middle" font-size="16">块首个页 → 下一块</text>
+    <rect x="405" y="188" width="151" height="37" rx="3" fill="#dcfce7" stroke="#15803d"/>
+    <text x="480" y="212" text-anchor="middle" font-size="16">块首个页 → 下一块</text>
+    <path d="M556 206H590V325H494V337" stroke="#475569" fill="none" marker-end="url(#arrow)"/>
+    <rect x="256" y="340" width="476" height="83" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <text x="494" y="369" text-anchor="middle" font-size="20">首个页的 struct page</text>
+    <text x="494" y="399" text-anchor="middle" font-size="17">buddy_list 关系 · PageBuddy · private = order</text>
+    <text x="35" y="448" font-size="17">每个节点代表 2^order 页；nr_free 是该阶跨类型的块数，不是页数</text>
+    <text x="35" y="478" font-size="15" fill="#475569">组织示意：省略空链表与实际块数，其他类型按配置和策略存在；块内其余页不各自挂入这条链表</text>
+  </g>
+</svg>

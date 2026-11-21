@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 380" role="img" aria-labelledby="title desc">
+  <title id="title">页分配慢路径的三类补救问题</title>
+  <desc id="desc">第一次分配失败后重新评估范围、GFP和内部许可。范围许可、基本页供给和连续布局是三个不同问题，分别联系重新判断、回收和规整。只有允许的分支才执行，之后重新分配。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="1000" height="380" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="500" y="32" font-size="23">补救选择依赖当前问题，不是固定的回收 → 规整 → OOM</text>
+    <rect x="240" y="60" width="520" height="48" rx="4" fill="#f1f5f9" stroke="#64748b"/>
+    <text x="500" y="91" font-size="18">重新评估 order、GFP、范围与 alloc_flags</text>
+    <path d="M500 110V128M168 128H832M168 128V151M500 128V151M832 128V151" fill="none" stroke="#475569" marker-end="url(#a)"/>
+    <rect x="28" y="157" width="280" height="90" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="360" y="157" width="280" height="90" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <rect x="692" y="157" width="280" height="90" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <g font-size="20"><text x="168" y="188">许可与范围</text><text x="500" y="188">可复用供给</text><text x="832" y="188">连续布局</text></g>
+    <g font-size="17"><text x="168" y="224">调整检查 / 合法回退</text><text x="500" y="224">适用回收</text><text x="832" y="224">适用规整</text></g>
+    <path d="M168 249V274H500M832 249V274H500M500 249V293" fill="none" stroke="#475569" marker-end="url(#a)"/>
+    <text x="500" y="318" font-size="19">按允许条件执行、重新分配，再决定重试或退出</text>
+    <text x="500" y="354" font-size="16" fill="#475569">分类解释图，不规定调用次序；某些高阶请求先规整，非睡眠请求不能强行进入直接回收</text>
+  </g>
+</svg>

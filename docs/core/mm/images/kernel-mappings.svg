@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 290" role="img" aria-labelledby="title desc">
+  <title id="title">arm64 内核映射的不同地址关系</title>
+  <desc id="desc">直接映射、内核映像和动态映射分别有自己的位置和转换条件。框的位置只用于分类，不代表实际虚拟地址顺序。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="290" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="29" font-size="22">都属于内核虚拟地址，不代表采用同一种转换</text>
+    <g fill="#dbeafe" stroke="#2563eb"><rect x="24" y="60" width="280" height="88" rx="4"/><rect x="340" y="60" width="280" height="88" rx="4"/><rect x="656" y="60" width="280" height="88" rx="4"/></g>
+    <g font-size="21"><text x="164" y="93">直接映射</text><text x="480" y="93">内核映像映射</text><text x="796" y="93">动态 vmalloc / vmap</text></g>
+    <g font-size="16"><text x="164" y="124">PAGE_OFFSET / PHYS_OFFSET</text><text x="480" y="124">kimage_voffset</text><text x="796" y="124">具体区间和页表</text></g>
+    <path d="M164 148V185M480 148V185M796 148V185" fill="none" stroke="#475569" marker-end="url(#a)"/>
+    <g fill="#fef3c7" stroke="#b45309"><rect x="24" y="197" width="280" height="51" rx="4"/><rect x="340" y="197" width="280" height="51" rx="4"/><rect x="656" y="197" width="280" height="51" rx="4"/></g>
+    <g font-size="17"><text x="164" y="229">适用且已映射的普通 RAM</text><text x="480" y="229">内核代码与数据物理资源</text><text x="796" y="229">对应页集合，可分散</text></g>
+    <text x="480" y="277" font-size="15">VMEMMAP 存放描述符；MMIO 按设备资源和属性访问；分类框不是地址布局比例图</text>
+  </g>
+</svg>

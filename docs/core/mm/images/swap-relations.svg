@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 330" role="img" aria-labelledby="title desc">
+  <title id="title">Swap entry、swap cache 与后备位置</title>
+  <desc id="desc">非 present PTE 中的普通 swap entry 标识后备位置，并用于查找 RAM 中的 swap cache。交换条目存在不等于数据已离开 RAM。</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="330" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="29" font-size="22">交换条目、RAM 缓存与后备存储分开理解</text>
+    <rect x="24" y="79" width="260" height="81" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="354" y="79" width="252" height="81" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <rect x="676" y="79" width="260" height="81" rx="4" fill="#f3e8ff" stroke="#7e22ce"/>
+    <g font-size="21"><text x="154" y="111">非 present PTE</text><text x="480" y="111">普通 swap entry</text><text x="806" y="111">Swap 后备位置</text></g>
+    <g font-size="16"><text x="154" y="141">记录交换条目</text><text x="480" y="141">类型与槽位标识</text><text x="806" y="141">相应后端保存数据</text></g>
+    <path d="M284 120H346M606 120H668M480 160V215" stroke="#475569" fill="none" marker-end="url(#arrow)"/>
+    <rect x="334" y="228" width="292" height="57" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <text x="480" y="262" font-size="19">RAM 中的 swap cache folio</text>
+    <path d="M806 160V257H638" stroke="#475569" stroke-dasharray="6 4" fill="none" marker-end="url(#arrow)"/>
+    <text x="650" y="198" font-size="15">缺失时读入；另有写出路径</text>
+    <text x="480" y="315" font-size="15">关系图，不是严格 I/O 时序；非 present 条目还可能是迁移等特殊状态</text>
+  </g>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 290" role="img" aria-labelledby="title desc">
+  <title id="title">资源压力的不同维度</title>
+  <desc id="desc">回收针对可复用量，规整针对物理布局，范围和资源组限制针对允许使用的供给与记账。这些动作不能互相替代。</desc>
+  <rect width="960" height="290" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="29" font-size="22">先判断限制在哪一层，再解释等待或失败</text>
+    <rect x="24" y="65" width="280" height="155" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="340" y="65" width="280" height="155" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <rect x="656" y="65" width="280" height="155" rx="4" fill="#f3e8ff" stroke="#7e22ce"/>
+    <g font-size="22"><text x="164" y="102">可复用量不足</text><text x="480" y="102">物理布局不合适</text><text x="796" y="102">范围 / 记账受限</text></g>
+    <g font-size="18"><text x="164" y="141">回收 / 写回 / swap</text><text x="480" y="141">迁移 / 规整</text><text x="796" y="141">node / zone / memcg</text></g>
+    <g font-size="16"><text x="164" y="174">先保全必要数据与引用</text><text x="480" y="174">移动可移动页以形成空闲块</text><text x="796" y="174">全机有空闲仍可能不满足</text><text x="164" y="201">获得可再次供给的页</text><text x="480" y="201">不增加 RAM 总容量</text><text x="796" y="201">需核对请求的实际约束</text></g>
+    <text x="480" y="262" font-size="17">GFP 决定允许的补救；不能睡眠的请求不自动获得无限资源或成功保证</text>
+  </g>
+</svg>

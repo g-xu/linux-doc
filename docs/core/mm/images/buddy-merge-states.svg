@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 590" role="img" aria-labelledby="title desc">
+  <title id="title">归还 order-1 块后逐阶合并</title>
+  <desc id="desc">64到66的两页块准备归还，66到68和68到72已在Buddy链表中。合并时分别删除旧伙伴节点，当前块变成四页、八页。72到80已被占用，合并停止，最终以64为首个页登记一个order3块。</desc>
+  <rect width="1000" height="590" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a">
+    <text x="500" y="32" text-anchor="middle" font-size="23">归还两页：删掉已有伙伴节点，最终只登记一个大块</text>
+    <g text-anchor="middle" font-size="16" fill="#475569">
+      <text x="310" y="71">PFN 64</text><text x="470" y="71">66</text><text x="630" y="71">68</text><text x="950" y="71">72</text>
+    </g>
+    <g font-size="18">
+      <text x="25" y="116">进入归还</text><text x="25" y="226">合并到 order 2</text>
+      <text x="25" y="336">合并到 order 3</text><text x="25" y="446">停止并登记</text>
+    </g>
+    <g font-size="15" fill="#475569">
+      <text x="25" y="143">当前块尚未入链表</text>
+      <text x="25" y="253">删除首 PFN 66 节点</text>
+      <text x="25" y="363">删除首 PFN 68 节点</text>
+      <text x="25" y="473">nr_free[3] = 1</text>
+    </g>
+    <rect x="310" y="89" width="160" height="63" rx="3" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="470" y="89" width="160" height="63" rx="3" fill="#dcfce7" stroke="#15803d"/>
+    <rect x="630" y="89" width="320" height="63" rx="3" fill="#dcfce7" stroke="#15803d"/>
+    <g text-anchor="middle" font-size="16">
+      <text x="390" y="115">[64,66)</text><text x="390" y="139">待归还</text>
+      <text x="550" y="115">[66,68)</text><text x="550" y="139">order 1 空闲</text>
+      <text x="790" y="128">[68,72) order 2 空闲</text>
+    </g>
+    <rect x="310" y="199" width="320" height="63" rx="3" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="630" y="199" width="320" height="63" rx="3" fill="#dcfce7" stroke="#15803d"/>
+    <g text-anchor="middle" font-size="18">
+      <text x="470" y="237">[64,68) 当前块，未入队</text>
+      <text x="790" y="237">[68,72) 仍在链表</text>
+    </g>
+    <rect x="310" y="309" width="640" height="63" rx="3" fill="#fef3c7" stroke="#b45309"/>
+    <text x="630" y="347" text-anchor="middle" font-size="20">[64,72) 当前块，未入队</text>
+    <rect x="310" y="419" width="640" height="63" rx="3" fill="#dcfce7" stroke="#15803d"/>
+    <text x="630" y="457" text-anchor="middle" font-size="20">首个页 PFN 64：PageBuddy，private = 3</text>
+    <text x="500" y="530" text-anchor="middle" font-size="18">下一候选 [72,80) 被占用：停止合并，把最终块挂回 order 3</text>
+    <text x="500" y="559" text-anchor="middle" font-size="15" fill="#475569">本次增加两页供给；合并原有空闲块只改变形态，不额外创造六页</text>
+    <text x="500" y="582" text-anchor="middle" font-size="14" fill="#475569">zone 锁内普通路径推演；省略 PCP、规整捕获、特殊类型边界与调试分支</text>
+  </g>
+</svg>

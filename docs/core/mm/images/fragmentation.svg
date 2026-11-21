@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 290" role="img" aria-labelledby="title desc">
+  <title id="title">相同空闲总量，不同物理布局</title>
+  <desc id="desc">两种八页布局都有四页空闲。甲的前四页连续，乙的空闲页被占用页隔开，不能立即满足 order 2 请求。</desc>
+  <rect width="960" height="290" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="29" font-size="22">都空闲四页，不代表都能取得 order 2 块</text>
+    <g stroke="#6b7280">
+      <path d="M112 64h360v58H112z" fill="#dcfce7"/><path d="M472 64h360v58H472z" fill="#e5e7eb"/>
+      <path d="M112 170h90v58h-90zM292 170h90v58h-90zM472 170h90v58h-90zM652 170h90v58h-90z" fill="#dcfce7"/>
+      <path d="M202 170h90v58h-90zM382 170h90v58h-90zM562 170h90v58h-90zM742 170h90v58h-90z" fill="#e5e7eb"/>
+      <path d="M202 64v58M292 64v58M382 64v58M562 64v58M652 64v58M742 64v58" fill="none"/>
+    </g>
+    <text x="58" y="99" font-size="20">甲</text><text x="58" y="205" font-size="20">乙</text>
+    <g font-size="19"><text x="292" y="100">四页连续空闲</text><text x="652" y="100">四页占用</text></g>
+    <g font-size="17"><text x="157" y="206">空</text><text x="247" y="206">占</text><text x="337" y="206">空</text><text x="427" y="206">占</text><text x="517" y="206">空</text><text x="607" y="206">占</text><text x="697" y="206">空</text><text x="787" y="206">占</text></g>
+    <g font-size="15"><text x="157" y="145">64</text><text x="247" y="145">65</text><text x="337" y="145">66</text><text x="427" y="145">67</text><text x="517" y="145">68</text><text x="607" y="145">69</text><text x="697" y="145">70</text><text x="787" y="145">71</text></g>
+    <text x="480" y="269" font-size="17">绿色为空闲，灰色为占用；这里只比较局部布局，不保证整机分配结果</text>
+  </g>
+</svg>

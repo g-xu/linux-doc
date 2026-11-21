@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 390" role="img" aria-labelledby="title desc">
+  <title id="title">Rmap 候选 VMA 与真实映射的区别</title>
+  <desc id="desc">文件页索引7通过address_space的i_mmap找到三个覆盖范围的VMA。A已映射原folio，B尚未缺页，C已经私有COW为匿名页。必须验证真实页表，不能把三个候选全部当作原folio映射。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="1000" height="390" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="500" y="32" font-size="23">区间树得到候选，页表检查确认当前内容身份</text>
+    <rect x="28" y="147" width="230" height="85" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <rect x="315" y="147" width="315" height="85" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="143" y="180" font-size="21">文件 folio</text><text x="143" y="213" font-size="18">对象页索引 7</text>
+    <text x="472" y="180" font-size="21">address_space.i_mmap</text><text x="472" y="213" font-size="17">筛选覆盖此索引的 VMA</text>
+    <path d="M260 190H310M632 190H660M660 96V289M660 96H689M660 190H689M660 289H689" fill="none" stroke="#475569" marker-end="url(#a)"/>
+    <rect x="696" y="64" width="276" height="66" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <rect x="696" y="158" width="276" height="66" rx="4" fill="#f1f5f9" stroke="#64748b"/>
+    <rect x="696" y="257" width="276" height="66" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <g font-size="17"><text x="834" y="91">A：PTE 指向原 folio</text><text x="834" y="116">真实映射</text><text x="834" y="185">B：PTE 为空</text><text x="834" y="210">只是候选</text><text x="834" y="284">C：已 COW 到匿名页</text><text x="834" y="309">对原 folio 只是候选</text></g>
+    <text x="500" y="369" font-size="15" fill="#475569">文件基本页示意；匿名路径用适用 anon_vma 索引，同样要核对实际条目并保持对象、树与页表保护</text>
+  </g>
+</svg>

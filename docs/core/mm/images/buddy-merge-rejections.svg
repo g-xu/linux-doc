@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 475" role="img" aria-labelledby="title desc">
+  <title id="title">伙伴关系不同于相邻和局部空闲</title>
+  <desc id="desc">第一组64到66和66到68是合法同阶伙伴。第二组66到68和68到70虽然相邻，但不是伙伴，合成四页块也不满足对齐。第三组64到66的伙伴区域66到68只空闲一页，不能当作order1伙伴。</desc>
+  <rect width="1000" height="475" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a">
+    <text x="500" y="32" text-anchor="middle" font-size="23">能否合并，看整块状态与伙伴定位，不只看物理相邻</text>
+    <g font-size="19">
+      <text x="28" y="92">同阶合法伙伴</text>
+      <text x="28" y="220">相邻但不是伙伴</text>
+      <text x="28" y="348">伙伴区域只空闲一半</text>
+    </g>
+    <rect x="345" y="61" width="290" height="58" rx="3" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="635" y="61" width="290" height="58" rx="3" fill="#dcfce7" stroke="#15803d"/>
+    <g text-anchor="middle" font-size="19"><text x="490" y="98">[64,66) order 1</text><text x="780" y="98">[66,68) order 1</text></g>
+    <text x="345" y="148" font-size="17" fill="#15803d">64 XOR 2 = 66；条件满足时合成 [64,68)</text>
+    <rect x="345" y="189" width="290" height="58" rx="3" fill="#dcfce7" stroke="#15803d"/>
+    <rect x="635" y="189" width="290" height="58" rx="3" fill="#dcfce7" stroke="#15803d"/>
+    <g text-anchor="middle" font-size="19"><text x="490" y="226">[66,68) order 1</text><text x="780" y="226">[68,70) order 1</text></g>
+    <text x="345" y="276" font-size="17" fill="#b91c1c">66 XOR 2 = 64；[66,70) 首 PFN 不按四页对齐</text>
+    <rect x="345" y="317" width="290" height="58" rx="3" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="635" y="317" width="145" height="58" rx="3" fill="#dcfce7" stroke="#15803d"/>
+    <rect x="780" y="317" width="145" height="58" rx="3" fill="#fee2e2" stroke="#b91c1c"/>
+    <g text-anchor="middle" font-size="18">
+      <text x="490" y="354">[64,66) order 1</text>
+      <text x="707" y="340">[66,67)</text><text x="707" y="364">order 0 空闲</text>
+      <text x="852" y="340">[67,68)</text><text x="852" y="364">仍被占用</text>
+    </g>
+    <text x="345" y="404" font-size="17" fill="#b91c1c">首 PFN 66 没有表示一个完整 order-1 空闲块</text>
+    <text x="500" y="449" text-anchor="middle" font-size="15" fill="#475569">简化为同一 zone 的普通块；真实合并还要遵循类型、范围、引用和同步协议</text>
+  </g>
+</svg>

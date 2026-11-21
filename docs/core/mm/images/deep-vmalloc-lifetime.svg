@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" role="img" aria-labelledby="title desc">
+  <title id="title">Vmalloc 的区间、页数组和后备页</title>
+  <desc id="desc">vmap_area管理连续虚拟区间，vm_struct记录后备页数组和实际数量。四个连续虚拟基本页可对应不连续PFN。建立和失败撤销按已完成资源阶段处理，撤映射与地址重用之间有翻译失效协议。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="1000" height="420" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="500" y="32" font-size="23">连续 CPU 区间不等于一个连续物理页块</text>
+    <rect x="28" y="62" width="444" height="50" rx="4" fill="#f1f5f9" stroke="#64748b"/>
+    <rect x="528" y="62" width="444" height="50" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <text x="250" y="94" font-size="18">vmap_area：VA 边界与搜索结构</text><text x="750" y="94" font-size="18">vm_struct：pages[]、实际 nr_pages</text>
+    <g fill="#dbeafe" stroke="#2563eb"><rect x="100" y="156" width="200" height="60"/><rect x="300" y="156" width="200" height="60"/><rect x="500" y="156" width="200" height="60"/><rect x="700" y="156" width="200" height="60"/></g>
+    <g font-size="18"><text x="200" y="193">VA 页 0</text><text x="400" y="193">VA 页 1</text><text x="600" y="193">VA 页 2</text><text x="800" y="193">VA 页 3</text></g>
+    <path d="M200 218V254M400 218V254M600 218V254M800 218V254" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <g fill="#dcfce7" stroke="#15803d"><rect x="120" y="260" width="160" height="55" rx="3"/><rect x="320" y="260" width="160" height="55" rx="3"/><rect x="520" y="260" width="160" height="55" rx="3"/><rect x="720" y="260" width="160" height="55" rx="3"/></g>
+    <g font-size="18"><text x="200" y="294">PFN 64</text><text x="400" y="294">PFN 96</text><text x="600" y="294">PFN 65</text><text x="800" y="294">PFN 200</text></g>
+    <text x="500" y="359" font-size="18">占区间 → 备页 → 装映射 → 发布；失败按实际已完成阶段回滚</text>
+    <text x="500" y="397" font-size="15" fill="#475569">基本页示意，省略 guard / huge 分支；撤销旧映射后，VA 再次复用仍需相应 TLB 协议</text>
+  </g>
+</svg>

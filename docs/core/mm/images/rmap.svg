@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">反向映射的候选查找与真实映射确认</title>
+  <desc id="desc">从数据页或 folio 按文件页和匿名页走不同对象索引，找到候选 VMA 和地址，再检查真实 PTE 或 PMD 映射。对象索引不等于每页直接保存 PTE 链表。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="420" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <rect x="310" y="20" width="340" height="63" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <text x="480" y="47" font-size="22">已知一个数据页 / folio</text><text x="480" y="72" font-size="16">要查找使用它的用户映射</text>
+    <path d="M480 83V106H230V127M480 106H730V127" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <rect x="40" y="140" width="380" height="77" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <rect x="540" y="140" width="380" height="77" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="230" y="171" font-size="20">文件页：address_space</text><text x="730" y="171" font-size="20">匿名页：anon_vma</text>
+    <text x="230" y="200" font-size="16">文件偏移与 i_mmap 区间索引</text><text x="730" y="200" font-size="16">偏移与 anon_vma_chain 区间索引</text>
+    <path d="M230 217V253M730 217V253" stroke="#475569" stroke-dasharray="6 4" fill="none" marker-end="url(#a)"/>
+    <rect x="40" y="266" width="380" height="53" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="540" y="266" width="380" height="53" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="230" y="299" font-size="19">候选 VMA 与相应虚拟地址</text><text x="730" y="299" font-size="19">候选 VMA 与相应虚拟地址</text>
+    <path d="M230 319V343H480V356M730 319V343H480" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <rect x="140" y="366" width="680" height="39" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="480" y="392" font-size="18">检查并锁定真实 PTE / PMD 映射，再执行相应操作</text>
+  </g>
+</svg>

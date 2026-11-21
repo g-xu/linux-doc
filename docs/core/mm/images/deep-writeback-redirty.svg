@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 310" role="img" aria-labelledby="title desc">
+  <title id="title">写回与再次脏化的两个状态位</title>
+  <desc id="desc">普通缓存内容有效后被修改，dirty置一。选取并开始写回后dirty可为零且writeback为一；再次写入使两者同时为一。本轮完成只结束writeback，不抹掉再次写入的dirty。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="1000" height="310" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="500" y="32" font-size="23">I/O 完成不能无条件清除后来产生的 dirty</text>
+    <g stroke="#64748b"><rect x="20" y="89" width="176" height="96" rx="4" fill="#f1f5f9"/><rect x="216" y="89" width="176" height="96" rx="4" fill="#fef3c7"/><rect x="412" y="89" width="176" height="96" rx="4" fill="#dbeafe"/><rect x="608" y="89" width="176" height="96" rx="4" fill="#fee2e2"/><rect x="804" y="89" width="176" height="96" rx="4" fill="#fef3c7"/></g>
+    <g font-size="18"><text x="108" y="122">内容有效</text><text x="304" y="122">CPU 修改</text><text x="500" y="122">选取并写回</text><text x="696" y="122">期间再次修改</text><text x="892" y="122">本轮完成</text></g>
+    <g font-size="19"><text x="108" y="163">D = 0，W = 0</text><text x="304" y="163">D = 1，W = 0</text><text x="500" y="163">D = 0，W = 1</text><text x="696" y="163">D = 1，W = 1</text><text x="892" y="163">D = 1，W = 0</text></g>
+    <path d="M197 137H212M393 137H408M589 137H604M785 137H800" fill="none" stroke="#475569" marker-end="url(#a)"/>
+    <text x="500" y="233" font-size="18">D：dirty；W：writeback；后续修改仍需适用写回</text>
+    <text x="500" y="278" font-size="15" fill="#475569">只展示状态协议，不保证 I/O 的不可变数据快照；具体提交、错误和持久性依文件系统与设备协议</text>
+  </g>
+</svg>

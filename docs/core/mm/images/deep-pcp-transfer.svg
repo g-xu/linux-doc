@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" role="img" aria-labelledby="title desc">
+  <title id="title">调用者、PCP 和 Buddy 的页块交接</title>
+  <desc id="desc">页块分配由Buddy批量补给PCP，PCP单次向调用者提供块。释放可先回到PCP，批量归还才回到Buddy并合并。PCP count计基本页数，Buddy各阶nr_free计块数。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="1000" height="360" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="500" y="32" font-size="23">批量交接摊薄共享操作，库存命中不改变外围契约</text>
+    <rect x="28" y="110" width="220" height="100" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="380" y="110" width="240" height="100" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <rect x="752" y="110" width="220" height="100" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <g font-size="21"><text x="138" y="148">调用者</text><text x="500" y="148">PCP：CPU × zone</text><text x="862" y="148">Buddy：zone</text></g>
+    <g font-size="17"><text x="138" y="180">持有已分配页块</text><text x="500" y="180">lists · count · lock</text><text x="862" y="180">按阶与类型组织</text></g>
+    <path d="M378 135H253M750 135H625M250 187H375M622 187H747" fill="none" stroke="#475569" marker-end="url(#a)"/>
+    <g font-size="16"><text x="314" y="96">单次取出</text><text x="686" y="96">批量补给</text><text x="314" y="241">先缓存释放</text><text x="686" y="241">批量归还</text></g>
+    <text x="500" y="292" font-size="18">PCP count：基本页数；Buddy nr_free[order]：该阶块数</text>
+    <text x="500" y="328" font-size="16" fill="#475569">普通路径示意；类型、适用阶、锁失败和库存决定具体分支，不是每次申请都访问 Buddy</text>
+  </g>
+</svg>

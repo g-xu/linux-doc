@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 440" role="img" aria-labelledby="title desc">
+  <title id="title">大页映射拆分与页对象拆分</title>
+  <desc id="desc">第一行一个PMD映射大物理对象，第二行多个PTE仍映射同一个大对象，只改变映射粒度。第三行对象经过另外的拆分协议成为基本页对象。图中少量格只表示关系，不是实际PMD包含的页数。</desc>
+  <rect width="1000" height="440" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a">
+    <text x="500" y="32" text-anchor="middle" font-size="23">映射变细，不必同时改变物理页对象的管理单位</text>
+    <g font-size="19"><text x="28" y="101">PMD 大页映射</text><text x="28" y="213">拆成 PTE 映射</text><text x="28" y="325">另外执行页对象拆分</text></g>
+    <g font-size="16" fill="#475569"><text x="28" y="130">一个条目 → 一个大对象</text><text x="28" y="242">多个条目 → 仍是同一个大对象</text><text x="28" y="354">引用、映射和锁需要独立协议</text></g>
+    <rect x="450" y="72" width="522" height="75" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="450" y="184" width="522" height="75" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <path d="M580 72V147M710 72V147M840 72V147M580 184V259M710 184V259M840 184V259" stroke="#93c5fd"/>
+    <text x="711" y="117" text-anchor="middle" font-size="20">一个大 folio / compound 对象</text>
+    <text x="711" y="229" text-anchor="middle" font-size="20">物理对象尚未因拆映射而拆分</text>
+    <g fill="#dcfce7" stroke="#15803d"><rect x="450" y="296" width="122" height="75" rx="3"/><rect x="583" y="296" width="122" height="75" rx="3"/><rect x="716" y="296" width="122" height="75" rx="3"/><rect x="849" y="296" width="122" height="75" rx="3"/></g>
+    <g font-size="16" text-anchor="middle"><text x="511" y="340">基本页对象</text><text x="644" y="340">基本页对象</text><text x="777" y="340">基本页对象</text><text x="910" y="340">基本页对象</text></g>
+    <text x="500" y="414" text-anchor="middle" font-size="15" fill="#475569">关系示意，不对应实际页数；映射拆分、对象拆分、内容迁移是不同操作，不由其中一步自动完成全部</text>
+  </g>
+</svg>

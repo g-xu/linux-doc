@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 590" role="img" aria-labelledby="title desc">
+  <title id="title">从 order-3 空闲块拆出 order-1 候选块</title>
+  <desc id="desc">初始块是 PFN 64到72。先移出整个大块，再将高地址的68到72放回order2，66到68放回order1，低地址的64到66作为分配候选。图中中间状态发生在zone锁保护范围内。</desc>
+  <rect width="1000" height="590" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a">
+    <text x="500" y="32" text-anchor="middle" font-size="23">请求 order 1：低地址半块继续处理，高地址半块放回</text>
+    <g text-anchor="middle" font-size="16" fill="#475569">
+      <text x="310" y="71">PFN 64</text><text x="470" y="71">66</text><text x="630" y="71">68</text><text x="950" y="71">72</text>
+    </g>
+    <g font-size="18">
+      <text x="25" y="116">初始状态</text>
+      <text x="25" y="226">取出整块</text>
+      <text x="25" y="336">第一次拆分</text>
+      <text x="25" y="446">第二次拆分</text>
+    </g>
+    <g font-size="15" fill="#475569">
+      <text x="25" y="143">nr_free[3] = 1</text>
+      <text x="25" y="253">nr_free[3] = 0</text>
+      <text x="25" y="363">nr_free[2] = 1</text>
+      <text x="25" y="473">nr_free[1] = 1</text>
+    </g>
+    <rect x="310" y="89" width="640" height="63" rx="3" fill="#dcfce7" stroke="#15803d"/>
+    <text x="630" y="128" text-anchor="middle" font-size="20">[64,72) order 3：一个链表节点</text>
+    <rect x="310" y="199" width="640" height="63" rx="3" fill="#fef3c7" stroke="#b45309"/>
+    <text x="630" y="238" text-anchor="middle" font-size="20">[64,72) 待拆块：已从链表移出</text>
+    <rect x="310" y="309" width="320" height="63" rx="3" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="630" y="309" width="320" height="63" rx="3" fill="#dcfce7" stroke="#15803d"/>
+    <text x="470" y="346" text-anchor="middle" font-size="18">[64,68) 继续拆</text>
+    <text x="790" y="346" text-anchor="middle" font-size="18">[68,72) 入 order 2</text>
+    <rect x="310" y="419" width="160" height="63" rx="3" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="470" y="419" width="160" height="63" rx="3" fill="#dcfce7" stroke="#15803d"/>
+    <rect x="630" y="419" width="320" height="63" rx="3" fill="#dcfce7" stroke="#15803d"/>
+    <g text-anchor="middle" font-size="16">
+      <text x="390" y="444">[64,66)</text><text x="390" y="468">候选 order 1</text>
+      <text x="550" y="444">[66,68)</text><text x="550" y="468">入 order 1</text>
+      <text x="790" y="458">[68,72) 留在 order 2</text>
+    </g>
+    <text x="500" y="531" text-anchor="middle" font-size="18">最终链表：2 页块 + 4 页块；原来的 8 页父块节点不再存在</text>
+    <text x="500" y="560" text-anchor="middle" font-size="15" fill="#475569">计数只跟踪本组贡献；锁内暂存块未入链表，候选还需外围检查、初始化及适用记账</text>
+    <text x="500" y="582" text-anchor="middle" font-size="14" fill="#475569">普通路径教学推演，省略 PCP、类型回退与 guard page；不是公开 API 的完整时序</text>
+  </g>
+</svg>

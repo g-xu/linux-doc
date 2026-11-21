@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 470" role="img" aria-labelledby="title desc">
+  <title id="title">普通高阶页块的描述符、内容地址与整体归还</title>
+  <desc id="desc">以独占的非 compound 阶二页块为例。拥有者保存首个页描述符、内容地址和原阶二。四个描述符对应四个物理连续基本页；内容地址与描述符地址不同。使用结束后以原描述符和原阶调用一次 __free_pages，整体归还四个页。首页额外引用不等于整块共享引用。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#465363"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1040" height="470" fill="#ffffff"/>
+  <g font-family="sans-serif" font-size="18" fill="#23313e">
+    <text x="28" y="31" font-size="22" font-weight="700">独占、非 compound、order = 2：一次取得，按原阶归还</text>
+    <rect x="28" y="53" width="984" height="59" rx="4" fill="#f3f5f7" stroke="#aab6c1"/>
+    <text x="47" y="89" font-weight="700">拥有者记录</text>
+    <text x="238" y="89">first：描述符指针</text>
+    <text x="536" y="89">data：内容地址</text>
+    <text x="804" y="89" font-weight="700">saved_order = 2</text>
+
+    <text x="28" y="170" font-weight="700">页描述符</text>
+    <rect x="234" y="141" width="175" height="49" fill="#e6edf8" stroke="#7084a3"/>
+    <rect x="435" y="141" width="175" height="49" fill="#e6edf8" stroke="#7084a3"/>
+    <rect x="636" y="141" width="175" height="49" fill="#e6edf8" stroke="#7084a3"/>
+    <rect x="837" y="141" width="175" height="49" fill="#e6edf8" stroke="#7084a3"/>
+    <text x="321" y="172" text-anchor="middle">第 0 页描述符</text>
+    <text x="522" y="172" text-anchor="middle">第 1 页描述符</text>
+    <text x="723" y="172" text-anchor="middle">第 2 页描述符</text>
+    <text x="924" y="172" text-anchor="middle">第 3 页描述符</text>
+    <path d="M 321 113 V 138" fill="none" stroke="#465363" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <text x="28" y="254" font-weight="700">页内容</text>
+    <text x="28" y="279" font-size="16">物理连续的 RAM</text>
+    <rect x="234" y="230" width="195" height="69" fill="#e7f3eb" stroke="#6f9780"/>
+    <rect x="429" y="230" width="194" height="69" fill="#e7f3eb" stroke="#6f9780"/>
+    <rect x="623" y="230" width="195" height="69" fill="#e7f3eb" stroke="#6f9780"/>
+    <rect x="818" y="230" width="194" height="69" fill="#e7f3eb" stroke="#6f9780"/>
+    <text x="331" y="258" text-anchor="middle">基本页 0</text>
+    <text x="526" y="258" text-anchor="middle">基本页 1</text>
+    <text x="720" y="258" text-anchor="middle">基本页 2</text>
+    <text x="915" y="258" text-anchor="middle">基本页 3</text>
+    <text x="331" y="283" font-size="16" text-anchor="middle">PAGE_SIZE 字节</text>
+    <text x="526" y="283" font-size="16" text-anchor="middle">PAGE_SIZE 字节</text>
+    <text x="720" y="283" font-size="16" text-anchor="middle">PAGE_SIZE 字节</text>
+    <text x="915" y="283" font-size="16" text-anchor="middle">PAGE_SIZE 字节</text>
+    <path d="M 321 192 V 226 M 522 192 V 226 M 723 192 V 226 M 924 192 V 226" fill="none" stroke="#465363" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M 580 113 V 127 H 212 V 264 H 231" fill="none" stroke="#00847c" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M 234 309 V 319 H 1012 V 309" fill="none" stroke="#465363" stroke-width="2"/>
+    <text x="623" y="345" text-anchor="middle">data = page_address(first)，不增加引用；容量 = 4 × PAGE_SIZE</text>
+    <rect x="28" y="362" width="984" height="52" rx="4" fill="#fff3d6" stroke="#bba365"/>
+    <text x="47" y="395" font-weight="700">所有使用结束</text>
+    <text x="286" y="395">__free_pages(first, saved_order)</text>
+    <path d="M 651 388 H 746" fill="none" stroke="#465363" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="773" y="395">整体归还 4 页</text>
+    <text x="28" y="447" font-size="17" fill="#94443e">边界：普通高阶首页的 get_page / put_page 不构成整块共享生命周期。</text>
+  </g>
+</svg>

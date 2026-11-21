@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 340" role="img" aria-labelledby="title desc">
+  <title id="title">Buddy 拆分与合并</title>
+  <desc id="desc">八页的 order 3 块拆分后，前两页分配给调用者，余下两页块和四页块保持空闲。满足伙伴条件时可合并恢复。</desc>
+  <rect width="960" height="340" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="29" font-size="22">申请 order 1：两页物理连续块</text>
+    <rect x="80" y="56" width="800" height="53" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="480" y="88" font-size="20">初始：[64, 72) 空闲，order 3</text>
+    <text x="480" y="139" font-size="17">取出原块，拆分；不是在原八页块中仅标记两页</text>
+    <rect x="80" y="162" width="192" height="69" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="280" y="162" width="192" height="69" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <rect x="480" y="162" width="400" height="69" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <g font-size="18"><text x="176" y="190">[64, 66)</text><text x="376" y="190">[66, 68)</text><text x="680" y="190">[68, 72)</text></g>
+    <g font-size="16"><text x="176" y="216">调用者，order 1</text><text x="376" y="216">空闲，order 1</text><text x="680" y="216">空闲，order 2</text></g>
+    <text x="480" y="261" font-size="17">释放前两页；伙伴同阶、空闲且边界等条件允许时，逐级合并</text>
+    <rect x="80" y="282" width="800" height="42" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="480" y="309" font-size="19">恢复：[64, 72) 空闲，order 3</text>
+  </g>
+</svg>

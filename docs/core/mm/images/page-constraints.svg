@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 370" role="img" aria-labelledby="title desc">
+  <title id="title">页的物理位置、记账归属与映射使用者</title>
+  <desc id="desc">同一文件缓存页位于某节点和 zone，可记账到一个资源组，又被多个进程映射。三个维度不能合成每进程独占的物理池。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="370" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <rect x="334" y="133" width="292" height="82" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <text x="480" y="167" font-size="22">同一文件缓存页 / folio</text><text x="480" y="197" font-size="16">一份物理数据</text>
+    <rect x="334" y="20" width="292" height="58" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="480" y="55" font-size="20">物理归属：node / zone</text>
+    <path d="M480 133V86" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <rect x="680" y="133" width="256" height="82" rx="4" fill="#f3e8ff" stroke="#7e22ce"/>
+    <text x="808" y="165" font-size="20">记账：示例 memcg A</text><text x="808" y="194" font-size="15">按实际 charge 与层级处理</text>
+    <path d="M626 174H672" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <rect x="70" y="277" width="310" height="52" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="580" y="277" width="310" height="52" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="225" y="309" font-size="19">进程 P 的用户映射</text><text x="735" y="309" font-size="19">进程 Q 的用户映射</text>
+    <path d="M225 277V174H326M735 277V240H480V223" stroke="#475569" stroke-dasharray="6 4" fill="none" marker-end="url(#a)"/>
+    <text x="480" y="357" font-size="15">虚线是映射关系；映射者、物理归属和记账归属是不同维度</text>
+  </g>
+</svg>

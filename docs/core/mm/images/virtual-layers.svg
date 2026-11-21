@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 380" role="img" aria-labelledby="title desc">
+  <title id="title">VMA 规则与逐页实际映射</title>
+  <desc id="desc">一个四页私有匿名 VMA 已建立，第一和第三页有数据映射，第二和第四页尚未驻留。VMA 与当前页表映射分开管理。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="380" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <rect x="100" y="20" width="760" height="67" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="480" y="49" font-size="21">VMA：[0x10000000, 0x10004000)</text><text x="480" y="75" font-size="17">本例 4 KiB 页，可读写，私有匿名；范围共四页</text>
+    <g stroke="#2563eb"><rect x="100" y="133" width="175" height="70" rx="4" fill="#dbeafe"/><rect x="295" y="133" width="175" height="70" rx="4" fill="#f3f4f6" stroke-dasharray="6 4"/><rect x="490" y="133" width="175" height="70" rx="4" fill="#dbeafe"/><rect x="685" y="133" width="175" height="70" rx="4" fill="#f3f4f6" stroke-dasharray="6 4"/></g>
+    <g font-size="17"><text x="187" y="160">页 0：有效 PTE</text><text x="382" y="160">页 1：暂无映射</text><text x="577" y="160">页 2：有效 PTE</text><text x="772" y="160">页 3：暂无映射</text></g>
+    <g font-size="15"><text x="187" y="188">映射数据页 A</text><text x="382" y="188">访问时处理缺页</text><text x="577" y="188">映射数据页 C</text><text x="772" y="188">访问时处理缺页</text></g>
+    <path d="M187 203V267M577 203V267" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <rect x="100" y="280" width="175" height="54" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="490" y="280" width="175" height="54" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <text x="187" y="313" font-size="19">物理数据页 A</text><text x="577" y="313" font-size="19">物理数据页 C</text>
+    <text x="480" y="366" font-size="16">VMA 表达范围与规则；PTE 表达当前映射；物理数据页不必彼此相邻</text>
+  </g>
+</svg>

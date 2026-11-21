@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 350" role="img" aria-labelledby="title desc">
+  <title id="title">回收候选与最终复用之间的安全条件</title>
+  <desc id="desc">候选需要适用锁与政策，处理后备内容和映射，再检查引用、dirty等安全状态，结束缓存成员资格和记账后才可能归还。任一条件不满足都可保留、活跃、等待或重试。图不是固定函数链。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="1000" height="350" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="500" y="32" font-size="23">选中候选不等于可以直接释放其物理存储</text>
+    <rect x="20" y="98" width="220" height="95" rx="4" fill="#f1f5f9" stroke="#64748b"/>
+    <rect x="267" y="98" width="220" height="95" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="513" y="98" width="220" height="95" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="760" y="98" width="220" height="95" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <g font-size="20"><text x="130" y="129">候选与政策</text><text x="377" y="129">后备与映射</text><text x="623" y="129">安全退出</text><text x="870" y="129">结束占用</text></g>
+    <g font-size="16"><text x="130" y="167">锁 · 可驱逐 · 扫描范围</text><text x="377" y="167">写回 / swap · unmap</text><text x="623" y="167">引用冻结 · dirty / pin</text><text x="870" y="167">缓存退出 · 适用归还</text></g>
+    <path d="M242 146H262M489 146H508M735 146H755" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <path d="M130 195V235H623M377 195V235M623 195V253" stroke="#b91c1c" fill="none" marker-end="url(#a)"/>
+    <text x="500" y="278" font-size="18" fill="#b91c1c">条件不满足：保留、重新活跃、等待或重试，不越过使用关系</text>
+    <text x="500" y="326" font-size="15" fill="#475569">条件分组示意，不是所有 folio 必经的固定调用次序；扫描量、回收量与高阶分配成功分开</text>
+  </g>
+</svg>

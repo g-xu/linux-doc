@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+  <title id="title">单节点中的不同 zone</title>
+  <desc id="desc">教学配置启用 DMA32，关闭 DMA，没有划出 MOVABLE。两个不连续 RAM 区间同属 node 0，分别归属 DMA32 与 NORMAL。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="360" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <rect x="320" y="22" width="320" height="70" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="480" y="51" font-size="22">node 0 / pglist_data</text><text x="480" y="78" font-size="17">本例采用单节点 UMA</text>
+    <path d="M480 92V124H230V151M480 124H730V151" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="480" y="146" font-size="16">node_zones：本节点的 zone 对象</text>
+    <rect x="80" y="163" width="300" height="64" rx="4" fill="#f3e8ff" stroke="#7e22ce"/>
+    <rect x="580" y="163" width="300" height="64" rx="4" fill="#f3e8ff" stroke="#7e22ce"/>
+    <text x="230" y="201" font-size="21">ZONE_DMA32</text><text x="730" y="201" font-size="21">ZONE_NORMAL</text>
+    <path d="M230 227V267M730 227V267" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <rect x="80" y="279" width="300" height="58" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="580" y="279" width="300" height="58" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <text x="230" y="313" font-size="18">RAM A：1 GiB 到 2 GiB</text><text x="730" y="313" font-size="18">RAM B：4 GiB 到 5 GiB</text>
+    <text x="480" y="257" font-size="16">下方箭头表示物理页的分配归属</text>
+  </g>
+</svg>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 440" role="img" aria-labelledby="title desc">
+  <title id="title">SLUB 对象供给与底层页</title>
+  <desc id="desc">对象请求先查 CPU 当前 freelist，在选定配置下可以从 CPU partial、节点 partial 或新 slab 补充。对象复用与底层页分配分层管理。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="440" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <rect x="290" y="20" width="380" height="63" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="480" y="47" font-size="22">kmem_cache：对象规格与供给管理</text><text x="480" y="72" font-size="16">size / object_size / CPU 与节点管理</text>
+    <rect x="24" y="144" width="280" height="94" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <rect x="340" y="144" width="280" height="94" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <rect x="656" y="144" width="280" height="94" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <g font-size="21"><text x="164" y="177">CPU 当前 freelist</text><text x="480" y="177">CPU partial</text><text x="796" y="177">节点 partial</text></g>
+    <g font-size="16"><text x="164" y="207">对象槽位可直接取得</text><text x="480" y="207">切换到适用的部分使用 slab</text><text x="796" y="207">从节点管理取得适用 slab</text></g>
+    <path d="M304 191H332M620 191H648" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="312" y="131" font-size="15">需补给</text><text x="648" y="131" font-size="15">需补给</text>
+    <path d="M796 238V292H628" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <rect x="340" y="286" width="280" height="101" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <text x="480" y="316" font-size="21">需要新的 slab</text><text x="480" y="345" font-size="17">页分配器提供底层存储</text><text x="480" y="374" font-size="16">组织槽位，再补充对象供给</text>
+    <path d="M340 338H164V250" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="480" y="423" font-size="15">选定 SLUB / CPU partial 情形的供给示意；省略失败、重试、节点约束和同步细节</text>
+  </g>
+</svg>

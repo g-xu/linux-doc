@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 350" role="img" aria-labelledby="title desc">
+  <title id="title">私有匿名页的共享与 COW 复制</title>
+  <desc id="desc">fork 后父子 PTE 写保护并共享 P0。子进程写入且需要复制时，子映射改为可写 P1，父进程保持 P0。独占复用分支未画。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="350" fill="#fff"/>
+  <path d="M480 42V302" stroke="#9ca3af" stroke-dasharray="6 4"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="240" y="30" font-size="21">fork 后：暂时共享</text><text x="720" y="30" font-size="21">子进程写入：需要复制的分支</text>
+    <g fill="#dbeafe" stroke="#2563eb"><rect x="30" y="82" width="180" height="63" rx="4"/><rect x="30" y="225" width="180" height="63" rx="4"/><rect x="530" y="82" width="180" height="63" rx="4"/><rect x="530" y="225" width="180" height="63" rx="4"/></g>
+    <g fill="#fef3c7" stroke="#b45309"><rect x="288" y="153" width="146" height="68" rx="4"/><rect x="782" y="82" width="146" height="63" rx="4"/><rect x="782" y="225" width="146" height="63" rx="4"/></g>
+    <g font-size="19"><text x="120" y="108">父 PTE</text><text x="120" y="251">子 PTE</text><text x="620" y="108">父 PTE</text><text x="620" y="251">子 PTE</text><text x="361" y="193">物理页 P0</text><text x="855" y="119">物理页 P0</text><text x="855" y="262">新物理页 P1</text></g>
+    <g font-size="15"><text x="120" y="133">写保护</text><text x="120" y="276">写保护</text><text x="620" y="133">保留原映射</text><text x="620" y="276">可写</text></g>
+    <path d="M210 113H249V178H280M210 256H249V200H280M710 113H774M710 256H774" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="480" y="329" font-size="16">VMA 仍允许写；PTE 写保护触发处理。实际也可能独占复用，不一定复制</text>
+  </g>
+</svg>

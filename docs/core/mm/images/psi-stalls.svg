@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 370" role="img" aria-labelledby="title desc">
+  <title id="title">Memory PSI 的 some 与 full</title>
+  <desc id="desc">同一观察域中的两个非 idle 任务。至少一个任务受内存停顿影响时为 some，所有相关非 idle 任务同时停顿时为 full。块宽不能推算实际 PSI 百分比。</desc>
+  <rect width="960" height="370" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="28" font-size="22">只看同一观察域中的 P、Q：状态含义示意</text>
+    <g font-size="17"><text x="250" y="65">时段 I</text><text x="450" y="65">时段 II</text><text x="650" y="65">时段 III</text><text x="850" y="65">时段 IV</text></g>
+    <text x="80" y="122" font-size="18">任务 P</text><text x="80" y="198" font-size="18">任务 Q</text>
+    <g stroke="#6b7280"><rect x="160" y="90" width="180" height="52" fill="#dcfce7"/><rect x="360" y="90" width="180" height="52" fill="#fef3c7"/><rect x="560" y="90" width="180" height="52" fill="#fef3c7"/><rect x="760" y="90" width="180" height="52" fill="#dcfce7"/><rect x="160" y="166" width="180" height="52" fill="#dcfce7"/><rect x="360" y="166" width="180" height="52" fill="#dcfce7"/><rect x="560" y="166" width="180" height="52" fill="#fef3c7"/><rect x="760" y="166" width="180" height="52" fill="#fef3c7"/></g>
+    <g font-size="17"><text x="250" y="123">可推进工作</text><text x="450" y="123">内存停顿</text><text x="650" y="123">内存停顿</text><text x="850" y="123">可推进工作</text><text x="250" y="199">可推进工作</text><text x="450" y="199">可推进工作</text><text x="650" y="199">内存停顿</text><text x="850" y="199">内存停顿</text></g>
+    <text x="80" y="263" font-size="18">some</text><text x="80" y="305" font-size="18">full</text>
+    <g font-size="17"><text x="250" y="263">否</text><text x="450" y="263">是</text><text x="650" y="263">是</text><text x="850" y="263">是</text><text x="250" y="305">否</text><text x="450" y="305">否</text><text x="650" y="305">是</text><text x="850" y="305">否</text></g>
+    <text x="480" y="352" font-size="15">真实 PSI 会聚合同一作用域的任务状态和时间；full 为零不等于没有 some 停顿</text>
+  </g>
+</svg>

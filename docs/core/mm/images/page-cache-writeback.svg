@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 320" role="img" aria-labelledby="title desc">
+  <title id="title">页缓存修改与写回</title>
+  <desc id="desc">可用缓存数据被修改后变脏，提交写回后可能在写回期间重新变脏。完成不等于立即释放缓存页，也不表示所有持久化语义已完成。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="320" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <rect x="24" y="106" width="260" height="79" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <rect x="344" y="106" width="272" height="79" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="676" y="106" width="260" height="79" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <g font-size="21"><text x="154" y="139">可用清洁数据</text><text x="480" y="139">数据已修改，dirty</text><text x="806" y="139">正在 writeback</text></g>
+    <g font-size="16"><text x="154" y="169">仍驻留于缓存</text><text x="480" y="169">需要后备对象保存修改</text><text x="806" y="169">与并发修改可能重叠</text></g>
+    <path d="M284 145H336M616 145H668" fill="none" stroke="#475569" marker-end="url(#a)"/>
+    <text x="313" y="94" font-size="15">修改</text><text x="647" y="94" font-size="15">提交</text>
+    <path d="M806 106V54H154V98" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="480" y="36" font-size="18">完成且无待写修改：恢复清洁状态</text>
+    <path d="M806 185V230H480V193" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="640" y="257" font-size="16">若已重脏，完成后仍需后续写回</text>
+    <text x="480" y="297" font-size="15">dirty 与 writeback 不是互斥枚举；写回、缓存释放和持久化保证是不同问题</text>
+  </g>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">页表存储、硬件解释与 TLB 翻译结果</title>
+  <desc id="desc">虚拟地址结合当前翻译上下文匹配适用 TLB 缓存，未命中时通过相关配置和页表形成翻译。TLB 不是逐项复制的软件页表，命中后仍须满足访问属性。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="420" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="28" font-size="22">arm64 普通 stage-1 翻译：存储形式与缓存结果分开</text>
+    <rect x="24" y="77" width="250" height="82" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="358" y="77" width="260" height="82" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <rect x="698" y="77" width="238" height="82" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <g font-size="19"><text x="149" y="109">VA 与当前翻译上下文</text><text x="488" y="109">TLB 的适用翻译结果</text><text x="817" y="109">输出地址与访问行为</text></g>
+    <g font-size="15"><text x="149" y="140">涉及相应范围、ASID 等</text><text x="488" y="140">匹配范围及有关属性</text><text x="817" y="140">通过相应属性检查后</text></g>
+    <path d="M274 118H350M618 118H690" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="315" y="67" font-size="15">查找</text><text x="657" y="67" font-size="15">命中</text>
+    <rect x="208" y="250" width="280" height="85" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="588" y="250" width="310" height="85" rx="4" fill="#f3e8ff" stroke="#7e22ce"/>
+    <g font-size="19"><text x="348" y="282">内存中的分层页表</text><text x="743" y="282">硬件按相关配置解释</text></g>
+    <g font-size="15"><text x="348" y="312">条目编码地址及属性</text><text x="743" y="312">形成适用翻译，不是原样复制 PTE</text></g>
+    <path d="M488 159V203H348V242M488 293H580M743 250V203H573V167" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="315" y="195" font-size="15">未命中：查表</text><text x="540" y="280" font-size="15">解释</text>
+    <text x="480" y="375" font-size="16">修改页表不自动更新已有缓存；是否需要失效及其范围按实际架构和路径处理</text>
+    <text x="480" y="402" font-size="15">逻辑关系图，不假定 TLB 内部固定字段格式；省略异常、块映射和其他缓存</text>
+  </g>
+</svg>

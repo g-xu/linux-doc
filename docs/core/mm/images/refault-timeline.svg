@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 350" role="img" aria-labelledby="title desc">
+  <title id="title">文件数据的驻留、回收与重访</title>
+  <desc id="desc">同一文件索引先有缓存 folio，回收后保留相应 shadow 历史，再读取时新 folio 可据此被识别为 refault。Shadow 不是数据副本或旧物理页。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="350" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="29" font-size="22">追踪同一文件对象的同一页索引，不是追踪同一物理页</text>
+    <g font-size="19"><text x="154" y="65">T1：数据驻留</text><text x="480" y="65">T2：数据被回收</text><text x="806" y="65">T3：数据再次需要</text></g>
+    <rect x="24" y="91" width="260" height="90" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="344" y="91" width="272" height="90" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <rect x="676" y="91" width="260" height="90" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <g font-size="20"><text x="154" y="125">缓存 folio A</text><text x="480" y="125">适用 shadow entry</text><text x="806" y="125">新取得 folio A′</text></g>
+    <g font-size="16"><text x="154" y="156">文件索引 k 有数据</text><text x="480" y="156">索引 k 保留回收历史</text><text x="806" y="156">索引 k 重新有数据</text></g>
+    <path d="M284 136H336M616 136H668" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <rect x="24" y="221" width="260" height="65" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="344" y="221" width="272" height="65" rx="4" fill="#f3f4f6" stroke="#6b7280"/>
+    <rect x="676" y="221" width="260" height="65" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <g font-size="16"><text x="154" y="247">read 或文件映射可使用它</text><text x="480" y="247">原 RAM 可以供其他使用者</text><text x="806" y="247">结合历史评估是否应保护</text><text x="154" y="274">不必属于一个进程的 RSS</text><text x="480" y="274">shadow 不保存页内容</text><text x="806" y="274">不是每次载入都有有效历史</text></g>
+    <text x="480" y="326" font-size="15">历史存在且路径适用时可识别 refault；距离反映有关资源进展，不是秒数</text>
+  </g>
+</svg>

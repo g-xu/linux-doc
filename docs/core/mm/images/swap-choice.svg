@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 370" role="img" aria-labelledby="title desc">
+  <title id="title">冷匿名数据与热文件缓存的回收选择</title>
+  <desc id="desc">简化八 GiB 模型有五 GiB 热文件缓存、二 GiB 冷匿名内容及一 GiB 空闲，新增二 GiB 需求需取得一 GiB。图比较回收热文件数据与换出冷匿名内容两种条件选择，不是默认政策或实测。</desc>
+  <rect width="960" height="370" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="28" font-size="22">简化 8 GiB 供给，新增 2 GiB：还需腾出 1 GiB</text>
+    <text x="480" y="59" font-size="16">忽略管理开销、水位和范围；普通匿名数据需保留，热文件数据可重读</text>
+    <g stroke="#6b7280"><rect x="80" y="85" width="500" height="47" fill="#dcfce7"/><rect x="580" y="85" width="200" height="47" fill="#fef3c7"/><rect x="780" y="85" width="100" height="47" fill="#f3f4f6"/></g>
+    <g font-size="17"><text x="330" y="114">热文件缓存 5 GiB</text><text x="680" y="114">冷匿名 2 GiB</text><text x="830" y="114">空闲 1</text></g>
+    <text x="480" y="166" font-size="18">A：普通匿名不能按 swap 方式回收，选择丢弃 1 GiB 热文件缓存</text>
+    <g stroke="#6b7280"><rect x="80" y="180" width="400" height="47" fill="#dcfce7"/><rect x="480" y="180" width="200" height="47" fill="#fef3c7"/><rect x="680" y="180" width="200" height="47" fill="#dbeafe"/></g>
+    <g font-size="17"><text x="280" y="209">文件驻留 4 GiB</text><text x="580" y="209">匿名 2 GiB</text><text x="780" y="209">新增 2 GiB</text></g>
+    <text x="480" y="260" font-size="18">B：swap 条件允许，选择换出 1 GiB 冷匿名，保留热文件缓存</text>
+    <g stroke="#6b7280"><rect x="80" y="274" width="500" height="47" fill="#dcfce7"/><rect x="580" y="274" width="100" height="47" fill="#fef3c7"/><rect x="680" y="274" width="200" height="47" fill="#dbeafe"/></g>
+    <g font-size="17"><text x="330" y="303">文件驻留 5 GiB</text><text x="630" y="303">匿名 1</text><text x="780" y="303">新增 2 GiB</text></g>
+    <text x="480" y="353" font-size="15">B 的 1 GiB 匿名数据由后备机制保存；两种方案都有代价，不保证内核实际采用它们</text>
+  </g>
+</svg>

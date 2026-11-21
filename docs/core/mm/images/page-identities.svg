@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 290" role="img" aria-labelledby="title desc">
+  <title id="title">物理页、PFN 与页描述符</title>
+  <desc id="desc">PFN 可以定位页描述符，也可以计算物理页起点。描述符保存管理信息，不保存四 KiB 的页内容。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="290" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="30" font-size="22">同一页：物理资源、编号、管理对象</text>
+    <rect x="24" y="94" width="240" height="106" rx="4" fill="#f3f4f6" stroke="#6b7280"/>
+    <rect x="360" y="94" width="240" height="106" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <rect x="696" y="94" width="240" height="106" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <g font-size="20"><text x="144" y="127">PFN 0x40000</text><text x="480" y="127">struct page</text><text x="816" y="127">物理数据页</text></g>
+    <g font-size="17"><text x="144" y="160">物理页帧号</text><text x="480" y="160">状态、引用、用途</text><text x="816" y="160">PA 0x40000000</text></g>
+    <g font-size="16"><text x="480" y="185">描述符自身也占内存</text><text x="816" y="185">本例页容量为 4 KiB</text></g>
+    <text x="312" y="79" font-size="15">pfn_to_page</text>
+    <text x="648" y="79" font-size="15">描述关系</text>
+    <path d="M264 142H352" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <path d="M600 142H688" stroke="#475569" stroke-dasharray="6 4" fill="none" marker-end="url(#a)"/>
+    <path d="M144 200V239H816V208" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="480" y="267" font-size="17">PFN 左移 PAGE_SHIFT 得到物理页起点，不产生分配或映射</text>
+  </g>
+</svg>

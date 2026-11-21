@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 270" role="img" aria-labelledby="title desc">
+  <title id="title">独立页映射与调用者引用</title>
+  <desc id="desc">教学情形只有一份分配引用和一次用户映射。vm_insert_page 成功增加映射引用，调用者 put_page 后映射仍持有页。没有其他持有者时，解除映射按协议释放最后引用。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="270" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="29" font-size="22">独立 order-0 页：分配持有与映射持有分开</text>
+    <rect x="24" y="88" width="250" height="92" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="350" y="88" width="270" height="92" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="696" y="88" width="240" height="92" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <g font-size="19"><text x="149" y="119">alloc_page 成功</text><text x="485" y="119">vm_insert_page 成功</text><text x="816" y="119">调用者 put_page</text></g>
+    <g font-size="16"><text x="149" y="151">分配引用：1</text><text x="485" y="151">分配引用：1，映射引用：1</text><text x="816" y="151">映射引用仍保留：1</text></g>
+    <path d="M274 134H342M620 134H688" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="480" y="220" font-size="17">成功后的调用者归还，不等于立即释放正在映射的物理页</text>
+    <text x="480" y="249" font-size="15">只画稳态持有，省略临时引用；无 fork、其他映射或持有者时，最后映射清理可结束页生命周期</text>
+  </g>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 440" role="img" aria-labelledby="title desc">
+  <title id="title">CMA 从 bitmap 候选到连续资源的取得</title>
+  <desc id="desc">bitmap尚未占用的候选范围可包含普通可移动内容。先占bitmap不使内容立即空闲，后续隔离、迁移和验证成功才取走范围。失败恢复占位与隔离状态，不保证把已迁移内容搬回原PFN。</desc>
+  <rect width="1000" height="440" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a">
+    <text x="500" y="32" text-anchor="middle" font-size="23">bitmap 可选 ≠ 目标物理范围已经全部空闲</text>
+    <g font-size="18"><text x="28" y="96">可选候选</text><text x="28" y="208">先占 bitmap</text><text x="28" y="320">隔离、迁移、验证成功</text></g>
+    <g font-size="16" fill="#475569"><text x="28" y="126">未被 CMA 分配占用</text><text x="28" y="238">阻止另一 CMA 请求选中</text><text x="28" y="350">才把连续目标交给调用者</text></g>
+    <g stroke="#64748b">
+      <rect x="450" y="65" width="130" height="74" fill="#dcfce7"/><rect x="580" y="65" width="130" height="74" fill="#fef3c7"/><rect x="710" y="65" width="130" height="74" fill="#dcfce7"/><rect x="840" y="65" width="130" height="74" fill="#fef3c7"/>
+      <rect x="450" y="177" width="130" height="74" fill="#dcfce7"/><rect x="580" y="177" width="130" height="74" fill="#fef3c7"/><rect x="710" y="177" width="130" height="74" fill="#dcfce7"/><rect x="840" y="177" width="130" height="74" fill="#fef3c7"/>
+    </g>
+    <g font-size="18" text-anchor="middle"><text x="515" y="108">空闲</text><text x="645" y="108">可移动内容</text><text x="775" y="108">空闲</text><text x="905" y="108">可移动内容</text><text x="515" y="220">仍空闲</text><text x="645" y="220">仍有内容</text><text x="775" y="220">仍空闲</text><text x="905" y="220">仍有内容</text></g>
+    <rect x="450" y="289" width="520" height="74" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="710" y="334" text-anchor="middle" font-size="20">目标已取走，旧内容按迁移协议移到别处</text>
+    <text x="500" y="405" text-anchor="middle" font-size="15" fill="#475569">仅展示成功分支；固定、引用、迁移目标和范围等可阻止完成，失败须恢复资源状态</text>
+    <text x="500" y="428" text-anchor="middle" font-size="14" fill="#475569">格子不规定实际 pageblock 或 bitmap 单元大小，不是设备地址或真实芯片布局</text>
+  </g>
+</svg>

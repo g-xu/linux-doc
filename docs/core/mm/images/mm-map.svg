@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" role="img" aria-labelledby="title desc">
+  <title id="title">Linux 内存管理的主要协作关系</title>
+  <desc id="desc">进程地址空间、内核分配、文件缓存共同使用物理页资源。缺页连接地址空间与数据提供者，压力处理管理资源复用和布局。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="560" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="29" font-size="22">主要状态与协作，不是固定调用链</text>
+    <rect x="24" y="63" width="280" height="116" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="340" y="63" width="280" height="116" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <rect x="656" y="63" width="280" height="116" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <g font-size="21"><text x="164" y="96">进程地址空间</text><text x="480" y="96">内核分配</text><text x="796" y="96">文件缓存与文件系统</text></g>
+    <g font-size="17"><text x="164" y="125">mm / VMA：范围与规则</text><text x="164" y="153">页表：当前映射</text><text x="480" y="125">SLUB：对象供给</text><text x="480" y="153">vmalloc：存储与虚拟映射</text><text x="796" y="125">address_space / folio</text><text x="796" y="153">文件数据、读入与写回</text></g>
+    <rect x="24" y="247" width="280" height="89" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="164" y="279" font-size="21">缺页处理</text><text x="164" y="309" font-size="17">检查规则，取得并安装数据</text>
+    <path d="M164 179V236" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <path d="M796 179V291H316" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="672" y="222" font-size="16">文件缺页取得缓存数据</text>
+    <rect x="340" y="377" width="280" height="89" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <text x="480" y="409" font-size="21">物理页资源与供给</text><text x="480" y="439" font-size="17">node / zone / Buddy / PCP</text>
+    <path d="M480 179V365" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="575" y="257" font-size="16">需要底层存储时</text>
+    <path d="M164 336V421H328" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="168" y="367" font-size="16">匿名页等新存储需求</text>
+    <path d="M796 291V421H632" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="796" y="367" font-size="16">缓存扩充时取得页</text>
+    <rect x="24" y="494" width="912" height="47" rx="4" fill="#f3e8ff" stroke="#7e22ce"/>
+    <text x="480" y="523" font-size="18">跨这些状态工作：rmap、回收 / swap、迁移 / 规整、NUMA 与 memcg</text>
+  </g>
+</svg>

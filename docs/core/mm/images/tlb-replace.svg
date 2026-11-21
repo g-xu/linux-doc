@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 250" role="img" aria-labelledby="title desc">
+  <title id="title">COW 替换映射与翻译同步</title>
+  <desc id="desc">选定 COW 复制成功分支，重查 PTE 后清除旧映射并处理旧翻译，再安装新页映射。图不是任意驱动修改页表的模板。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="250" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="29" font-size="22">选定 COW 复制分支：不能只改内存里的 PTE</text>
+    <rect x="24" y="77" width="260" height="92" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="344" y="77" width="272" height="92" rx="4" fill="#fee2e2" stroke="#b91c1c"/>
+    <rect x="676" y="77" width="260" height="92" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <g font-size="20"><text x="154" y="111">原 PTE 指向 P0</text><text x="480" y="111">清除旧映射与翻译</text><text x="806" y="111">安装指向 P1 的 PTE</text></g>
+    <g font-size="16"><text x="154" y="143">复制后锁定并重查条目</text><text x="480" y="143">相关失效、屏障与通知</text><text x="806" y="143">维护 rmap 和使用关系</text></g>
+    <path d="M284 123H336M616 123H668" fill="none" stroke="#475569" marker-end="url(#a)"/>
+    <text x="480" y="208" font-size="16">失效范围和同步方式由真实路径决定，不表示每次全局 flush</text>
+    <text x="480" y="235" font-size="15">省略数据准备、失败、锁和引用细节；不是裸写页表的调用模板</text>
+  </g>
+</svg>

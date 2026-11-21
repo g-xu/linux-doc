@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 240" role="img" aria-labelledby="title desc">
+  <title id="title">普通页的分配与释放</title>
+  <desc id="desc">普通分配和归还通常复用既有页描述符，改变页的使用状态和空闲供给成员关系，不改变 node 和 zone 归属。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="240" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <rect x="70" y="82" width="290" height="70" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <rect x="600" y="82" width="290" height="70" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <text x="215" y="125" font-size="22">空闲供给中的页</text><text x="745" y="125" font-size="22">调用者占用的页</text>
+    <path d="M215 82V53H745V73" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <path d="M745 152V180H215V161" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="480" y="38" font-size="18">分配成功：改变状态与成员关系</text>
+    <text x="480" y="204" font-size="18">结束使用，按原分配与引用协议归还</text>
+    <text x="480" y="231" font-size="15">描述符通常复用，node / zone 归属不变；不包括热插拔和内存重配置</text>
+  </g>
+</svg>

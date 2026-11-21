@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 250" role="img" aria-labelledby="title desc">
+  <title id="title">页描述符地址与页内容地址</title>
+  <desc id="desc">page_address 将适用普通 RAM 页的描述符联系到已有直接映射中的内容地址，不新建映射。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="960" height="250" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="30" font-size="22">访问管理信息与访问数据是两条路径</text>
+    <rect x="24" y="91" width="250" height="99" rx="4" fill="#ccfbf1" stroke="#0f766e"/>
+    <rect x="352" y="91" width="256" height="99" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="688" y="91" width="248" height="99" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <g font-size="19"><text x="149" y="124">struct page *page</text><text x="480" y="124">void *addr</text><text x="812" y="124">物理 RAM 数据页</text></g>
+    <g font-size="17"><text x="149" y="153">VMEMMAP 中的描述符</text><text x="480" y="153">直接映射中的内容地址</text><text x="812" y="153">调用者使用的数据</text></g>
+    <text x="312" y="80" font-size="15">page_address</text><text x="648" y="80" font-size="15">已有映射</text>
+    <path d="M274 142H344M608 142H680" fill="none" stroke="#475569" marker-end="url(#a)"/>
+    <text x="480" y="228" font-size="17">适用普通 RAM 的直接映射前提；取得内容地址不等于取得使用权</text>
+  </g>
+</svg>
