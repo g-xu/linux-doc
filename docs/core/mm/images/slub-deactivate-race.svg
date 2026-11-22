@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" role="img" aria-labelledby="title desc">
+  <title id="title">停用 slab 时根据最新 counters 归还局部链</title>
+  <desc id="desc">局部空闲链五槽位已由停用路径持有。旧共享状态inuse七、G一、U二；另一CPU归还Y后变为inuse六、G二、U一。旧目标inuse二的比较失败，重读后减五得到inuse一，合并链七槽位并解除frozen。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="1000" height="420" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="500" y="32" font-size="23">局部链长不变，共享计数仍可能被合法归还改变</text>
+    <text x="500" y="78" font-size="18">停用路径已摘下局部链：free_delta = L = 5</text>
+    <rect x="28" y="128" width="284" height="132" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="358" y="128" width="284" height="132" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="688" y="128" width="284" height="132" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <g font-size="20"><text x="170" y="160">停用前观察</text><text x="500" y="160">期间归还 Y</text><text x="830" y="160">重读并成功提交</text></g>
+    <g font-size="18"><text x="170" y="195">I=7，G=1，U=2</text><text x="500" y="195">I=6，G=2，U=1</text><text x="830" y="195">I=1，G=7，U=1</text><text x="170" y="231">frozen=1，L=5</text><text x="500" y="231">frozen=1，L=5</text><text x="830" y="231">frozen=0，L=0</text></g>
+    <path d="M314 194H352M644 194H682" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="500" y="307" font-size="19" fill="#b91c1c">按旧 I=7 提出的 7−5=2 未提交：链头 / counters 不匹配</text>
+    <text x="500" y="346" font-size="19">重读 I=6 后计算 6−5=1；局部尾接到最新共享链，再完成 unfreeze</text>
+    <text x="500" y="395" font-size="15" fill="#475569">本例最终仍有一个对象在用，进入相应 partial；node 成员资格还需列表锁协调</text>
+  </g>
+</svg>

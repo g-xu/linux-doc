@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 330" role="img" aria-labelledby="title desc">
+  <title id="title">VMA地址决定交错分配优选节点</title>
+  <desc id="desc">基本页VMA vm_pgoff为二，策略nodes为0、2、4。页序号0到3计算off2到5，再对三取模，分别优选node4、0、2、4。乱序访问不改变该位置计算。</desc>
+  <rect width="1000" height="330" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="500" y="31" font-size="22">VMA 基本页路径：off = vm_pgoff + 页位置，target = off % 3</text>
+    <text x="500" y="74" font-size="17">给定 vm_pgoff=2；策略节点按集合顺序 {0,2,4}</text>
+    <g fill="#dbeafe" stroke="#2563eb"><rect x="30" y="106" width="205" height="100" rx="4"/><rect x="275" y="106" width="205" height="100" rx="4"/><rect x="520" y="106" width="205" height="100" rx="4"/><rect x="765" y="106" width="205" height="100" rx="4"/></g>
+    <g font-size="19"><text x="132" y="138">页0：off=2</text><text x="377" y="138">页1：off=3</text><text x="622" y="138">页2：off=4</text><text x="867" y="138">页3：off=5</text><text x="132" y="180">优选 node 4</text><text x="377" y="180">优选 node 0</text><text x="622" y="180">优选 node 2</text><text x="867" y="180">优选 node 4</text></g>
+    <text x="500" y="251" font-size="18">先访问页3再访问页0，计算仍是各自的位置，不按fault次数轮转</text>
+    <text x="500" y="310" font-size="15" fill="#475569">图示策略选择而非实际PFN；允许范围、页供给、回退与charge仍可改变最终结果</text>
+  </g>
+</svg>

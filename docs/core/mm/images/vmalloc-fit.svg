@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" role="img" aria-labelledby="title desc">
+  <title id="title">Vmalloc空洞分裂与对齐失败</title>
+  <desc id="desc">原空洞相对页索引3到19。四页且八页对齐的请求占8到12，剩3到8和12到19。随后六页对齐请求从16开始到22，越过原右洞19，虽然剩余总量十二页仍失败。</desc>
+  <rect width="1000" height="420" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a">
+    <text x="500" y="31" text-anchor="middle" font-size="22">空洞总长度足够，不代表对齐后的候选能装下</text>
+    <g font-size="17" text-anchor="middle"><text x="168" y="78">3</text><text x="328" y="78">8</text><text x="456" y="78">12</text><text x="584" y="78">16</text><text x="680" y="78">19</text><text x="776" y="78">22</text></g>
+    <text x="28" y="139" font-size="18">原空洞</text><rect x="168" y="103" width="512" height="56" fill="#dcfce7" stroke="#15803d"/>
+    <text x="424" y="137" text-anchor="middle" font-size="19">[3,19)</text>
+    <text x="28" y="237" font-size="18">第一次切分</text>
+    <rect x="168" y="202" width="160" height="56" fill="#dcfce7" stroke="#15803d"/><rect x="328" y="202" width="128" height="56" fill="#dbeafe" stroke="#2563eb"/><rect x="456" y="202" width="224" height="56" fill="#dcfce7" stroke="#15803d"/>
+    <g font-size="18" text-anchor="middle"><text x="248" y="237">[3,8)</text><text x="392" y="237">[8,12)</text><text x="568" y="237">[12,19)</text></g>
+    <text x="28" y="337" font-size="18">再请求六页</text>
+    <rect x="456" y="302" width="224" height="56" fill="#dcfce7" stroke="#15803d"/><rect x="584" y="296" width="192" height="68" fill="none" stroke="#b91c1c" stroke-width="3"/>
+    <path d="M680 87V371" stroke="#b91c1c" stroke-dasharray="5 5"/><text x="840" y="337" font-size="18" fill="#b91c1c">22 超过 19</text>
+    <text x="500" y="401" text-anchor="middle" font-size="15" fill="#475569">相对VA页索引、八页对齐，省略guard；绿色空闲、蓝色已占、红框为失败候选，不是物理PFN图</text>
+  </g>
+</svg>

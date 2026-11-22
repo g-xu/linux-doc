@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 390" role="img" aria-labelledby="title desc">
   <title id="title">SLUB 活动 slab 的本地和非当前释放通道</title>
-  <desc id="desc">CPU0管理frozen slab S。其c freelist提供本地对象A和B。另一个CPU释放S中的X和Y进入slab freelist。CPU0通过get_freelist在相应协议下接收另一条链，而非其他CPU直接修改CPU0局部链。</desc>
+  <desc id="desc">CPU0管理frozen slab S。独立八槽位快照中局部链有A B C三个对象，slab链有已归还X Y两个对象，另三槽位由调用者持有。因此inuse为六而非调用者持有三。CPU0通过get_freelist接收另一条链，非当前路径不直接修改CPU0局部链。</desc>
   <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
   <rect width="1000" height="390" fill="#fff"/>
   <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
@@ -9,14 +9,14 @@
     <rect x="28" y="130" width="400" height="95" rx="4" fill="#dbeafe" stroke="#2563eb"/>
     <rect x="572" y="130" width="400" height="95" rx="4" fill="#dcfce7" stroke="#15803d"/>
     <g font-size="21"><text x="228" y="164">CPU 0：c->freelist</text><text x="772" y="164">S->freelist</text></g>
-    <g font-size="19"><text x="228" y="202">A → B → …，与 tid 联合更新</text><text x="772" y="202">X → Y → …，与 counters 协调</text></g>
+    <g font-size="19"><text x="228" y="202">A → B → C，与 tid 联合更新</text><text x="772" y="202">X → Y，与 counters 协调</text></g>
     <path d="M570 184H433" stroke="#475569" fill="none" marker-end="url(#a)"/>
     <text x="500" y="116" font-size="15">get_freelist</text>
     <rect x="610" y="281" width="324" height="48" rx="4" fill="#fef3c7" stroke="#b45309"/>
-    <text x="772" y="312" font-size="18">CPU 1 归还 S 中的对象</text>
+    <text x="772" y="312" font-size="18">非当前路径归还的 X / Y</text>
     <path d="M772 279V231" stroke="#475569" fill="none" marker-end="url(#a)"/>
-    <text x="228" y="292" font-size="18">取得 A 只改变局部供给</text>
-    <text x="228" y="322" font-size="17">不等于底层 slab 页立即释放</text>
-    <text x="500" y="371" font-size="15" fill="#475569">普通协议示意；frozen 计数不直接等于调用者持有数，RT / 调试会改变同步与快路径</text>
+    <text x="228" y="292" font-size="18">N=8，L=3，G=2，U=3</text>
+    <text x="228" y="322" font-size="18">I = U + L = 6，frozen=1</text>
+    <text x="500" y="371" font-size="15" fill="#475569">普通活动 slab 的独立快照；inuse 不等于调用者持有数，图不表示默认对象数或实际无锁读数</text>
   </g>
 </svg>

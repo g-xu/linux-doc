@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 680" role="img" aria-labelledby="title desc">
+  <title id="title">八槽位在调用者与两条空闲链间流转</title>
+  <desc id="desc">五个快照均为frozen一。A和B分配后inuse八；B由非当前路径归还后inuse七；A本地归还后调用者持有零但inuse仍七。局部七槽位再分配后只有B在slab链，最后接收并返回B使inuse八。蓝色U调用者，绿色L局部空闲，黄色G共享空闲。</desc>
+  <rect width="1000" height="680" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a">
+    <text x="500" y="32" text-anchor="middle" font-size="23">N = U + L + G；活动 frozen slab 的 I = U + L</text>
+    <g font-size="16"><rect x="220" y="59" width="18" height="18" fill="#dbeafe" stroke="#2563eb"/><text x="248" y="74">U：调用者持有</text><rect x="438" y="59" width="18" height="18" fill="#dcfce7" stroke="#15803d"/><text x="466" y="74">L：局部空闲</text><rect x="646" y="59" width="18" height="18" fill="#fef3c7" stroke="#b45309"/><text x="674" y="74">G：slab 级空闲</text></g>
+    <g font-size="18"><text x="28" y="145">已分配 A、B</text><text x="28" y="250">非当前路径归还 B</text><text x="28" y="355">本地归还 A</text><text x="28" y="460">再取局部七槽位</text><text x="28" y="565">接收并返回 B</text></g>
+    <g font-size="16"><text x="28" y="173">I=8，U=2，L=6，G=0</text><text x="28" y="278">I=7，U=1，L=6，G=1</text><text x="28" y="383">I=7，U=0，L=7，G=1</text><text x="28" y="488">I=7，U=7，L=0，G=1</text><text x="28" y="593">I=8，U=8，L=0，G=0</text></g>
+    <g stroke="#64748b">
+      <rect x="310" y="119" width="75" height="63" fill="#dbeafe"/><rect x="390" y="119" width="75" height="63" fill="#dbeafe"/><rect x="470" y="119" width="75" height="63" fill="#dcfce7"/><rect x="550" y="119" width="75" height="63" fill="#dcfce7"/><rect x="630" y="119" width="75" height="63" fill="#dcfce7"/><rect x="710" y="119" width="75" height="63" fill="#dcfce7"/><rect x="790" y="119" width="75" height="63" fill="#dcfce7"/><rect x="870" y="119" width="75" height="63" fill="#dcfce7"/>
+      <rect x="310" y="224" width="75" height="63" fill="#dbeafe"/><rect x="390" y="224" width="75" height="63" fill="#fef3c7"/><rect x="470" y="224" width="75" height="63" fill="#dcfce7"/><rect x="550" y="224" width="75" height="63" fill="#dcfce7"/><rect x="630" y="224" width="75" height="63" fill="#dcfce7"/><rect x="710" y="224" width="75" height="63" fill="#dcfce7"/><rect x="790" y="224" width="75" height="63" fill="#dcfce7"/><rect x="870" y="224" width="75" height="63" fill="#dcfce7"/>
+      <rect x="310" y="329" width="75" height="63" fill="#dcfce7"/><rect x="390" y="329" width="75" height="63" fill="#fef3c7"/><rect x="470" y="329" width="75" height="63" fill="#dcfce7"/><rect x="550" y="329" width="75" height="63" fill="#dcfce7"/><rect x="630" y="329" width="75" height="63" fill="#dcfce7"/><rect x="710" y="329" width="75" height="63" fill="#dcfce7"/><rect x="790" y="329" width="75" height="63" fill="#dcfce7"/><rect x="870" y="329" width="75" height="63" fill="#dcfce7"/>
+      <rect x="310" y="434" width="75" height="63" fill="#dbeafe"/><rect x="390" y="434" width="75" height="63" fill="#fef3c7"/><rect x="470" y="434" width="75" height="63" fill="#dbeafe"/><rect x="550" y="434" width="75" height="63" fill="#dbeafe"/><rect x="630" y="434" width="75" height="63" fill="#dbeafe"/><rect x="710" y="434" width="75" height="63" fill="#dbeafe"/><rect x="790" y="434" width="75" height="63" fill="#dbeafe"/><rect x="870" y="434" width="75" height="63" fill="#dbeafe"/>
+      <rect x="310" y="539" width="75" height="63" fill="#dbeafe"/><rect x="390" y="539" width="75" height="63" fill="#dbeafe"/><rect x="470" y="539" width="75" height="63" fill="#dbeafe"/><rect x="550" y="539" width="75" height="63" fill="#dbeafe"/><rect x="630" y="539" width="75" height="63" fill="#dbeafe"/><rect x="710" y="539" width="75" height="63" fill="#dbeafe"/><rect x="790" y="539" width="75" height="63" fill="#dbeafe"/><rect x="870" y="539" width="75" height="63" fill="#dbeafe"/>
+    </g>
+    <g font-size="21" text-anchor="middle">
+      <text x="347" y="160">A</text><text x="427" y="160">B</text><text x="507" y="160">C</text><text x="587" y="160">D</text><text x="667" y="160">E</text><text x="747" y="160">F</text><text x="827" y="160">G</text><text x="907" y="160">H</text>
+      <text x="347" y="265">A</text><text x="427" y="265">B</text><text x="507" y="265">C</text><text x="587" y="265">D</text><text x="667" y="265">E</text><text x="747" y="265">F</text><text x="827" y="265">G</text><text x="907" y="265">H</text>
+      <text x="347" y="370">A</text><text x="427" y="370">B</text><text x="507" y="370">C</text><text x="587" y="370">D</text><text x="667" y="370">E</text><text x="747" y="370">F</text><text x="827" y="370">G</text><text x="907" y="370">H</text>
+      <text x="347" y="475">A</text><text x="427" y="475">B</text><text x="507" y="475">C</text><text x="587" y="475">D</text><text x="667" y="475">E</text><text x="747" y="475">F</text><text x="827" y="475">G</text><text x="907" y="475">H</text>
+      <text x="347" y="580">A</text><text x="427" y="580">B</text><text x="507" y="580">C</text><text x="587" y="580">D</text><text x="667" y="580">E</text><text x="747" y="580">F</text><text x="827" y="580">G</text><text x="907" y="580">H</text>
+    </g>
+    <text x="500" y="640" text-anchor="middle" font-size="19">第三行没有调用者持有槽位，但 I 仍是 7：局部空闲尚计入 inuse</text>
+    <text x="500" y="666" text-anchor="middle" font-size="15" fill="#475569">格子表示槽位归属，不表示 freelist 顺序；所有行是普通模型的逻辑快照，不是无锁实测读数</text>
+  </g>
+</svg>

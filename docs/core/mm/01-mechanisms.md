@@ -138,7 +138,7 @@ Buddy 的 order 回答空闲块包含多少基本页。**描述管理粒度与�
 
 NUMA 中，CPU 访问不同节点可能有不同成本，策略也可能限定节点。内核用 `pglist_data`，简称 pgdat，保存节点管理信息。
 
-Node 不等于内存条或连续地址。本例采用单节点 UMA，A 和 B 都属于 node 0，空洞不要求产生新 node。
+Node 不等于内存条或连续地址。本例采用单节点 UMA（Uniform Memory Access，一致内存访问）模型，A 和 B 都属于 node 0，空洞不要求产生新 node。
 
 ### 5.2 Zone 区分节点中的分配条件
 
@@ -236,7 +236,9 @@ arm64 `mem_init` 调用 `memblock_free_all` 将适用页交给分配器。Manage
 
 “由页分配器管理”是范围，“当前空闲”是状态，“满足请求”还需条件。
 
-## 8. 这些管理结构尚未建立时，怎样分配？ {#bootmem}
+<a id="bootmem"></a>
+
+## 8. 这些管理结构尚未建立时，怎样分配？
 
 ### 8.1 启动分配不能依赖尚未就绪的 Buddy
 

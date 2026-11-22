@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 470" role="img" aria-labelledby="title desc">
+  <title id="title">SLUB 对象大小、槽位步长与空闲链接</title>
+  <desc id="desc">模型指定对象512字节、槽位对齐64字节、基本页4KiB。普通内置空闲链接偏移256，槽位步长512，可容纳八槽位。仅ctor要求外置链接时偏移512，新增8字节后对齐为576，每给定order0页最多七槽位。图不预测cache实际优选阶。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="1000" height="470" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a">
+    <text x="500" y="32" text-anchor="middle" font-size="23">数据大小不等于槽位步长，空闲链接可复用对象内部空间</text>
+    <text x="68" y="91" font-size="19">普通布局：object_size = size = 512</text>
+    <text x="458" y="120" text-anchor="middle" font-size="16">offset = 256，空闲时存链接</text>
+    <path d="M458 124V134" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <rect x="68" y="141" width="768" height="69" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="452" y="141" width="12" height="69" fill="#fef3c7" stroke="#b45309"/>
+    <text x="255" y="182" text-anchor="middle" font-size="19">对象数据区</text>
+    <text x="660" y="182" text-anchor="middle" font-size="19">对象数据区继续</text>
+    <text x="68" y="239" font-size="16">同一位置交给调用者后可用作对象内容，不为每个槽位额外分配链表节点</text>
+    <text x="68" y="275" font-size="19">仅 ctor 要求外置链接：size = ALIGN(512 + 8, 64) = 576</text>
+    <rect x="68" y="318" width="768" height="69" fill="#dbeafe" stroke="#2563eb"/>
+    <rect x="836" y="318" width="12" height="69" fill="#fef3c7" stroke="#b45309"/>
+    <rect x="848" y="318" width="84" height="69" fill="#f1f5f9" stroke="#64748b"/>
+    <text x="452" y="359" text-anchor="middle" font-size="20">对象数据 512 字节</text>
+    <text x="890" y="358" text-anchor="middle" font-size="17">对齐</text>
+    <text x="842" y="301" text-anchor="middle" font-size="16">offset = 512</text>
+    <path d="M842 305V312" stroke="#475569" fill="none" marker-end="url(#a)"/>
+    <text x="500" y="425" text-anchor="middle" font-size="18">给定 order-0 页：普通最多 8 槽位；外置链接模型最多 7 槽位</text>
+    <text x="500" y="454" text-anchor="middle" font-size="15" fill="#475569">不含其他调试 / KASAN 开销；s->inuse 为字节布局量，slab->inuse 为对象计数</text>
+  </g>
+</svg>

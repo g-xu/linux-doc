@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 570" role="img" aria-labelledby="title desc">
+  <title id="title">内存管理总览的阅读顺序</title>
+  <desc id="desc">左侧按物理页、分配、地址与数据、回收的概念依赖排列，右侧列出跨多个阶段的大页、连续内存、节点、资源组、承诺和固定问题。箭头仅表示阅读顺序，不表示运行时调用链。</desc>
+  <defs>
+    <marker id="next" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 10 5 0 10z" fill="#52606d"/>
+    </marker>
+  </defs>
+  <rect width="960" height="570" fill="#ffffff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a">
+    <text x="480" y="34" text-anchor="middle" font-size="22">先理解资源怎样被使用，再看什么条件会改变决策</text>
+    <text x="296" y="71" text-anchor="middle" font-size="17">本篇第 2～5 节：基础关系</text>
+    <text x="785" y="71" text-anchor="middle" font-size="17">第 6 节：跨阶段的问题</text>
+    <rect x="28" y="91" width="536" height="82" rx="4" fill="#e0f2fe" stroke="#0284c7"/>
+    <text x="48" y="123" font-size="21">2. 物理页从哪里来？</text>
+    <text x="48" y="152" font-size="17">memblock 登记；页描述符、node / zone 组织</text>
+    <path d="M296 178V200" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#next)"/>
+    <rect x="28" y="207" width="536" height="82" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="48" y="239" font-size="21">3. 怎样分配给调用者？</text>
+    <text x="48" y="268" font-size="17">Buddy / PCP 取页；SLUB 分对象；vmalloc 建映射</text>
+    <path d="M296 294V316" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#next)"/>
+    <rect x="28" y="323" width="536" height="82" rx="4" fill="#fef9c3" stroke="#a16207"/>
+    <text x="48" y="355" font-size="21">4. 地址怎样找到数据？</text>
+    <text x="48" y="384" font-size="17">VMA、页表、缺页；匿名数据、COW、文件缓存</text>
+    <path d="M296 410V432" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#next)"/>
+    <rect x="28" y="439" width="536" height="82" rx="4" fill="#ffe4e6" stroke="#be123c"/>
+    <text x="48" y="471" font-size="21">5. 哪些页能够腾出来？</text>
+    <text x="48" y="500" font-size="17">选回收候选；rmap 查映射；保存数据和安全释放</text>
+    <rect x="626" y="91" width="306" height="430" rx="4" fill="#f8fafc" stroke="#64748b"/>
+    <g font-size="19">
+      <text x="646" y="128">映射粒度：THP / HugeTLB</text>
+      <text x="646" y="195">连续范围：CMA、规整</text>
+      <text x="646" y="262">物理位置：NUMA</text>
+      <text x="646" y="329">用量限制：memcg</text>
+      <text x="646" y="396">未来需求：overcommit</text>
+      <text x="646" y="463">移动条件：固定、热插拔</text>
+    </g>
+    <g font-size="16" fill="#475569">
+      <text x="646" y="154">改变页及翻译的处理粒度</text>
+      <text x="646" y="221">改变连续页的取得条件</text>
+      <text x="646" y="288">影响适用分配的节点选择</text>
+      <text x="646" y="355">影响记账、压力与回收</text>
+      <text x="646" y="422">检查某些映射的潜在需求</text>
+      <text x="646" y="489">影响迁移及资源下线</text>
+    </g>
+    <text x="480" y="551" text-anchor="middle" font-size="17" fill="#475569">左侧箭头仅表示阅读次序；右侧机制影响多个阶段，不是“回收之后的下一步”</text>
+  </g>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc">
+  <title id="title">严格承诺检查与失败回滚</title>
+  <desc id="desc">给定已扣保留的allowed100页和旧承诺70。独立请求20加入后90严格小于100，接受并保留90；请求30加入后100不严格小于100，撤销本次30恢复70。图不是物理页预留。</desc>
+  <rect width="1000" height="340" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="500" y="31" font-size="22">先加入本次承诺，再判定；拒绝必须撤销这次增量</text>
+    <text x="500" y="75" font-size="18">给定旧承诺70，已扣保留的 allowed=100（基本页单位）</text>
+    <rect x="28" y="110" width="440" height="105" rx="4" fill="#dcfce7" stroke="#15803d"/><rect x="532" y="110" width="440" height="105" rx="4" fill="#fee2e2" stroke="#b91c1c"/>
+    <g font-size="19"><text x="248" y="145">请求20：70+20=90</text><text x="752" y="145">请求30：70+30=100</text><text x="248" y="182">严格小于100，接受，账保留90</text><text x="752" y="182">不成立，减回30，账恢复70</text></g>
+    <text x="500" y="264" font-size="18">承诺接受不保证将来每次缺页成功；物理供给与memcg是另外的判断</text>
+    <text x="500" y="318" font-size="15" fill="#475569">两个独立、无其他并发变化的helper判定样例；保留目标源码的严格小于，不是实测配置</text>
+  </g>
+</svg>

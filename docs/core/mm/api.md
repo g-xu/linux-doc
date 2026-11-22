@@ -2,7 +2,7 @@
 
 本页服务于接口查询，不要求按学习章节顺序阅读。原理入口为 [分配](02-allocation.md)、[地址空间](03-address-space.md) 与 [资源再利用](04-reclaim-rmap.md)。
 
-需要直接查参数、错误判据、调用条件及完整清理模式时，进入 [内核内存 API 详细参考](api-reference.md)。本页保留选型与最短示例；详细契约和新增 mmap 生命周期、扩容、池资源骨架集中维护在参考页。
+需要直接查参数、错误判据、调用条件及完整清理模式时，进入 [内核内存 API 详细参考](api-reference.md)。本页保留选型与最短示例；mmap 生命周期、扩容、池资源等详细契约集中维护在参考页。
 
 以内核 Linux 6.1.158、arm64 为基线。前六节的分配教学函数默认普通可睡眠任务上下文，资源独立持有、没有并发或异步使用；它们不是完整模块，未编译、加载或运行。设备和固定相关入口另按各节说明遵循其使用者与完成契约。
 
@@ -28,7 +28,9 @@
 
 接口是否适用不只取决于大小。还要确定实际使用者、连续性、上下文、失败策略和释放责任。DMA、MMIO、用户映射回调和固定用户页不在普通缓冲区示例的契约内。
 
-## 2. 字节块与数组 {#bytes}
+<a id="bytes"></a>
+
+## 2. 字节块与数组
 
 头文件为 `<linux/slab.h>`。以下为去掉属性后的代表性调用签名，部分是 inline 包装：
 
@@ -75,7 +77,9 @@ static int array_example(size_t count)
 
 避免先做可能溢出的 `count * size` 再传普通字节接口。柔性数组等复杂布局可比较 `struct_size` 类 helper，而不是手写未经检查的容量计算。
 
-## 3. 专用对象缓存 {#object-cache}
+<a id="object-cache"></a>
+
+## 3. 专用对象缓存
 
 头文件 `<linux/slab.h>`。本树签名为：
 
@@ -132,18 +136,22 @@ static int cache_example(void)
 
 频繁分配同一结构不自动意味着必须专用 cache，应比较规格、配置与管理需求。涉及向用户态复制的对象，还要按范围核对 usercopy 契约；RCU 类型安全标志也不等于延迟对象复用。
 
-## 4. 明确的按阶物理块 {#pages}
+<a id="pages"></a>
+
+## 4. 明确的按阶物理块
 
 明确需要 `2^order` 个连续基本页时选择 `alloc_pages`；普通独占块保存原阶，用 `__free_pages` 配对。小对象、可接受物理不连续的 CPU 工作区和设备 DMA 存储仍按各自需求选型。
 
 本节只保留查询导航，函数参数与完整示例集中维护：
 
-- [页分配 API 样章](api-reference.md#pages)：参数、返回、上下文、释放模型、真实调用者与错误处理。
+- [页分配 API 详细参考](api-reference.md#pages)：参数、返回、上下文、释放模型、真实调用者与错误处理。
 - [Exact 分配](api-reference.md#exact)：非二次幂页数容量及专用释放接口。
 - [页内容访问](api-reference.md#access)：`page_address` 与 Local 访问配对。
 - [Buddy 深入专题](sub/page-allocation/01-buddy.md)：空闲块组织、拆分、合并及实现约束。
 
-## 5. CPU 工作区与动态虚拟区域 {#workspace}
+<a id="workspace"></a>
+
+## 5. CPU 工作区与动态虚拟区域
 
 头文件 `<linux/slab.h>` 与 `<linux/vmalloc.h>`：
 
@@ -187,7 +195,9 @@ static int workspace_example(size_t bytes)
 
 异步使用结束之后才能清理。上述示例没有工作线程、设备访问或跨线程发布，不提供这些生命周期的通用模板。
 
-## 6. 已有页组成连续映射 {#existing-pages}
+<a id="existing-pages"></a>
+
+## 6. 已有页组成连续映射
 
 头文件 `<linux/vmalloc.h>`，保护类型还依赖目标架构定义：
 
@@ -238,7 +248,9 @@ out_pages:
 
 `VM_MAP_PUT_PAGES` 是不同契约：数组自身和相应页引用转移给映射管理，后续用 `vfree` 配合。数组须符合分配来源要求，不能把本例栈数组改标志后套用。
 
-## 7. 用户态地址范围接口 {#userspace}
+<a id="userspace"></a>
+
+## 7. 用户态地址范围接口
 
 这是用户态库接口，不是可加载内核模块应直接调用的 API。头文件 `<sys/mman.h>`：
 
@@ -290,7 +302,9 @@ static int user_mapping_example(void)
 
 实际程序还应记录错误并设计恢复。`mmap` 成功不代表全部数据页驻留；`munmap` 成功也不保证共享或缓存数据立即回到空闲页供给。
 
-## 8. DMA 内存与 MMIO 资源 {#device-memory}
+<a id="device-memory"></a>
+
+## 8. DMA 内存与 MMIO 资源
 
 这是设备使用入口，不是普通字节分配器的别名。调用者需要有效设备及资源、正确设备地址能力、传输方向和完成协议。
 
@@ -344,7 +358,9 @@ void __iomem *devm_ioremap_resource(struct device *dev,
 
 Devm 自动撤销资源不替代停设备、停中断及结束并发访问。相关机制见 [内存属性与设备使用](03-address-space.md#tlb-cache)，依据为同树 DMA 指南和 `lib/devres.c`。
 
-## 9. 用户页固定 {#pinning}
+<a id="pinning"></a>
+
+## 9. 用户页固定
 
 头文件 `<linux/mm.h>`，本树 6.1.158 的代表性签名为：
 
@@ -357,6 +373,8 @@ void unpin_user_pages(struct page **pages, unsigned long npages);
 
 这里 `start` 是用户地址，`nr_pages` 是页数，输出数组需足够容纳结果；页数和首尾偏移应按覆盖范围计算。返回负值表示错误，非负结果还要判断实际取得数量，可能只部分成功。
 
+本树这个五参数入口要求调用者已经持有当前 mm 的 `mmap_lock`，不能直接在未加锁的普通路径调用。自行管理锁的 unlocked 变体有不同参数和限制；配对加锁及部分成功清理见 [固定 API 详细参考](api-reference.md#pin)。返回的 VMA 指针不能在解锁后继续当作稳定对象使用。
+
 调用前选择实际使用模型与读写权限，不能把任意用户指针直接转成物理地址。需要写内容时还要处理相应 COW 和脏状态契约。
 
 Pin 包装设置内部固定标志，调用者不要向普通 GUP 随意塞 `FOLL_PIN` 来替代它。长期固定的 `FOLL_LONGTERM` 还受对应区域和实现限制。
@@ -367,7 +385,9 @@ Pin 包装设置内部固定标志，调用者不要向普通 GUP 随意塞 `FOL
 
 原理见 [固定为何限制迁移](05-placement-and-limits.md#pinning)，源依据为 `mm/gup.c` 与同树 pin 指南。其他版本的签名可能不同，勿复制最新版本参数替换当前树。
 
-## 10. 大页、策略、文件同步与资源组查询 {#policy-queries}
+<a id="policy-queries"></a>
+
+## 10. 大页、策略、文件同步与资源组查询
 
 以下是各能力的主要使用入口，不要求先阅读全部实现：
 
@@ -386,7 +406,9 @@ Pin 包装设置内部固定标志，调用者不要向普通 GUP 随意塞 `FOL
 
 本轮不执行调参、配置大页池、改变节点绑定或固定页面。CMA 内部连续分配、memblock 初始化、回收入口和裸页表 helper 也不作为普通调用者的通用替代入口。
 
-## 11. 资源压力与保护的查询 {#pressure-observation}
+<a id="pressure-observation"></a>
+
+## 11. 资源压力与保护的查询
 
 先确认目标版本、启用状态、权限与实际资源组路径。这些是用户态观察入口，不是普通内核模块应直接调用的分配 API：
 

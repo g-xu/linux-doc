@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" role="img" aria-labelledby="title desc">
+  <title id="title">Slab 级归还与局部批量接收的原子比较</title>
+  <desc id="desc">CPU0局部链空，观察slab链头X与inuse七、frozen一。CPU1归还Y使链Y到X和inuse六。旧比较失败，CPU0重读后接收两槽位，清slab链并置inuse八；返回Y，X留在局部链。最终U七L一G零。</desc>
+  <rect width="1000" height="520" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a">
+    <text x="500" y="32" text-anchor="middle" font-size="23">get_freelist 必须同时验证链头与 counters</text>
+    <text x="500" y="73" text-anchor="middle" font-size="18">独立八槽位起点：L=0，G=1，U=7，I=7，frozen=1</text>
+    <rect x="28" y="101" width="944" height="308" fill="#f8fafc" stroke="#94a3b8"/>
+    <path d="M28 146H972M28 218H972M28 285H972M28 347H972M345 101V409M630 101V409" fill="none" stroke="#cbd5e1"/>
+    <g text-anchor="middle" font-size="19"><text x="186" y="131">CPU 0：接收</text><text x="487" y="131">CPU 1：归还</text><text x="801" y="131">共享 slab 状态</text></g>
+    <g font-size="17">
+      <text x="48" y="179">读取链头 X，保存旧 counters</text><text x="362" y="179">Y 仍由调用者持有</text><text x="648" y="179">head=X，I=7，G=1</text>
+      <text x="48" y="245">旧观察尚未提交</text><text x="362" y="245">提交 Y→X，I 减到 6</text><text x="648" y="245">head=Y，I=6，G=2</text>
+      <text x="48" y="312" fill="#b91c1c">比较旧 (X,counters) 失败</text><text x="362" y="312">归还已完成</text><text x="648" y="312">Y→X 没有丢失</text>
+      <text x="48" y="376">重读并接收 Y→X，返回 Y</text><text x="362" y="376">无新的归还</text><text x="648" y="376">head=NULL，I=8，F=1</text>
+    </g>
+    <text x="500" y="450" text-anchor="middle" font-size="20">最终：U=7，L=1（X），G=0；I = U + L = 8</text>
+    <text x="500" y="490" text-anchor="middle" font-size="15" fill="#475569">转移的是空闲槽位管理权，不是新增两份调用者持有；图不是两个字段的无锁实测快照</text>
+  </g>
+</svg>

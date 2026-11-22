@@ -2,9 +2,11 @@
 
 前面按普通页理解分配、映射和回收。实际系统还需要回答：**一次请求使用多大的页、放在哪个节点、向谁记账、能否长期固定？**
 
-这些不是 mm 之外的零散功能，它们改变前面机制的输入和约束。本篇补齐核心认识：每项为什么存在、基本怎样工作、与哪些机制连接。基线为 arm64 Linux 6.1.158，实际功能启用状态仍按目标配置确认。
+这些不是 mm 之外的零散功能，它们改变前面机制的输入和约束。本篇补齐核心认识：每项为什么存在、基本怎样工作、与哪些机制连接。基线为 arm64 Linux 6.1.158，实际功能启用状态仍按目标配置确认。THP、CMA、NUMA 等名称的展开见 [术语速查](00-overview.md#glossary)。
 
-## 1. 大页改变的不只是分配字节数 {#hugepages}
+<a id="hugepages"></a>
+
+## 1. 大页改变的不只是分配字节数
 
 ### 1.1 为什么希望减少翻译条目？
 
@@ -35,7 +37,9 @@ THP 不能保证每个地址始终由一个大页映射。是否尝试、是否�
 
 源码：`mm/huge_memory.c`、`mm/khugepaged.c`、`mm/hugetlb.c`；说明见同树 `Documentation/mm/transhuge.rst` 与 `Documentation/admin-guide/mm/hugetlbpage.rst`。
 
-## 2. CMA 为什么既预留，又允许适用页复用？ {#cma}
+<a id="cma"></a>
+
+## 2. CMA 为什么既预留，又允许适用页复用？
 
 ### 2.1 连续需求与长期资源利用的矛盾
 
@@ -59,7 +63,9 @@ CMA 解决适用连续资源的准备问题，不提供设备地址、CPU/设备
 
 源码：`mm/cma.c`、`mm/page_alloc.c` 的 `init_cma_reserved_pageblock`、`alloc_contig_range`，以及目标平台 DMA 实现。
 
-## 3. NUMA 策略决定适用页放在哪里 {#numa}
+<a id="numa"></a>
+
+## 3. NUMA 策略决定适用页放在哪里
 
 ### 3.1 节点存在与策略选择是两个问题
 
@@ -88,7 +94,9 @@ CMA 解决适用连续资源的准备问题，不提供设备地址、CPU/设备
 
 源码：`mm/mempolicy.c`；作用域和使用说明见同树 `Documentation/admin-guide/mm/numa_memory_policy.rst`。
 
-## 4. memcg 记账不等于每进程独占物理池 {#memcg}
+<a id="memcg"></a>
+
+## 4. memcg 记账不等于每进程独占物理池
 
 ### 4.1 位置、使用者与记账分别表达什么？
 
@@ -109,7 +117,9 @@ CMA 解决适用连续资源的准备问题，不提供设备地址、CPU/设备
 
 对象或页释放时也要按对应生命周期处理取消或归还记账。不能将一次申请的物理成功等同于整个对外分配成功。
 
-### 4.3 保护与限制是两个方向 {#memory-protection}
+<a id="memory-protection"></a>
+
+### 4.3 保护与限制是两个方向
 
 仅知道 high / max，还不能解释回收为何偏向某些资源组。用量限制关注“这组继续消耗时怎样施加压力”，保护则关注“回收选择时，哪些已使用内存应优先保留”。
 
@@ -154,7 +164,9 @@ CMA 解决适用连续资源的准备问题，不提供设备地址、CPU/设备
 
 进一步看保护决策，可读 `mem_cgroup_calculate_protection` 和 `mm/vmscan.c` 的对应使用点，区分配置数值、有效边界与实际回收分支。
 
-## 5. Overcommit 管理承诺，不是统计当前驻留 {#overcommit}
+<a id="overcommit"></a>
+
+## 5. Overcommit 管理承诺，不是统计当前驻留
 
 ### 5.1 有地址范围后，未来写入可能需要多少存储？
 
@@ -181,7 +193,9 @@ CMA 解决适用连续资源的准备问题，不提供设备地址、CPU/设备
 
 这套机制连接 mmap、brk、mprotect、fork 等适用状态变化。源码入口为 `mm/util.c` 的 `__vm_enough_memory`，规则见同树 `Documentation/mm/overcommit-accounting.rst`。
 
-## 6. 页面固定为什么限制回收与迁移？ {#pinning}
+<a id="pinning"></a>
+
+## 6. 页面固定为什么限制回收与迁移？
 
 ### 6.1 CPU 映射可以改，外部使用者不一定允许页换位置
 
@@ -199,7 +213,9 @@ CMA 解决适用连续资源的准备问题，不提供设备地址、CPU/设备
 
 接口边界见 [用户页固定](api.md#pinning)。源码为 `mm/gup.c` 和 `include/linux/mm.h`，说明见同树 `Documentation/core-api/pin_user_pages.rst`。
 
-## 7. 热插拔说明哪些管理事实可以变化？ {#hotplug}
+<a id="hotplug"></a>
+
+## 7. 热插拔说明哪些管理事实可以变化？
 
 物理内存上线不仅是扩大一个计数，还要建立适用描述信息、节点/zone 联系并交给运行期管理。下线则需要隔离范围、停止新分配，并处理可移动的占用页；不满足条件时可能失败。
 
@@ -222,4 +238,4 @@ CMA 解决适用连续资源的准备问题，不提供设备地址、CPU/设备
 
 本篇覆盖功能与基本机制，完整大页并发、CMA 隔离算法、策略继承细节和 memcg 内部实现仍可沿这些入口继续深入。回到 [总览](00-overview.md) 可以从同一张全景中查到它们的位置。
 
-本批进一步写了 [大页与连续区域](sub/page-size/01-hugepages-cma.md) 和 [NUMA、memcg 与承诺约束](sub/resource-control/01-numa-memcg.md)，从实际准备、验证、记账和回滚过程解释这些条件，仍保留未穷举分支的边界。
+实现可以按问题分别进入 [THP](sub/page-size/02-thp.md)、[HugeTLB](sub/page-size/03-hugetlb.md)、[CMA](sub/page-size/04-cma.md)、[NUMA](sub/resource-control/02-numa.md)、[memcg](sub/resource-control/03-memcg.md) 和 [overcommit](sub/resource-control/04-overcommit.md)。各篇追踪自己的对象、决策和失败处理，不把这些独立机制拼成同一条调用链；全部入口见 [深入专题首页](sub/index.md)。

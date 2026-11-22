@@ -38,7 +38,16 @@
 
 普通 EL1 管理的 stage-1 翻译中，`TTBR0_EL1` 与 `TTBR1_EL1` 提供相应页表根信息，`TCR_EL1` 配置地址范围、页粒度及有关参数。用户和内核使用低、高地址范围，不能把 64 位指针等同于实现了完整 64 位 VA。
 
-切换还涉及 ASID、安全特性与实际协议，因此这些寄存器不是任何时刻都不变的裸指针。本篇只解释机制位置，不展开虚拟化 stage-2。
+切换还涉及 ASID（Address Space Identifier，地址空间标识）、安全特性与实际协议，因此这些寄存器不是任何时刻都不变的裸指针。本篇只解释机制位置，不展开虚拟化 stage-2。
+
+| 名称 | 名称展开与在这里的职责 |
+| --- | --- |
+| `TTBR0_EL1 / TTBR1_EL1` | Translation Table Base Register，提供相应翻译范围的根表等信息 |
+| `TCR_EL1` | Translation Control Register，配置地址范围、翻译粒度等参数 |
+| `MAIR_EL1` | Memory Attribute Indirection Register，保存由页表属性索引选择的内存类型编码 |
+| EL1 | Exception Level 1，本文普通内核执行所在的异常级；不等同于页表第一级 |
+
+这些名称用于读源码时定位职责，不是要求调用者直接写寄存器。页表中的属性如何引用 MAIR，以及更新时的同步，见本节后面的 TLB 与 Cache 说明。
 
 内核地址也有不同用途：
 
@@ -51,7 +60,9 @@
 
 它们不能随意互换，也不是一张自由可分配区域表。具体边界用本树符号和配置核对，见 `Documentation/arm64/memory.rst`、`arch/arm64/include/asm/memory.h`。
 
-### 2.2 内核地址为什么不能统一用一个公式？ {#kernel-mappings}
+<a id="kernel-mappings"></a>
+
+### 2.2 内核地址为什么不能统一用一个公式？
 
 ![不同内核映射有不同地址关系](images/kernel-mappings.svg)
 
@@ -102,7 +113,9 @@ Linux 统一接口为 `PGD → P4D → PUD → PMD → PTE`。本例 P4D 折叠�
 
 这些是 mm 实现阅读点，不是普通驱动手动拼装映射的建议。尤其要区分 non-present 与全零：交换、迁移等状态也可以编码在非 present 条目中。
 
-### 2.5 TLB、页表与数据 Cache 不做同一件事 {#tlb-cache}
+<a id="tlb-cache"></a>
+
+### 2.5 TLB、页表与数据 Cache 不做同一件事
 
 TLB 缓存翻译结果，数据 Cache 缓存内容。普通 TLB miss 可以由硬件查表解决，不必产生缺页；访问许可或翻译不满足时才可能进入异常处理。
 
@@ -201,7 +214,9 @@ DMA 又是设备访问 RAM，不等于 CPU 访问 MMIO：
 
 源码阅读：`mm/memory.c` 的 `do_fault` 及相应分支、`mm/filemap.c` 的 `filemap_fault`，再追踪具体文件系统回调。
 
-### 4.3 页缓存不仅服务缺页，也有自己的生命周期 {#page-cache}
+<a id="page-cache"></a>
+
+### 4.3 页缓存不仅服务缺页，也有自己的生命周期
 
 普通文件页缓存由 `address_space` 联系文件数据，`i_pages` 使用 XArray 按文件页索引组织缓存 folio。一个 folio 可以覆盖一个或多个基本页索引；它的存储与某一个进程的映射生命周期不绑定。
 

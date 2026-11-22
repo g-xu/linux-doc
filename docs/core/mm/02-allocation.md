@@ -57,7 +57,7 @@ buddy_pfn = pfn XOR (1 << order)
 
 阅读起点：`mm/page_alloc.c` 的 `__rmqueue_smallest`、`expand`、`__free_one_page`，以及 `mm/internal.h` 的伙伴定位 helper。
 
-进一步对应实际结构、链表计数、逐步状态和并发协议，阅读 [Buddy：空闲页块的组织、分配与合并](sub/page-allocation/01-buddy.md)。接口使用另查 [页分配 API 样章](api-reference.md#pages)，不将内部函数当作驱动调用入口。
+进一步对应实际结构、链表计数、逐步状态和并发协议，阅读 [Buddy：空闲页块的组织、分配与合并](sub/page-allocation/01-buddy.md)。接口使用另查 [页分配 API 详细参考](api-reference.md#pages)，不将内部函数当作驱动调用入口。
 
 ## 2. 总量、布局和供给位置影响不同
 
@@ -71,7 +71,7 @@ buddy_pfn = pfn XOR (1 << order)
 
 ### 2.2 PCP 为什么放在 Buddy 旁边？
 
-频繁小规格分配若每次都访问共享 zone 管理，会增加同步与共享状态操作。PCP 将部分适用规格的空闲页缓存到 CPU 局部，补充和排空时与 Buddy 批量交接。
+频繁小规格分配若每次都访问共享 zone 管理，会增加同步与共享状态操作。PCP（Per-CPU Pages，每 CPU 页缓存）将部分适用规格的空闲页缓存到 CPU 局部，补充和排空时与 Buddy 批量交接。
 
 PCP 里的页仍是空闲供给，不是永久分配给该 CPU 的私有 RAM。它主要改变供给组织和交接成本，不改变页的基本资源语义。
 
@@ -179,7 +179,9 @@ PCP 里的页仍是空闲供给，不是永久分配给该 CPU 的私有 RAM。�
 
 NMI、raw spinlock 等严格情境需核对具体接口与目标版本。处于文件系统或 I/O 路径时，还需防止回收递归依赖；NOFS / NOIO 作用域是表达这类约束的工具，不是随意组合标志的补丁。
 
-### 5.2 水位保护的是供给余量，不是额外 RAM {#slowpath}
+<a id="slowpath"></a>
+
+### 5.2 水位保护的是供给余量，不是额外 RAM
 
 Zone 的 `WMARK_MIN / LOW / HIGH` 是页数量意义上的参考水位，结合 `watermark_boost`、order、分配策略和有关保留检查。它们不是所有芯片固定比例的三个容量池。
 
@@ -226,7 +228,7 @@ Zone 的 `WMARK_MIN / LOW / HIGH` 是页数量意义上的参考水位，结合 
 
 ## 6. 从认识落实到接口
 
-进一步进入实现，可读 [PCP](sub/page-allocation/02-pcp.md)、[分配慢路径](sub/page-allocation/03-slowpath.md)、[SLUB](sub/object-allocation/01-slub.md) 与 [vmalloc](sub/virtual-allocation/01-vmalloc.md)。这些草稿分别追踪批量交接、补救决策、对象供给和映射生命周期。
+进一步进入实现，可读 [PCP](sub/page-allocation/02-pcp.md)、[分配慢路径](sub/page-allocation/03-slowpath.md)、[SLUB](sub/object-allocation/01-slub.md) 与 [vmalloc](sub/virtual-allocation/01-vmalloc.md)。这些专题分别追踪批量交接、补救决策、对象供给和映射生命周期。
 
 至此可解释：小对象不必每次申请新页；连续物理块不等于任意页集合；虚拟连续只放宽相应形态约束；GFP 不消除资源需求。
 

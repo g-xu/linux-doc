@@ -1,6 +1,6 @@
 # 内核内存 API 详细参考
 
-本页用于实际开发时按函数名或需求查询，提供参数、返回值、调用条件、所有权和失败清理。[原 API 页](api.md) 保留选型与最短入门骨架，详细契约以本页及所标目标源码为准。
+本页用于实际开发时按函数名或需求查询，提供参数、返回值、调用条件、所有权和失败清理。[API 选型指南](api.md) 负责需求比较与最短使用骨架，详细契约以本页及所标目标源码为准。
 
 基线为 **Linux 6.1.158、arm64 / AArch64**。签名去掉了部分属性；宏和 inline 包装按调用形式展示，不将其都称为独立导出函数。源码路径相对该内核根目录。
 
@@ -8,7 +8,7 @@
 
 示例是可供改造的教学函数或明确标注的片段，不是完整模块，**未编译、加载或运行**。默认允许睡眠的任务上下文；设备示例要求设备有效、已按硬件能力设置地址范围，并由调用者处理实际完成。所有示例都不允许在资源仍被使用时销毁或扩容。
 
-用户态 `mmap/munmap/mprotect`、NUMA 库接口及控制文件见 [原查询页](api.md#userspace)。本页重点是内核调用者，不穷举内部回收或页表函数。
+用户态 `mmap/munmap/mprotect`、NUMA 库接口及控制文件见 [API 选型指南](api.md#userspace)。本页重点是内核调用者，不穷举内部回收或页表函数。
 
 ## 1. 需求与配对速查
 
@@ -36,7 +36,9 @@
 
 失败不是统一的 NULL：字节分配多为 NULL，映射函数常为负 errno，GUP 返回实际页数，用户复制返回剩余字节，SG 映射失败为 0，MMIO 资源 helper 可能返回错误指针。
 
-## 2. GFP 与允许的工作 {#gfp}
+<a id="gfp"></a>
+
+## 2. GFP 与允许的工作
 
 GFP 用于资源范围和分配策略，不是性能等级或成功保证。示例优先 `GFP_KERNEL`；不能因缓存可能命中，就在不可睡眠路径使用它。
 
@@ -78,7 +80,9 @@ memalloc_nofs_restore(saved);
 
 ## 3. 字节、容量与扩容
 
-### 3.1 kmalloc / kzalloc / kcalloc {#bytes}
+<a id="bytes"></a>
+
+### 3.1 kmalloc / kzalloc / kcalloc
 
 头文件 `<linux/slab.h>`：
 
@@ -104,7 +108,9 @@ void kfree(const void *p);
 
 源码：`include/linux/slab.h`、`mm/slab_common.c`，选定 SLUB 的对象路径见 `mm/slub.c`。
 
-### 3.2 struct_size / array_size / check_mul_overflow {#sizes}
+<a id="sizes"></a>
+
+### 3.2 struct_size / array_size / check_mul_overflow
 
 头文件 `<linux/overflow.h>`。这些是容量计算 helper，不分配存储：
 
@@ -116,7 +122,9 @@ overflow = check_mul_overflow(count, element_size, &bytes);
 
 `struct_size/array_size` 的适用计算溢出返回 `SIZE_MAX`；`check_mul_overflow` 用布尔结果报告。用 `size_t` 接收尺寸，检查后再传分配器；不要缩成较窄整数。
 
-### 3.3 krealloc / krealloc_array {#resize}
+<a id="resize"></a>
+
+### 3.3 krealloc / krealloc_array
 
 ```c
 void *krealloc(const void *p, size_t new_size, gfp_t flags);
@@ -206,7 +214,9 @@ static void vector_destroy(struct ref_vector *v)
 
 源码：`mm/slab_common.c` 的 `krealloc/__do_krealloc`；数组包装及 overflow helper。
 
-## 4. 对象缓存及用户复制范围 {#cache}
+<a id="cache"></a>
+
+## 4. 对象缓存及用户复制范围
 
 头文件 `<linux/slab.h>`：
 
@@ -269,13 +279,17 @@ Usercopy 范围不是授权机制，不免除对用户输入、目标对象存�
 
 ## 5. 物理页与内容地址
 
-### 5.1 alloc_page / alloc_pages 与归还 {#pages}
+<a id="pages"></a>
+
+### 5.1 alloc_page / alloc_pages 与归还
 
 **适用场景：内核调用者需要由自己持有、最终整体归还的普通物理连续页块。** 这组接口按阶分配，不按任意字节数分配，也不提供 DMA 地址。只要求 CPU 虚拟连续的工作区不必承担高阶物理连续分配的失败风险。
 
 直达：[参数与返回](#pages-arguments) · [GFP 与上下文](#pages-gfp) · [地址与所有权](#pages-ownership) · [完整示例](#pages-example) · [变体选择](#pages-variants) · [真实调用者](#pages-callers)。
 
-#### 调用形式、头文件与可见性 {#pages-signatures}
+<a id="pages-signatures"></a>
+
+#### 调用形式、头文件与可见性
 
 包含 `<linux/gfp.h>` 获取分配、归还声明和 GFP 标志；访问描述符及使用 `page_address/get_page/put_page` 时包含 `<linux/mm.h>`。下列是本树的接口形式，后两项实际是宏，不是独立的导出函数：
 
@@ -289,7 +303,9 @@ void __free_pages(struct page *page, unsigned int order);
 
 `alloc_pages` 在 `CONFIG_NUMA=y` 时由 `mm/mempolicy.c` 实现并导出；否则是 `<linux/gfp.h>` 中的 inline 包装，最终使用已导出的 `__alloc_pages`。`__free_pages` 在 `mm/page_alloc.c` 中导出。不能仅因宏或 inline 没有同名导出就判定它不可用；实际模块可用性仍需结合目标配置和构建环境。
 
-#### 参数、单位、成功与失败 {#pages-arguments}
+<a id="pages-arguments"></a>
+
+#### 参数、单位、成功与失败
 
 | 参数 / 结果 | 可直接用于调用的规则 |
 | --- | --- |
@@ -310,7 +326,9 @@ void __free_pages(struct page *page, unsigned int order);
 
 **字节数转阶：** `get_order(unsigned long size)` 返回容纳非零字节数所需的最小阶，不执行分配，也不保证结果小于 `MAX_ORDER`。arm64 的 `size_t` 与 `unsigned long` 均为 64 位。本树明确规定 `get_order(0)` 的结果没有有效契约；必须先拒绝或单独处理零长度。若字节数来自 `count * element_size`、长度加头部等运算，应先用 `check_mul_overflow/check_add_overflow` 检查，不能对已经回绕的结果调用 `get_order`。取得阶后还需检查上界；自行计算页数、容量前也应防止移位和乘法溢出。完整示例演示后两项检查。
 
-#### GFP 选择与允许上下文 {#pages-gfp}
+<a id="pages-gfp"></a>
+
+#### GFP 选择与允许上下文
 
 | 调用需求 | 本组的典型选择 | 不能忽略的约束 |
 | --- | --- | --- |
@@ -330,7 +348,9 @@ void __free_pages(struct page *page, unsigned int order);
 
 GFP 的作用域限制详见 [§2](#gfp)；本树会继承当前 NOFS / NOIO 等约束。以上策略不是要求覆盖调用者已经建立的合法作用域。
 
-#### 页描述符、内容地址与所有权边界 {#pages-ownership}
+<a id="pages-ownership"></a>
+
+#### 页描述符、内容地址与所有权边界
 
 对本节普通 arm64 RAM、`GFP_KERNEL` 得到的页块，内容通过 `page_address(first)` 访问。例如：
 
@@ -358,7 +378,9 @@ data[0] = 0x5a;
 
 不匹配的阶没有可靠的纠错路径：阶过小可能留下其余页，阶过大可能归还不属于自己的内存、触发检查或破坏系统。**保存原阶、只归还一次、归还前结束所有借用**，是调用者自己的责任。
 
-#### 完整教学示例：独占 CPU 线性缓冲区 {#pages-example}
+<a id="pages-example"></a>
+
+#### 完整教学示例：独占 CPU 线性缓冲区
 
 限定场景：普通可睡眠任务上下文；内核自己提出已验证的非零容量；普通 arm64 RAM；只供 CPU 同步访问，不映射给用户、不交给设备、不拆页、不加页引用。`*owner` 事先初始化为 `NULL`，所有调用由外层串行化，拥有者记录不可复制成两份资源所有权。
 
@@ -456,7 +478,9 @@ static int ref_page_block_example(void)
 
 这个示例刻意用两个不同分配器：页块归还用 `__free_pages`，记录本身归还用 `kfree`；二者不可互换。示例只做源码契约和静态用法核对，未编译、未运行，不是可以直接加载的完整模块。
 
-#### 相关变体：需要改变什么才换接口 {#pages-variants}
+<a id="pages-variants"></a>
+
+#### 相关变体：需要改变什么才换接口
 
 | 需求 / 变体 | 调用与返回的区别 | 归还和使用边界 |
 | --- | --- | --- |
@@ -467,9 +491,11 @@ static int ref_page_block_example(void)
 | 非幂次页数但仍要物理连续：`alloc_pages_exact` | 按字节数申请、释放多余基本页，返回内容地址 | 只按 [§5.2](#exact) 的原 size 配 `free_pages_exact`，不保留普通高阶归还模型 |
 | 不要求物理连续的 CPU 工作区 | 考虑 `kvmalloc/vmalloc` 等，而非强求高阶成功 | 使用 [§6](#virtual) 中该分配器的归还方式 |
 
-节点变体和地址变体没有让普通高阶块自动具备整块引用语义。本样章不展开 compound / folio 的完整用法；也不把内部的 `__rmqueue_smallest` 等执行函数列成外部 API。拆分与合并机制由 [Buddy 实现专题](sub/page-allocation/01-buddy.md) 承接。
+节点变体和地址变体没有让普通高阶块自动具备整块引用语义。本节不展开 compound / folio 的完整用法；也不把内部的 `__rmqueue_smallest` 等执行函数列成外部 API。拆分与合并机制由 [Buddy 实现专题](sub/page-allocation/01-buddy.md) 承接。
 
-#### 真实调用者：为何保存阶，而不是最后猜阶 {#pages-callers}
+<a id="pages-callers"></a>
+
+#### 真实调用者：为何保存阶，而不是最后猜阶
 
 **用例一：按固定 order 创建页元素的 mempool。** 本树 `include/linux/mempool.h:99` 的初始化包装将阶放在 `pool_data` 中；`mm/mempool.c:544` 与 `:551` 是真正的分配、释放回调。以下仅摘录回调主体，保持原语义：
 
@@ -514,7 +540,9 @@ void mempool_free_pages(void *element, void *pool_data)
 
 同版本官方说明可从本树 `Documentation/core-api/memory-allocation.rst`、`Documentation/core-api/mm-api.rst` 阅读；参数与特殊引用行为最终以以上本地实现为准。源码目录有 `localversion-rt`，但没有目标 `.config`，本组不把实际 PREEMPT_RT 启用状态当作已知事实。
 
-### 5.2 alloc_pages_exact / free_pages_exact {#exact}
+<a id="exact"></a>
+
+### 5.2 alloc_pages_exact / free_pages_exact
 
 ```c
 void *alloc_pages_exact(size_t size, gfp_t flags);
@@ -546,7 +574,9 @@ static int exact_example(void)
 
 示例独立使用，不引入用户映射、设备持有或分拆引用。源码：`make_alloc_exact`、`alloc_pages_exact`、`free_pages_exact`。
 
-### 5.3 page_address / kmap_local_page {#access}
+<a id="access"></a>
+
+### 5.3 page_address / kmap_local_page
 
 普通有效 arm64 RAM 且具有直接映射时，`page_address(page)` 取得内容地址，不增加页引用、不分配存储。
 
@@ -567,7 +597,9 @@ kunmap_local(addr);
 
 ## 6. 虚拟工作区与已有页映射
 
-### 6.1 kvmalloc / vmalloc 与释放 {#virtual}
+<a id="virtual"></a>
+
+### 6.1 kvmalloc / vmalloc 与释放
 
 头文件 `<linux/slab.h>`、`<linux/vmalloc.h>`：
 
@@ -610,7 +642,9 @@ void *kvrealloc(const void *p, size_t oldsize, size_t newsize,
 
 源码：`mm/util.c` 的 `kvmalloc_node`、`kvfree`、`kvrealloc`，`mm/vmalloc.c`。
 
-### 6.3 vmap / vunmap 的两种所有权 {#vmap}
+<a id="vmap"></a>
+
+### 6.3 vmap / vunmap 的两种所有权
 
 ```c
 void *vmap(struct page **pages, unsigned int count,
@@ -631,7 +665,9 @@ Count 是页数，flags 是虚拟区域标志而非 GFP，prot 是映射保护�
 
 源码：`mm/vmalloc.c` 的 `vmap`、`vunmap`、`__vunmap`。
 
-## 7. 访问用户数据，不直接解引用 {#uaccess}
+<a id="uaccess"></a>
+
+## 7. 访问用户数据，不直接解引用
 
 头文件 `<linux/uaccess.h>`。代表性调用形式：
 
@@ -695,7 +731,9 @@ static int reply_to_user(struct ref_request __user *dst)
 
 ## 8. 将内核后备存储映射给用户
 
-### 8.1 vm_insert_page：独立页及引用 {#insert-page}
+<a id="insert-page"></a>
+
+### 8.1 vm_insert_page：独立页及引用
 
 头文件 `<linux/mm.h>`：
 
@@ -754,7 +792,9 @@ static int mmap_one_zero_page(struct vm_area_struct *vma)
 
 源码：`mm/memory.c` 的 `validate_page_before_insert`、`insert_page_into_pte_locked`、`vm_insert_page`。
 
-### 8.2 vmalloc_user / remap_vmalloc_range {#user-map}
+<a id="user-map"></a>
+
+### 8.2 vmalloc_user / remap_vmalloc_range
 
 头文件 `<linux/vmalloc.h>`：
 
@@ -872,7 +912,9 @@ Kref 只解决存活，不串行化共享数据，也不提供 DMA 一致性；�
 
 源码：`mm/vmalloc.c` 的 `vmalloc_user`、`remap_vmalloc_range_partial`；`kernel/fork.c`、VMA 复制与销毁的回调使用位置。
 
-### 8.3 设备资源与 PFN 映射 {#pfn-map}
+<a id="pfn-map"></a>
+
+### 8.3 设备资源与 PFN 映射
 
 ```c
 int vm_iomap_memory(struct vm_area_struct *vma, phys_addr_t start,
@@ -889,7 +931,9 @@ int remap_pfn_range(struct vm_area_struct *vma, unsigned long user_addr,
 
 本页不给任意 PFN 的通用 mmap 模板。源码：`mm/memory.c` 的相应实现；arm64 的设备属性见 [地址空间篇](03-address-space.md#tlb-cache)。
 
-## 9. 用户页固定与部分成功 {#pin}
+<a id="pin"></a>
+
+## 9. 用户页固定与部分成功
 
 头文件 `<linux/mm.h>`：
 
@@ -904,6 +948,10 @@ void unpin_user_pages_dirty_lock(struct page **pages,
 
 本树有最后一个 vmas 参数，可为 NULL；不要复制其他版本的签名代替它。调用面向相应当前用户 mm，不在无用户 mm 的内核线程、IRQ 或禁止缺页等待的路径套用。
 
+**`pin_user_pages` 要求调用者已经持有当前 mm 的 `mmap_lock`，可读锁或写锁。** 它不是自行加锁的包装；只确认 `current->mm` 非空并不满足调用条件。传入 `vmas` 时，返回的 VMA 指针也只在相应锁仍持有期间有效；固定页的存活不等于 VMA 的存活。
+
+需要由接口自行管理 mmap 锁时，本树另有四参数 `pin_user_pages_unlocked(start, nr_pages, pages, gup_flags)`，参数次序不同，不应在已经持有该锁时直接套用。它在本树不支持 `FOLL_LONGTERM`；长期固定仍须选择支持该标志的入口并遵守其锁协议，不能只替换函数名。
+
 | 参数 / 行为 | 正确处理 |
 | --- | --- |
 | `start/nr_pages` | 用户页范围；计算首尾偏移、覆盖页数并检查溢出 |
@@ -915,11 +963,12 @@ void unpin_user_pages_dirty_lock(struct page **pages,
 
 #### 要么取得全部，要么归还部分
 
-该 helper 用于需要完整、可写页集合的示例。Pages 数组由调用者准备并保证容量；1024 是示例上限。这里只固定，不创建 DMA 映射，不改页内容。
+该 helper 用于需要完整、可写页集合的示例。调用它时外层尚未持有 mmap 锁，由 helper 配对取得和释放读锁。Pages 数组由调用者准备并保证容量；1024 是示例上限。这里只固定，不创建 DMA 映射，不改页内容。
 
 ```c
 #include <linux/errno.h>
 #include <linux/mm.h>
+#include <linux/mmap_lock.h>
 #include <linux/overflow.h>
 #include <linux/sched.h>
 
@@ -935,7 +984,9 @@ static int pin_all_writable_pages(unsigned long start,
         return -EINVAL;
     if (check_add_overflow(start, count * PAGE_SIZE, &end))
         return -EOVERFLOW;
+    mmap_read_lock(current->mm);
     nr = pin_user_pages(start, count, FOLL_WRITE, pages, NULL);
+    mmap_read_unlock(current->mm);
     if (nr < 0)
         return (int)nr;
     if ((unsigned long)nr != count) {
@@ -951,11 +1002,13 @@ static int pin_all_writable_pages(unsigned long start,
 
 Pin 不免除 DMA 映射、方向、同步、完成和进程生命周期处理。不是用一次普通 `put_page` 结束所有 PIN，也不因用户解除 VMA 就认定设备已结束。
 
-源码：`mm/gup.c`、`include/linux/mm.h`；同树 `Documentation/core-api/pin_user_pages.rst`。
+源码：`mm/gup.c` 的 `pin_user_pages`、`__gup_longterm_locked`、`__get_user_pages_locked` 及 unlocked 包装；声明见 `include/linux/mm.h`，锁接口见 `include/linux/mmap_lock.h`。同树 `Documentation/core-api/pin_user_pages.rst` 解释 PIN 与普通引用的使用模型，但不能代替具体入口的锁条件。
 
 ## 10. DMA 与设备资源
 
-### 10.1 Coherent 分配与成对参数 {#dma}
+<a id="dma"></a>
+
+### 10.1 Coherent 分配与成对参数
 
 头文件 `<linux/dma-mapping.h>`：
 
@@ -1008,7 +1061,9 @@ static void dma_block_destroy(struct ref_dma_block *b)
 
 调用 destroy 前，必须确认设备、回调和所有 CPU 访问都已结束。Coherent 不替代描述符发布顺序、屏障或访问同步。不要将这块存储传 `kfree`，也不由 CPU 指针推算替代 DMA 地址。
 
-### 10.2 Streaming 映射与同步 {#streaming}
+<a id="streaming"></a>
+
+### 10.2 Streaming 映射与同步
 
 代表性签名 / 调用形式：
 
@@ -1055,7 +1110,9 @@ void dma_unmap_sg(struct device *dev, struct scatterlist *sg,
 
 源码：`include/linux/dma-mapping.h`，实际 DMA ops；同树 `dma-api-howto.rst`、`dma-api.rst`。
 
-### 10.4 MMIO 资源映射 {#mmio}
+<a id="mmio"></a>
+
+### 10.4 MMIO 资源映射
 
 ```c
 void __iomem *devm_ioremap_resource(struct device *dev,
@@ -1068,7 +1125,9 @@ void __iomem *devm_ioremap_resource(struct device *dev,
 
 ## 11. 内存池与小块 DMA 池
 
-### 11.1 Mempool 的 min_nr 不是硬上限 {#mempool}
+<a id="mempool"></a>
+
+### 11.1 Mempool 的 min_nr 不是硬上限
 
 头文件 `<linux/mempool.h>`：
 
@@ -1114,7 +1173,9 @@ static int pool_example(void)
 
 若持有归还元素所需的锁却等待分配，预留池仍不能解决依赖死锁。源码：`include/linux/mempool.h`、`mm/mempool.c`。
 
-### 11.2 DMA Pool 服务设备小块对象 {#dma-pool}
+<a id="dma-pool"></a>
+
+### 11.2 DMA Pool 服务设备小块对象
 
 头文件 `<linux/dmapool.h>`：
 

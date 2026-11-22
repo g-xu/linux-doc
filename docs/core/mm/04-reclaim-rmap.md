@@ -46,7 +46,9 @@ MGLRU 将类似访问新近程度的页分到不同 generation。Aging 观察访
 
 两类实现改变候选管理和扫描成本，不改变“先保护数据与使用关系，再允许复用”的基本要求。源码读 `mm/vmscan.c`，设计说明见同树 `Documentation/mm/multigen_lru.rst`。
 
-### 1.5 Swap 不是把所有内存统一写入一个文件 {#swap}
+<a id="swap"></a>
+
+### 1.5 Swap 不是把所有内存统一写入一个文件
 
 普通匿名内容没有可直接重新读取的原始文件，交换机制为适用内容准备后备位置，并把位置标识联系到有关非 present PTE。
 
@@ -64,7 +66,9 @@ MGLRU 将类似访问新近程度的页分到不同 generation。Aging 观察访
 
 源码：`mm/swap_state.c`、`mm/swapfile.c`、`mm/page_io.c`、`mm/memory.c` 的 `do_swap_page`。
 
-## 2. 工作集、refault 与反复回收 {#working-set}
+<a id="working-set"></a>
+
+## 2. 工作集、refault 与反复回收
 
 ### 2.1 当前驻留量不等于当前工作集
 
@@ -75,8 +79,8 @@ MGLRU 将类似访问新近程度的页分到不同 generation。Aging 观察访
 | 量 | 回答的问题 | 不回答的问题 |
 | --- | --- | --- |
 | 虚拟区间容量 | 进程拥有多大地址范围？ | 这些地址是否驻留、是否近期使用 |
-| RSS | 当前映射了多少驻留内存？ | 这些页是否独占、是否近期活跃 |
-| PSS | 共享驻留页按映射者分摊后有多少？ | 实际访问热度及未来需求 |
+| RSS（Resident Set Size，驻留集大小） | 当前映射了多少驻留内存？ | 这些页是否独占、是否近期活跃 |
+| PSS（Proportional Set Size，比例分摊驻留量） | 共享驻留页按映射者分摊后有多少？ | 实际访问热度及未来需求 |
 | 工作集 | 指定对象在指定时间窗口访问了哪些页？ | 没有窗口或采样定义时的唯一精确值 |
 
 对进程页集合，可用 `W(t, Δ)` 表示 `[t - Δ, t]` 内访问过的页。窗口变长，覆盖可能扩大；访问模式改变，集合也改变。它是分析访问行为的模型，不是某个 `/proc` 字段直接给出的万能数字。
@@ -274,7 +278,9 @@ OOM 处置要先确定作用域和适用条件，再选择候选任务；选择�
 
 这些是读取方向，本轮没有在目标机采集数据或进行调参。文件统计受权限、配置及并发变化影响。
 
-### 8.1 PSI 测量停顿，不是内存占用率 {#psi}
+<a id="psi"></a>
+
+### 8.1 PSI 测量停顿，不是内存占用率
 
 用量回答占用了多少，PSI（Pressure Stall Information）回答资源争用使任务受到多少时间影响。`/proc/pressure/memory` 表达系统范围；cgroup v2 的相应 `memory.pressure` 表达该资源组范围。
 
@@ -327,3 +333,5 @@ cat "$CG/memory.events"
 至此，资源组织、分配、地址使用和再利用形成闭环。下一篇 [页粒度、位置与资源约束](05-placement-and-limits.md) 补充大页、CMA、NUMA、记账承诺和页面固定，解释它们怎样改变前面的条件。
 
 深入到候选执行和安全退出，读 [回收专题](sub/reclaim/01-reclaim.md)；对象索引、真实页表确认和解除映射协议，读 [rmap 专题](sub/reclaim/02-rmap.md)。
+
+具体候选选择另读 [传统LRU的证据与预算](sub/reclaim/03-lru.md) 和 [MGLRU的世代与反馈](sub/reclaim/04-mglru.md)。两者是按配置选择的不同实现，不将generation和active/inactive当作同一套算法。

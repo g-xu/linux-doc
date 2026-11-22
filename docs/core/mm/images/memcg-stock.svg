@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 350" role="img" aria-labelledby="title desc">
+  <title id="title">Memcg批量charge与per-CPU额度库存</title>
+  <desc id="desc">给定batch32，第一普通一页请求将层级额度加32，使用一份留stock31；第二请求使用一份stock，层级计数仍32而stock30；drain未使用库存后计数二stock零。不表示预先分配32张物理页。</desc>
+  <rect width="1000" height="350" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="500" y="31" font-size="22">Stock 缓存已charge的额度，不缓存物理页</text>
+    <g fill="#f8fafc" stroke="#64748b"><rect x="28" y="87" width="288" height="126" rx="4"/><rect x="356" y="87" width="288" height="126" rx="4"/><rect x="684" y="87" width="288" height="126" rx="4"/></g>
+    <g font-size="18"><text x="172" y="118">第一请求</text><text x="500" y="118">第二请求</text><text x="828" y="118">Drain 未消费额度</text><text x="172" y="151">层级计数32，使用1</text><text x="500" y="151">层级计数32，使用2</text><text x="828" y="151">层级计数2，使用2</text></g>
+    <g font-size="20" fill="#15803d"><text x="172" y="188">Stock=31</text><text x="500" y="188">Stock=30</text><text x="828" y="188">Stock=0</text></g>
+    <text x="500" y="266" font-size="18">没有预先拿到三十张额外物理页；改变的是额度与共享计数的交接</text>
+    <text x="500" y="321" font-size="15" fill="#475569">单CPU普通charge的限定模型、给定batch32；不是memory.current全部组成或系统实测结果</text>
+  </g>
+</svg>

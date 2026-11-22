@@ -1,120 +1,122 @@
-# 页缓存与写回：索引、内容有效性和再次脏化
+# 页缓存与写回：对象成员资格、索引标记与 I/O 状态
 
-本篇基于 arm64 Linux 6.1.158，选普通文件页缓存为主线；具体文件系统仍通过 `address_space_operations` 实现数据读入、脏化和写回。DAX、直接 I/O 和 swap 后端不套用同一完整路径。
+基于 arm64 Linux 6.1.158，主线为普通文件 page cache。DAX、直接 I/O、swap 和具体文件系统日志不是同一条完整流程。
 
-## 1. 同一文件数据由哪两个索引联系？
+页缓存把“文件偏移”连接到 RAM 中的内容，使普通文件读写和文件映射可以复用同一份数据。找到缓存对象、读到有效内容、提交修改、完成写回是不同阶段，本篇先追踪这些阶段，再解释索引标记和锁。前置关系见 [页缓存机制](../../03-address-space.md#page-cache)。
 
-`address_space.i_pages` 用文件页索引定位缓存 folio；`address_space.i_mmap` 组织可能映射该文件范围的 VMA。前者找数据，后者服务反向关系，不是一棵树同时完成两种查找。
+## 1. 内容对象怎样被三个方向索引？
 
-| 对象 / 状态 | 责任 |
-| --- | --- |
-| `address_space` | 缓存索引、文件回调、映射区间与相关保护 |
-| `folio` | 内容、锁、引用及 uptodate / dirty / writeback |
-| `i_pages` 的 marks | 标记需要写回等索引状态，避免每次全量扫描 |
-| `inode` 与 `bdi_writeback` | 文件级待写集合、写回管理和统计 |
-| 文件系统回调 | 内容读入、具体块映射、脏化和 I/O 提交 |
+| 关系 | 实现 | 用来回答 |
+| --- | --- | --- |
+| 文件位置到内容 | `address_space.i_pages` 的 XArray | 这个索引的缓存在哪里？ |
+| 内容到候选映射 | `address_space.i_mmap` | 哪些 VMA 可能使用该文件范围？ |
+| inode 到写回工作 | inode/writeback 集合 | 哪个文件还有需要处理的脏状态？ |
 
-声明见 `include/linux/fs.h`。Buffered read、buffered write 和普通文件 mmap 可使用同一缓存对象，而不是为每个进程各复制一套文件缓存。
+Folio 的引用、mapping、index 和锁将它与这些关系联系起来。进入 XArray 不表示读入已完成，存在引用不表示它仍是原 mapping 成员。
 
-## 2. 进入索引，不等于内容已经有效
+`filemap_add_folio` 要建立索引成员资格并处理适用记账与 shadow；buffered read、write、mmap 可复用同一内容对象，而非每个进程各有独立文件副本。
 
-`filemap_add_folio` 将新对象加入 `i_pages`。对象可先进入索引，再通过相应读入和完成协议变成 uptodate；其他查找者需要等待或验证，不能仅因“找到 folio”就读未完成内容。
+## 2. 索引存在和 uptodate 为什么分开？
 
-这正是引用、folio 锁与 uptodate 各自不同的原因：
-
-- 引用保持对象存活。
-- 锁协调读入、截断和关键状态改变。
-- Uptodate 表示本路径需要的内容已经有效；不是一种资源所有权。
-
-本篇以普通 filemap fault 为例；某些文件系统的 buffered read 还处理部分有效范围，不用它们覆盖所有 folio 的统一规则。
-
-## 3. 文件缺页：查到缓存后还要检查哪些状态？
-
-`mm/filemap.c` 的 `filemap_fault` 主干可按三个阶段阅读：
+新 folio 可以先发布到缓存索引，其他查询者于是找到同一对象，而不重复创造同位置内容；完成读入前，它还不是可直接消费的有效数据。
 
 ```text
-检查文件大小和所需页索引
-  -> 查找或创建缓存 folio，处理适用预读
-  -> 获取 folio 锁；等待可能需要释放 mmap 锁
-  -> 重查 folio 仍属于原 mapping，内容 uptodate
-  -> 重查文件大小与索引
-  -> 返回锁定数据页给公共 fault 安装路径
+锁定的缓存对象进入索引
+后备读入提交/完成
+按协议标记有效内容、结束相应锁
+其他引用者验证状态后读取
 ```
 
-它返回 `VM_FAULT_LOCKED` 时，表示上层仍需按协议完成安装和解锁，而不是 helper 已完成全部用户 PTE 更新。
+锁等待和 uptodate 检查把“找到对象”与“获得可用内容”分开。不同文件系统/大 folio 的部分有效范围有自己的接口，不一律等同于普通 filemap fault 的整对象检查。
 
-若等待中丢掉 mmap 锁，则返回 RETRY 使上层重新取得 VMA；不能把“文件对象仍存活”替代“VMA 没有变化”。
+## 3. Filemap_fault 两次大小检查的意义
 
-## 4. 截断竞争：一个有引用的 folio 为什么仍不能安装？
+先根据 `i_size` 和 `vmf->pgoff` 拒绝超范围。找到或创建 folio 后，取得锁，再检查：
 
-考虑 fault 已取得缓存对象引用，另一线程截断文件：
+1. folio 是否仍属于原 mapping，是否覆盖所需 index。
+2. 内容是否 uptodate；不满足则按读入/错误/重试路径。
+3. 期间若释放了 mmap 锁，返回 RETRY 重找 VMA。
+4. 锁内重新核对 i_size，才交出适用数据页。
 
-| 时刻 | 缺页线程 | 截断线程 |
-| --- | --- | --- |
-| 查找 | 取得 index 对应 folio 引用 | 尚未完成截断 |
-| 等待 folio 锁 | 引用保证对象还在 | 可改变文件大小及缓存成员资格 |
-| 重新取得锁 | 检查 mapping 和 i_size | 已退出相应临界区 |
-| 继续或重试 | 原成员资格 / 大小失效则不按旧观察安装 | 不靠调用者旧引用恢复旧文件大小 |
+例如第一次查询 index 7 合法，等待时文件缩到只含索引 0～3。引用保证旧 folio 对象未消失，却不保证 index 7 仍代表合法文件数据。继续安装会把旧内容错误暴露为当前文件范围。
 
-对象存在、仍属于索引、仍在有效文件范围，是三个不同问题。`filemap_fault` 对 `folio->mapping` 和 `i_size` 的重查体现了这一点。
+返回 `VM_FAULT_LOCKED` 也不是已经安装用户 PTE；公共 fault 路径继续处理映射提交和结束持有。
 
-## 5. 脏化不是只给 folio 写一个位
+## 4. Dirty 的三层状态
 
-`folio_mark_dirty` 在适用 mapping 下调用 `mapping->a_ops->dirty_folio`。具体文件系统可能需要设置缓存索引标记、更新 inode 待写状态、块或缓冲元数据与统计。
-
-调用者不能手动设置一个 dirty 位就认为这些副作用全部完成。反过来，索引中有 dirty mark 也不是这次 I/O 已完成的证明。
-
-共享文件 mmap 的写入与 PTE 脏状态还要通过 `folio_mkclean` 等路径协调到文件缓存。私有文件映射的 COW 新页则属于匿名内容，不把它当作原文件自动写回。
-
-## 6. Dirty 与 writeback 为什么必须分开？
-
-![写回期间再次脏化的状态](../../images/deep-writeback-redirty.svg)
-
-只跟踪一个缓存 folio 的主状态，省略具体文件系统的提交步骤：
-
-| 时刻 | Dirty | Writeback | 含义 |
-| --- | --- | --- | --- |
-| 内容有效且未修改 | 0 | 0 | 可讨论为干净缓存 |
-| CPU 修改内容 | 1 | 0 | 需要适用写回 |
-| 本轮选取并开始写回 | 0 | 1 | 本轮在进行，不代表内容不会再被修改 |
-| 写回期间再次修改 | 1 | 1 | 同时存在进行中的写回与新的脏状态 |
-| 本轮完成 | 1 | 0 | 新脏状态不能被本轮完成无条件抹掉 |
-
-这是状态协议示意，不规定文件系统一定对内存内容制作不可变快照。具体数据版本、锁、块 I/O 和一致性仍由文件系统保证。
-
-`folio_clear_dirty_for_io`、`__folio_start_writeback` 和 `folio_end_writeback` 的作用不能互换。清除 dirty 的准备过程与开始 writeback 需要正确协调，I/O 完成则结束本轮 writeback 并唤醒相应等待者。
-
-## 7. 为什么清脏之前还要看 PTE？
-
-本树 `folio_clear_dirty_for_io` 要求 folio 锁。在适用可写回 mapping 下，它调用 `folio_mkclean` 处理用户映射中的脏状态，配合重新脏化副作用，再协调清脏和统计。
-
-这是为了避免 PTE、folio、索引和文件系统各自清状态时遗漏修改。单独读一次 dirty 位，再释放锁并直接提交，不能代表该同步协议。
-
-`__folio_start_writeback/__folio_end_writeback` 还维护 `i_pages` 的 WRITEBACK 标记与对应计数。它们不是普通字段赋值包装。
-
-## 8. 谁挑选要写的文件，谁提交实际 I/O？
-
-`fs/fs-writeback.c` 管理 inode / writeback 工作；`__writeback_single_inode` 协调本轮文件写回。`mm/page-writeback.c` 提供通用扫描、标记和节流基础；具体 `writepages` 等回调执行文件系统相关工作。
-
-因此“文件缓存是 mm 的一部分”不等于文件系统块分配、日志或持久性都由 mm 统一完成。
-
-写回完成也不等于完整 `fsync` 持久性要求已满足。还可能涉及元数据、日志、错误报告和设备完成协议，不能只检查一个 writeback 位就宣称数据已经可靠落盘。
-
-## 9. 写入者为什么也会被节流？
-
-如果脏化速度长期高于后端处理能力，继续积累缓存会挤压可回收供给。`balance_dirty_pages_ratelimited` 以通用写回状态为基础，在适用路径约束写入速度。
-
-这不是每次 write 都同步刷整张页，也不是只看全机空闲内存做决定。写回域、后端能力和相关阈值共同影响策略，本文不提供未经测量的通用调参值。
-
-## 10. 阅读和衔接
-
-| 问题 | 当前实现 |
+| 状态 | 作用 |
 | --- | --- |
-| 索引插入与查找 | `mm/filemap.c`：`filemap_add_folio`、`filemap_get_pages` |
-| 文件缺页与截断重查 | `filemap_fault` |
-| 脏化副作用和清脏 | `mm/page-writeback.c`：`folio_mark_dirty`、`folio_clear_dirty_for_io` |
-| 写回起止与再次脏化 | `__folio_start_writeback`、`__folio_end_writeback`；`mm/filemap.c`：`folio_end_writeback` |
-| inode 工作与实际回调 | `fs/fs-writeback.c`：`__writeback_single_inode` |
-| 写入者节流 | `balance_dirty_pages_ratelimited` |
+| folio dirty | 内容有待保存的修改 |
+| XArray DIRTY/TOWRITE 等 mark | 有效寻找本轮候选，不每次全索引扫描 |
+| inode 的脏/待写状态 | 把相关文件送入写回协调 |
 
-观察 dirty / writeback、写回事件与 I/O 时，先对应状态和计量单位；本篇没有采集数据。缓存如何被安全移出继续读 [回收](../reclaim/01-reclaim.md)，候选用户映射如何定位继续读 [rmap](../reclaim/02-rmap.md)。
+`folio_mark_dirty` 调用适用 `a_ops->dirty_folio`，以文件系统/通用 helper 完成这些副作用。直接设置一个位不能代替索引、inode 和统计更新。
+
+私有文件写产生的匿名 COW 页不因原 VMA 有文件就自动写回原文件；共享写路径则协调文件缓存和 PTE 脏状态。
+
+## 5. Clear_dirty_for_io 为何不是“所有脏标记马上归零”？
+
+本树在 folio 锁下通过 `folio_mkclean` 等协调用户 PTE 和缓存修改，再清 folio dirty、调整统计。**缓存索引的 DIRTY mark 可以暂时保留**，直到开始写回的阶段按状态处理。
+
+这避免候选已被选中但 I/O 起始尚未完成时，被索引扫描错误地彻底遗忘。临时不同步必须按协议解释，不能由观察者“修正”一个看起来不一致的 mark。
+
+## 6. 一个 folio 的完整位/标记序列
+
+限定使用通用 writeback tags 的正常可写回 mapping，省略具体块 I/O：
+
+| 时刻 | Folio dirty | DIRTY mark | Writeback | WRITEBACK mark |
+| --- | --- | --- | --- | --- |
+| 已脏化 | 1 | 1 | 0 | 0 |
+| clear_dirty_for_io 完成 | 0 | 可仍为 1 | 0 | 0 |
+| start_writeback 完成，没再次脏化 | 0 | 0 | 1 | 1 |
+| I/O 期间再次修改 | 1 | 1 | 1 | 1 |
+| 本轮 I/O 结束 | 1 | 1 | 0 | 0 |
+
+`__folio_start_writeback` 在相应 XArray 锁内设置 WRITEBACK mark，只有 folio 没有新 dirty 时才清 DIRTY mark。`__folio_end_writeback` 结束 WRITEBACK 标记和计数，不抹掉新脏化。
+
+![两种位不能合并](../../images/deep-writeback-redirty.svg)
+
+表是状态协议，不保证所有文件系统制作不可变 I/O 快照。具体字节的一致性、重新写入和块提交要按文件系统协议保证。
+
+## 7. 持续写入时，一轮扫描怎么结束？
+
+`write_cache_pages` 等通用逻辑通过范围、`nr_to_write` 和适用 TOWRITE 标记组织一轮任务；同步写回或 tagged_writepages 等条件可选择先给候选集合标记。
+
+```text
+确定本轮范围/目标
+标记或选取适用候选
+取得 folio 锁，重新检查成员资格与 dirty/writeback
+按文件系统回调处理
+推进索引和预算，而不是永远追逐新增 dirty
+```
+
+这不是冻结全部内容的全局快照，也不是所有文件系统都必须直接使用同一个扫描函数。候选标记解决扫描与进展，数据版本由另一层协议管理。
+
+## 8. 谁结束 I/O，谁报告错误？
+
+文件系统 `writepages` 等实际处理块映射和提交；完成路径调用 `folio_end_writeback`，更新统计并唤醒等待者。错误还要进入相应 mapping/inode 的错误报告机制。
+
+Writeback 位归零只表示这轮对象状态结束，不证明文件数据、元数据、日志与设备缓存已经满足 fsync 的持久性要求。
+
+`fs/fs-writeback.c` 的 `__writeback_single_inode` 协调文件级任务；mm 的 helper 不替文件系统决定日志顺序和设备持久化。
+
+## 9. 写入者节流为何不是一次 write 对应一次同步 I/O？
+
+`balance_dirty_pages_ratelimited` 联系 dirty 产生速度、写回域、后端进度和阈值，适用时让写入者承担等待，避免持续累积挤压可回收供给。
+
+它同时需要区分 dirty 与 writeback：前者待提交，后者已在进行。把两者只加成一个“占用量”，不足以说明哪一层产生瓶颈。
+
+## 10. 锁和引用分工
+
+| 保护 | 作用 |
+| --- | --- |
+| folio 引用 | 对象存活 |
+| folio 锁 | 读入、截断及关键内容状态转换 |
+| invalidate 相关保护 | 阻止错误地在失效范围创建/读入内容 |
+| XArray 锁 | 成员资格和 marks |
+| mmap / PTE 保护 | 用户映射规则与实际安装 |
+| inode/writeback 保护 | 文件工作集合、统计和 I/O 协调 |
+
+`filemap_fault` 等待时可能释放 mmap 锁；再次读取不能继续沿用旧 VMA。最后回收还要冻结引用、验证 dirty 并退出索引，见 [回收执行](../reclaim/01-reclaim.md)。
+
+源码：`mm/filemap.c` 的插入、fault、完成；`mm/page-writeback.c` 的 dirty、clear、start/end、扫描与节流；`fs/fs-writeback.c` 的文件协调。本文没有实际提交 I/O 或改写目标机文件。

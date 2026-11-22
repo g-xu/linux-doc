@@ -1,77 +1,58 @@
-# Rmap：对象索引、候选 VMA 与真实页表映射
+# Rmap：候选地址计算、页表验证与映射解除
 
-本篇基于 arm64 Linux 6.1.158，承接 [回收篇](../../04-reclaim-rmap.md)。重点是**从已知 folio 找到它的实际用户映射，并在同步协议中检查或修改这些关系**。
+基于 arm64 Linux 6.1.158。Rmap 不为每页维护一份永远有效的所有 PTE 指针数组，而以内容对象的位置筛选 VMA，再在正确保护下核对实际条目。
 
-## 1. Rmap 不是每页保存一个“所有 PTE 指针数组”
+从进程地址查页，可以走页表；回收先拿到一页，却要反过来找到用户地址。Rmap（reverse mapping，反向映射）先用文件或匿名对象的区间索引缩小范围，再检查候选地址的真实页表。先读 [反向映射机制](../../04-reclaim-rmap.md)，本篇进一步推演位置计算、确认和撤销。
 
-本树采用对象式索引，先根据内容归属缩小可能的 VMA 集合，再走页表验证：
+## 1. 索引键是什么？
 
-| 内容类型 | 候选索引 | 最后要确认 |
+| 对象 | 候选索引 | 输入 |
 | --- | --- | --- |
-| 文件 folio | `address_space.i_mmap` 的 VMA 区间树 | 此 VMA 的目标条目是否仍映射当前页 |
-| 普通匿名 folio | 适用 `anon_vma` 的 `anon_vma_chain` 区间树 | 此地址是否仍有当前页的映射 |
+| 文件 folio | `mapping->i_mmap` VMA 区间树 | 文件页位置及 folio 覆盖范围 |
+| 普通匿名 folio | 相应 anon_vma 的链式关系/区间树 | 匿名关系位置与 folio 范围 |
 
-区间索引记录“可能覆盖这个对象位置”，不是已经确认当前 PFN 的映射清单。Folio 的归属、位置与引用提供查询前提，不允许对任意页强行当作匿名 rmap 对象。
+`rmap_walk_anon/rmap_walk_file` 用 `folio_pgoff` 和 `folio_nr_pages` 形成位置区间。位置不是物理 PFN，不能因为迁移换了 PFN就丢掉内容对象的索引身份。
 
-![对象索引筛选候选，页表验证实际关系](../../images/deep-rmap-candidates.svg)
+锁/引用稳定归属，区间索引缩小范围，页表验证确认真实映射，这三层缺一不可。
 
-## 2. 文件页例子：三个候选，可能只有一个真实映射
+![候选不是映射清单](../../images/deep-rmap-candidates.svg)
 
-假设某文件基本页索引为 7，三个普通线性 VMA 的文件区间都覆盖该索引：
+## 2. 一个真实可计算的候选地址
 
-| VMA | 当前实际情况 | rmap 验证结果 |
-| --- | --- | --- |
-| A | 已缺页，PTE 指向该文件 folio | 真实映射 |
-| B | 尚未访问该位置，PTE 为空 | 只是候选 |
-| C | 私有写后 PTE 指向新的匿名页 | 对原文件 folio 不是真实映射 |
-
-文件区间关系可以仍然存在，而 COW 后内容身份已经改变。不能遍历 `i_mmap` 后不查 PTE，就把 A、B、C 都算成原页的映射。
-
-对普通基本页线性范围，可用下面的关系理解候选地址：
+限定普通基本页线性文件 VMA，以符号 V 表示适用起点：`vm_pgoff=4`、长度四页，对象 index=7。
 
 ```text
-用户地址 = VMA 起点 + (对象页索引 - vm_pgoff) × PAGE_SIZE
+候选地址 = V + (7-4)×PAGE_SIZE = V + 3×PAGE_SIZE
 ```
 
-只适用于已验证落在范围内的简化模型；真实源码使用 `vma_address` 等 helper，并处理 folio 范围与不同映射类型，不自行用公式绕过检查。
+它在范围内。Index=8 已超过这段 VMA，不能生成一次合法候选。
 
-## 3. 匿名索引为什么需要 anon_vma_chain？
+真实实现使用 `vma_address` 等 helper，并处理大 folio 覆盖范围、特殊映射和越界。不是让调用者对任意页直接套减法访问页表。
 
-Fork 后多个 VMA 可能共享匿名内容，同时后续 COW 会生成仅属于其中一个分支的内容。`anon_vma_chain` 连接 VMA 与相关匿名对象索引，允许在保持关系表达的同时缩小搜索范围。
+## 3. 三个候选怎样只留下一个真实映射？
 
-它不是一个 `mm` 对应一个固定 anon_vma，再把所有匿名页都接到同一个全局链表。`anon_vma_clone/anon_vma_fork` 还包含复用条件，不能画成每次 fork 无条件新建完全相同的一套节点。
+三段 VMA 都在对象索引中覆盖 index 7：
 
-图只展示候选与验证的逻辑，不规定某一次 fork 实际新增的全部对象数。对应实现见 `include/linux/rmap.h`、`mm/rmap.c`。
+| VMA | 目标条目 | 对当前文件 folio 的结果 |
+| --- | --- | --- |
+| A | Present，PFN 对应该 folio | 真正映射 |
+| B | None，尚未访问 | 候选但没有映射 |
+| C | 私有 COW 后指向匿名 Q | 候选但不是原文件内容 |
 
-## 4. 一次 walk 怎样把索引变成操作？
+`i_mmap` 表达文件范围关系，不因每次缺页或 COW 都变成原 PFN 的精确列表。因此查询者必须核对 PTE/PMD，而不能只数候选 VMA。
 
-`rmap_walk` 根据 folio 类型进入 `rmap_walk_anon` 或 `rmap_walk_file`。它计算 folio 覆盖的对象位置区间，在相应树中筛选候选 VMA，再调用 `rmap_walk_control.rmap_one`。
+## 4. Anon_vma_chain 为何比“每进程一张链”复杂？
 
-```text
-持有适用 folio / 对象保护
-  -> 获取匿名或文件区间索引保护
-  -> 按对象位置筛选候选 VMA
-  -> 计算该候选中可能的用户地址
-  -> 回调在实际页表中检查 / 操作
-  -> 达到 done 条件或按回调结果结束
-```
+Fork 需要保留旧共享内容的候选关系，COW 后新内容又要能够减少不相关分支扫描。一个 VMA 可以通过多个 chain 联系相关匿名对象；它们不是物理页副本。
 
-不同用户可用这套框架检查访问、解除映射或迁移关系。索引遍历本身不是固定执行“释放物理页”的命令。
+`anon_vma_clone` 复制相应关系，`anon_vma_fork` 还尝试复用合适 anon_vma。不能把每一次 fork 固定画成“必新建一个完全独立对象树”。
 
-## 5. page_vma_mapped_walk 负责验证什么？
+新页的 `page_add_new_anon_rmap`、复用时 `page_move_anon_rmap` 等与这些关系协作。内容分支改变和索引链分配是不同事实。
 
-`mm/page_vma_mapped.c` 的 `page_vma_mapped_walk` 在相应页表锁下定位条目，验证目标 PFN / folio 范围及适用条目类型。
-
-它还区分 PMD 映射与 PTE 映射的大 folio、迁移等状态；不能在看到一个 PMD 非空后就认为它是普通下级表。
-
-调用者若提前结束遍历，需要按 helper 契约结束持有的页表映射 / 锁。保留一个 PTE 指针到锁外后长期使用，不是 rmap 提供的能力。
-
-## 6. Try_to_unmap 如何使用这些关系？
-
-本树 `try_to_unmap` 建立控制对象：
+## 5. 遍历框架怎样调用具体操作？
 
 ```c
-/* mm/rmap.c：控制对象主干摘录。 */
+/* mm/rmap.c：try_to_unmap 使用的控制主干。 */
 struct rmap_walk_control rwc = {
     .rmap_one = try_to_unmap_one,
     .arg = (void *)flags,
@@ -80,35 +61,51 @@ struct rmap_walk_control rwc = {
 };
 ```
 
-回调检查并修改真实映射，协调 dirty 信息、适用 swap 编码、引用和翻译失效。操作可能被 mlock、竞争或其他条件阻止，因此调用者仍检查 `folio_mapped` 等结果。
+`rmap_walk` 选择文件/匿名路径，计算覆盖区间，调用每个候选的 `rmap_one`。回调返回值和 done 条件允许提前结束。
 
-`try_to_unmap` 是内部执行接口，调用者需要适用 folio 锁 / 引用和 flags 协议，不能把它当作驱动取得任意用户页后可调用的通用清理函数。
+同一框架可服务访问检查、unmap、迁移等，遍历本身不固定执行物理页释放。TTU_RMAP_LOCKED 还表达调用者已经持有相应保护的约定，不是任意省锁标志。
 
-## 7. 三层保护的对象不同
+## 6. Page_vma_mapped_walk 的确认阶段
 
-| 保护 | 主要责任 |
+Helper 定位对应页表层，取得适用锁，检查条目类型和 PFN/folio 覆盖关系。PTE-mapped 与 PMD-mapped 大页不同，迁移条目也不能解释成普通可直接访问内容。
+
+如果条目在查询期间变化，不能继续修改旧指针。提前停止 walker 需要结束适用页表映射与锁，不能长期保存一个 PTE 地址作为该页的永久反向指针。
+
+这也是为什么 “已知 folio” 不使整个 VMA 页表稳定：每一个真实条目都要按自己的保护和验证完成操作。
+
+## 7. Unmap 修改哪些状态？
+
+普通回收回调在真实映射锁内取得条目，处理 dirty 信息、RSS/映射关系、适用后备编码和引用，执行相应翻译失效。匿名需保留后备时生成 swap entry；迁移则使用其专用编码和恢复协议。
+
+```text
+旧：用户 PTE present -> P
+回收适用后：PTE 不再 present，可能记录 swap 后备
+P 的用户映射数量下降
+但缓存、临时引用或 pin 仍可能保持 P
+```
+
+不同类型不都变成空 PTE。无后备的有用匿名内容不能照文件干净页一样丢弃。
+
+## 8. 为什么 void 返回还要看 mapped？
+
+`try_to_unmap` 的回调可能因保护、竞争或其他条件提前退出，外层通过 `folio_mapped` 等检验仍有多少使用关系。一次返回不是“所有候选全部成功解除”的证明。
+
+即使 mapcount 已为零，底层引用和缓存成员资格未必结束；最终回收在 [执行篇](01-reclaim.md) 的引用冻结和 dirty 验证处继续。
+
+## 9. 三层保护与文件截断
+
+| 保护 | 稳定的内容 |
 | --- | --- |
-| folio 锁与引用 | 归属关系及处理期间的对象存活 |
-| anon_vma / `i_mmap_rwsem` 等 | 候选集合及其关系结构 |
-| PTE / PMD 锁 | 实际条目验证与修改 |
+| folio 锁/引用 | 当前归属及对象存活 |
+| anon_vma 或 i_mmap 保护 | 候选关系集合 |
+| PTE/PMD 锁 | 真实条目读取和修改 |
 
-`rmap_walk_file` 明确依赖 folio 锁稳定 mapping，以便取得 `i_mmap` 保护；匿名路径有自己的对象取得与读锁协议。不能只读一个 mapping 指针，就在对象可能已退出时拿其锁。
+`rmap_walk_file` 依赖 folio 锁稳定 mapping，才能安全取得其 `i_mmap_rwsem`；引用只是对象没释放，不足以证明仍是原文件成员。
 
-读锁保护候选集合，也不自动使整个 mm 的所有页表成为静止快照。不同层的保护解决不同竞争，不能彼此替代。
+共享集合读锁也不冻结所有 mm 的 PTE。只有三层协议联合起来，候选定位才能成为一次正确的映射操作。
 
-## 8. Unmap、TLB 和最终归还如何连接？
+## 10. Arm64 翻译完成点
 
-撤掉软件 PTE 后，旧翻译的使用还需要架构失效协议。部分回收路径采用批量 flush，不能因未立即看到单独失效动作就省掉最后完成步骤。
+撤销软件条目后，还需适用 TLB/MMU notifier 协调。批量失效可以延后具体指令，但不能省掉资源重用之前必须完成的协议。
 
-另一方面，即使全部用户映射已撤销，也可能仍有文件缓存引用、临时访问引用或 pin。Rmap 和 mapcount 不是所有引用的总清单；最后回收继续看 [回收专题](01-reclaim.md) 的安全退出条件。
-
-## 9. 读完应能解释
-
-| 问题 | 实现入口 |
-| --- | --- |
-| 如何从归属找到候选？ | `mm/rmap.c`：`rmap_walk_anon`、`rmap_walk_file` |
-| fork 为什么不按固定对象数新增？ | `anon_vma_clone`、`anon_vma_fork` |
-| 如何确认实际页表关系？ | `mm/page_vma_mapped.c`：`page_vma_mapped_walk` |
-| 如何执行 unmap 与检查结果？ | `mm/rmap.c`：`try_to_unmap`、`try_to_unmap_one` |
-
-图和三候选例子是静态推演，未执行 fork、COW 或追踪实验。完整 KSM、HugeTLB rmap 和所有批量失效分支不是本篇覆盖的全部实现。
+源码：`mm/rmap.c` 的对象取得、walk 与回调；`mm/page_vma_mapped.c` 的条目确认；arm64 `pgtable.h/tlbflush.h`。图例和地址计算未在目标机运行，完整 KSM/HugeTLB 分支需按专用类型继续读。

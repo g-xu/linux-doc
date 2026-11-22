@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" role="img" aria-labelledby="title desc">
+  <title id="title">局部链头回到 A 但 tid 已变化的竞争</title>
+  <desc id="desc">外层看到A到B到C和tid T。同CPU中断先取得A，再取得B，最后归还A，链变为A到C，tid为T加三step。只比较链头可能把尚被使用的B重新入链；联合比较tid拒绝旧观察。限定非RT合法非睡眠快路径。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
+  <rect width="1000" height="500" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="500" y="32" font-size="23">旧 head 仍是 A，不等于旧 next = B 仍然可用</text>
+    <text x="214" y="82" font-size="20">外层分配路径</text><text x="786" y="82" font-size="20">同 CPU 的中断路径</text>
+    <rect x="28" y="110" width="372" height="70" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="214" y="138" font-size="18">读取 A→B→C，tid = T</text><text x="214" y="165" font-size="17">保存旧 object=A，next=B</text>
+    <g fill="#fef3c7" stroke="#b45309"><rect x="600" y="136" width="372" height="58" rx="4"/><rect x="600" y="218" width="372" height="58" rx="4"/><rect x="600" y="300" width="372" height="58" rx="4"/></g>
+    <g font-size="17"><text x="786" y="172">取得 A：head=B，T+step</text><text x="786" y="254">取得 B：head=C，T+2step</text><text x="786" y="336">归还 A：A→C，T+3step</text></g>
+    <path d="M786 196V212M786 278V294M598 329H510V407H406" fill="none" stroke="#475569" marker-end="url(#a)"/>
+    <text x="214" y="240" font-size="18" fill="#b91c1c">若只按 head=A 提交旧 next=B</text>
+    <text x="214" y="272" font-size="18" fill="#b91c1c">会把仍被中断路径持有的 B 再供给</text>
+    <rect x="28" y="377" width="372" height="68" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="214" y="405" font-size="18">实际：比较 (A,T) 失败</text><text x="214" y="431" font-size="17">重读 next=C 和新 tid 后才重试</text>
+    <text x="740" y="413" font-size="18">B 尚未归还，不能再次发放</text>
+    <text x="500" y="480" font-size="15" fill="#475569">静态竞争推演；非 RT、同活动 slab、合法非睡眠中断命中路径；不示意 RT 硬中断分配</text>
+  </g>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc">
+  <title id="title">传统LRU普通访问证据的两轮判断</title>
+  <desc id="desc">普通mapped非executable文件候选第一轮PTE证据一且旧referenced零，设置标记并保留。第二轮仍有证据且旧标记一，激活。若没有新PTE证据但旧标记仍一，则进入仅干净时可回收的相应分支。</desc>
+  <rect width="1000" height="340" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="500" y="31" font-size="22">初次fault的访问证据，不等于持续工作集访问</text>
+    <rect x="28" y="90" width="288" height="112" rx="4" fill="#dbeafe" stroke="#2563eb"/><rect x="356" y="90" width="288" height="112" rx="4" fill="#dcfce7" stroke="#15803d"/><rect x="684" y="90" width="288" height="112" rx="4" fill="#fef3c7" stroke="#b45309"/>
+    <g font-size="18"><text x="172" y="120">第一轮普通证据</text><text x="500" y="120">下一轮又有证据</text><text x="828" y="120">没有新PTE证据</text></g>
+    <g font-size="17"><text x="172" y="151">PTE=1，旧referenced=0</text><text x="500" y="151">PTE=1，旧referenced=1</text><text x="828" y="151">PTE=0，旧referenced=1</text></g>
+    <g font-size="18"><text x="172" y="183">置标记，KEEP</text><text x="500" y="183">ACTIVATE</text><text x="828" y="183">文件：RECLAIM_CLEAN</text></g>
+    <text x="500" y="254" font-size="18">第二、三框是下一轮的不同分支；不是连续必经的三个动作</text>
+    <text x="500" y="310" font-size="15" fill="#475569">限定普通文件候选；mlock、多个PTE证据、executable和竞争有单独条件，未运行扫描</text>
+  </g>
+</svg>
