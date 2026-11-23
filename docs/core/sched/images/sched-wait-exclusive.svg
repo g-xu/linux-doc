@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 460" role="img" aria-labelledby="title desc">
+  <title id="title">非独占项和独占唤醒预算</title>
+  <desc id="desc">N为非独占项，E1和E2为独占项。预算为1时成功唤醒N不扣预算，成功唤醒E1后预算变0，E2未访问。如果E1未匹配，预算可继续用于E2。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#52606d"/></marker></defs>
+  <rect width="1080" height="460" fill="#fff"/>
+  <g font-family="Microsoft YaHei,Noto Sans CJK SC,sans-serif" fill="#20252b">
+    <text x="30" y="40" font-size="24">“唤醒一个”约束独占预算，不是无条件只访问一个等待项</text>
+    <text x="30" y="88" font-size="19">给定顺序 N → E1 → E2；本次三个状态均匹配，初始独占预算 = 1</text>
+    <rect x="60" y="135" width="260" height="160" fill="#e0f2fe" stroke="#0284c7"/>
+    <rect x="410" y="135" width="260" height="160" fill="#e1f2eb" stroke="#338768"/>
+    <rect x="760" y="135" width="260" height="160" fill="#f4f6f8" stroke="#7b8793"/>
+    <g font-size="20"><text x="85" y="173">N：非独占</text><text x="435" y="173">E1：独占</text><text x="785" y="173">E2：独占</text></g>
+    <g font-size="18">
+      <text x="85" y="215">回调成功</text><text x="85" y="253">预算仍为1，继续</text>
+      <text x="435" y="215">回调成功</text><text x="435" y="253">预算变0，停止</text>
+      <text x="785" y="215">本次未访问</text><text x="785" y="253">等待后续通知</text>
+    </g>
+    <path d="M320 210 H405" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M670 210 H755" stroke="#7b8793" stroke-dasharray="5 5"/>
+    <text x="30" y="353" font-size="18">若E1回调返回0，则不扣预算，可以继续尝试E2；回调成功仍不等于业务资源已取得。</text>
+    <text x="30" y="414" font-size="17">图示回调与预算关系，不表示真实采集；等待项可能由成功回调自动摘除。</text>
+  </g>
+</svg>

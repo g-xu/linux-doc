@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="590" viewBox="0 0 1100 590" role="img" aria-labelledby="title desc">
+  <title id="title">分层调度域与排队任务迁移</title>
+  <desc id="desc">教学四核拓扑的较近与较远平衡范围，CPU0上的非执行任务C经源队列退队、迁移状态、目标队列入队进入CPU1。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#4b5563"/></marker></defs>
+  <rect width="1100" height="590" fill="#fff"/>
+  <g font-family="Noto Sans CJK SC,Microsoft YaHei,sans-serif" fill="#20252b">
+    <text x="30" y="40" font-size="24">域管理平衡范围，任务仍在每 CPU 的 rq 中</text>
+    <rect x="30" y="70" width="1040" height="255" fill="#f4f6f8" stroke="#7b8793"/>
+    <text x="50" y="100" font-size="19">较远层：CPU 0 / 1 / 2 / 3</text>
+    <rect x="55" y="125" width="465" height="175" fill="#fff" stroke="#338768"/>
+    <text x="75" y="155" font-size="18">较近层：0 / 1</text>
+    <rect x="80" y="180" width="190" height="95" fill="#e1f2eb" stroke="#338768"/>
+    <text x="95" y="212" font-size="18">CPU0：rq</text>
+    <text x="95" y="245" font-size="17">A 执行；B / C 排队</text>
+    <rect x="295" y="180" width="190" height="95" fill="#e1f2eb" stroke="#338768"/>
+    <text x="310" y="212" font-size="18">CPU1：rq</text>
+    <text x="310" y="245" font-size="17">idle</text>
+    <rect x="560" y="125" width="485" height="175" fill="#fff" stroke="#9f7532"/>
+    <text x="580" y="155" font-size="18">较近层：2 / 3</text>
+    <rect x="580" y="180" width="190" height="95" fill="#fff0d7" stroke="#9f7532"/>
+    <text x="595" y="212" font-size="18">CPU2：rq</text>
+    <text x="595" y="245" font-size="17">其他任务</text>
+    <rect x="815" y="180" width="190" height="95" fill="#fff0d7" stroke="#9f7532"/>
+    <text x="830" y="212" font-size="18">CPU3：rq</text>
+    <text x="830" y="245" font-size="17">其他任务</text>
+    <text x="30" y="367" font-size="20">独立迁移模型：C 允许 0 / 1，未执行，满足适用迁移条件</text>
+    <rect x="30" y="395" width="260" height="95" fill="#f4f6f8" stroke="#7b8793"/>
+    <text x="50" y="425" font-size="18">源 rq 锁保护</text>
+    <text x="50" y="460" font-size="18">C 退队 / 更新 CPU 关联</text>
+    <rect x="405" y="395" width="280" height="95" fill="#fff0d7" stroke="#9f7532"/>
+    <text x="425" y="425" font-size="18">TASK_ON_RQ_MIGRATING</text>
+    <text x="425" y="460" font-size="18">其他状态操作遵守重试协议</text>
+    <rect x="810" y="395" width="260" height="95" fill="#e1f2eb" stroke="#338768"/>
+    <text x="830" y="425" font-size="18">目标 rq 锁保护</text>
+    <text x="830" y="460" font-size="18">C 入队 / 历史与记账交接</text>
+    <path d="M290 442 H400 M685 442 H805" stroke="#4b5563" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="30" y="545" font-size="18">拓扑仅为示例，不指定芯片 cache；普通 detach 不直接移走正在执行的 A。</text>
+  </g>
+</svg>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 530" role="img" aria-labelledby="title desc">
+  <title id="title">锁等待者树与拥有者PI树保存不同集合</title>
+  <desc id="desc">L持有X Z，X上H80 M70等待，Z上J60等待。锁树保存所有相应等待者，L的PI树只保存每把锁的最高者H J。H退出时需要将X对应top替换成M。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#52606d"/></marker></defs>
+  <rect width="1100" height="530" fill="#fff"/>
+  <g font-family="Microsoft YaHei,Noto Sans CJK SC,sans-serif" fill="#20252b">
+    <text x="30" y="40" font-size="23">同一waiter可有锁树节点与PI树节点，两个索引保存不同成员</text>
+    <text x="40" y="90" font-size="20">锁X的等待者</text><text x="400" y="90" font-size="20">锁Z的等待者</text>
+    <rect x="30" y="115" width="280" height="250" fill="#f4f6f8" stroke="#7b8793"/>
+    <rect x="390" y="115" width="230" height="250" fill="#f4f6f8" stroke="#7b8793"/>
+    <rect x="40" y="150" width="250" height="60" fill="#f9e5eb" stroke="#a84d68"/>
+    <rect x="40" y="255" width="250" height="60" fill="#fff0d7" stroke="#9f7532"/>
+    <rect x="410" y="150" width="190" height="60" fill="#e1f2eb" stroke="#338768"/>
+    <text x="60" y="188" font-size="20">H80：X的top</text><text x="60" y="293" font-size="20">M70：仍在X等待</text>
+    <text x="430" y="188" font-size="20">J60：Z的top</text>
+    <rect x="750" y="115" width="320" height="250" fill="#e1f2eb" stroke="#338768"/>
+    <text x="770" y="153" font-size="20">L的PI树：H80 / J60</text>
+    <text x="770" y="203" font-size="18">X只贡献当前最高H</text>
+    <text x="770" y="247" font-size="18">Z贡献最高J</text>
+    <text x="770" y="294" font-size="18">L正常20 → 有效80</text>
+    <path d="M290 180 H340 V100 H720 V190 H745 M600 180 H700 V240 H745" stroke="#52606d" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+    <text x="30" y="425" font-size="19">H退出后：X的top改为M70，L的PI最高变为70；不能直接降回正常20。</text>
+    <text x="30" y="474" font-size="17">用户RT优先级的独立模型；图示成员关系，未画真实红黑树平衡拓扑或Deadline排序。</text>
+    <text x="30" y="511" font-size="17">L释放X后仍有J60捐赠；再释放Z，才可按剩余依赖恢复正常属性。</text>
+  </g>
+</svg>

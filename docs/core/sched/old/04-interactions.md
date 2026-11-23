@@ -22,7 +22,7 @@
 | cputime | `kernel/sched/cputime.c` + `cpuacct.c` | 外围 | CPU 时间记账(user/sys/steal、cgroup) | `cpuacct_charge` / `account_*_time` |
 | psi | `kernel/sched/psi.c` | 外围 | 压力失速信息(PSI)统计 | `psi_task_change` / `psi_task_switch` |
 
-行界依据见 [`references/methodology.md`](../../.qoder/skills/kernel-core-subsystem-docs/references/methodology.md) §A(load-balance 从 fair 拆出、idle-stop 合并的判据)。
+行界依据见 [`references/methodology.md`](../../../.qoder/skills/kernel-core-subsystem-docs/references/methodology.md) §A(load-balance 从 fair 拆出、idle-stop 合并的判据)。
 
 四层的主依赖方向(实线=直接调用,虚线=共享字段/回调解耦),读懂这张图再看 §2 的 11×11 矩阵就有了骨架:
 
@@ -92,7 +92,7 @@
 
 ## §3 逐对关系展开
 
-42 个非空格子本轮展开 8 个最关键的(其余登记 §3 末欠债清单,耦合形式已在 §2 确定,不影响其他节正确性——见 [`references/methodology.md`](../../.qoder/skills/kernel-core-subsystem-docs/references/methodology.md) §H)。
+42 个非空格子本轮展开 8 个最关键的(其余登记 §3 末欠债清单,耦合形式已在 §2 确定,不影响其他节正确性——见 [`references/methodology.md`](../../../.qoder/skills/kernel-core-subsystem-docs/references/methodology.md) §H)。
 
 ### §3.1 core → 各调度类(分派解耦,格子 CO→FA/RT/DL/IS)
 
@@ -113,7 +113,7 @@
 - 耦合形式:直接调用各自的 PELT 入口。
 - 调用点:RT `rt.c:1768/1838`(出/入队)、`rt.c:2551/2652` 调 `update_rt_rq_load_avg(rq_clock_pelt(rq), rq, running)`;DL `deadline.c:2002/2054/2071/2698` 调 `update_dl_rq_load_avg`。
 - 传递语义:RT/DL 也向 PELT 贡献负载信号,写入 `rq.avg_rt`/`rq.avg_dl`,让调频能看到实时/截止期任务的算力需求。
-- 取证教训:这是 [`references/methodology.md`](../../.qoder/skills/kernel-core-subsystem-docs/references/methodology.md) §B.1 记录的著名误判点——曾用 `grep update_load_avg rt.c` 得 0 命中就断言"RT 不用 PELT"。实际 PELT 是同构函数族,RT/DL 各有专属入口。否定结论前必须先枚举整族。
+- 取证教训:这是 [`references/methodology.md`](../../../.qoder/skills/kernel-core-subsystem-docs/references/methodology.md) §B.1 记录的著名误判点——曾用 `grep update_load_avg rt.c` 得 0 命中就断言"RT 不用 PELT"。实际 PELT 是同构函数族,RT/DL 各有专属入口。否定结论前必须先枚举整族。
 
 ### §3.4 fair/rt/dl → schedutil(格子 FA/RT/DL→SU)
 

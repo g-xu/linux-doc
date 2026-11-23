@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="560" viewBox="0 0 1100 560" role="img" aria-labelledby="title desc">
+  <title id="title">实时优先级队列和同级轮转</title>
+  <desc id="desc">高优先级非空队列先于低优先级。FIFO持续可运行不因同级时间片轮转，RR用完适用时间片可移到同级队尾。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#4b5563"/></marker></defs>
+  <rect width="1100" height="560" fill="#fff"/>
+  <g font-family="Noto Sans CJK SC,Microsoft YaHei,sans-serif" fill="#20252b">
+    <text x="30" y="40" font-size="24">先选适用最高级，再处理该级队列</text>
+    <text x="30" y="94" font-size="19">用户优先级 80</text>
+    <rect x="220" y="65" width="140" height="55" fill="#fff0d7" stroke="#9f7532"/>
+    <text x="250" y="100" font-size="20">H：队头</text>
+    <text x="30" y="174" font-size="19">用户优先级 60</text>
+    <rect x="220" y="145" width="140" height="55" fill="#e1f2eb" stroke="#338768"/>
+    <text x="250" y="180" font-size="20">A：队头</text>
+    <rect x="435" y="145" width="140" height="55" fill="#e1f2eb" stroke="#338768"/>
+    <text x="490" y="180" font-size="20">B</text>
+    <path d="M360 172 H430" stroke="#4b5563" marker-end="url(#arrow)"/>
+    <text x="680" y="99" font-size="18">H 可运行时优先于 A / B</text>
+    <text x="680" y="174" font-size="18">真实位图使用内核内部编码</text>
+    <path d="M30 230 H1070" stroke="#d1d7dd"/>
+    <text x="30" y="270" font-size="20">另一个快照：H 不可运行，仅同级 A / B</text>
+    <text x="30" y="324" font-size="19">FIFO</text>
+    <rect x="170" y="295" width="800" height="48" fill="#e1f2eb" stroke="#338768"/>
+    <text x="200" y="325" font-size="19">A 持续执行；B 等待，直到阻塞 / yield 等适用事件</text>
+    <text x="30" y="412" font-size="19">RR</text>
+    <rect x="170" y="382" width="265" height="48" fill="#338768"/>
+    <rect x="435" y="382" width="265" height="48" fill="#9f7532"/>
+    <rect x="700" y="382" width="270" height="48" fill="#338768"/>
+    <g fill="#fff" font-size="19"><text x="240" y="413">A：4 ms</text><text x="505" y="413">B：4 ms</text><text x="770" y="413">A：4 ms</text></g>
+    <text x="30" y="488" font-size="18">RR 的 4 ms 是教学参数；只有适用同级竞争，到期才需重新排队请求切换。</text>
+    <text x="30" y="527" font-size="18">图不含组限流、PI、更高类与不可抢占区；优先级高不代表任意现场都能立即切换。</text>
+  </g>
+</svg>

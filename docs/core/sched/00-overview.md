@@ -1,185 +1,317 @@
----
-title: 总览
----
+# 内核调度总览：组成、决策与运行过程
 
-# 00 · 调度器子系统总览(原理导览)
+理解调度器，需要把两张图放在一起看：**架构图说明有哪些参与者，运行图说明它们何时协作。** CFS、实时策略、唤醒和上下文切换各自只是其中一部分。本篇先建立全局关系，再沿单 CPU 和多 CPU 的运行过程把它们连接起来。
 
-> 本篇是整套文档的**学习主线**:先用三个核心决定讲清调度器的基本思想,再用五个调度类勾勒大体框架,然后把"一次调度怎么发生""多核怎么协作"两条主流程走一遍,最后才是边界、子模块划分与文档导航。想快速建立全局观,顺着 §1→§5 读一遍即可;想深入某个类,每节末尾都有"深入见"指针。
->
-> 基线:Linux 6.1.158(**PREEMPT_RT `-rt58`**,已确认 `CONFIG_PREEMPT_LAZY`),arm64。代码根:`kernel/sched/`。
+分析基线为本地 **Linux 6.1.158-rt58、arm64、`PREEMPT_RT=y`**。读者已熟悉任务、系统调用、内核同步和基本内存管理。本篇直接从调度器的组成与设计进入；多核算例额外假定 SMP，组调度、带宽控制、lazy 抢占和 EAS 等按各自条件讨论。
 
-## §1 一句话定位与全局架构
+<a id="reading"></a>
 
-调度器决定"此刻这颗 CPU 上跑哪个任务",并在多核间平衡负载。它是内核最核心的共享状态机:每颗 CPU 一个运行队列(`struct rq`),按 sched_class 优先级链(stop > dl > rt > fair > idle)挑任务,靠 tick、唤醒、主动让出三类事件驱动重新调度。
+| 阅读需求 | 入口 |
+| --- | --- |
+| 建立全局视野 | [架构](#architecture) → [设计思路](#design) → [对象](#tasks) |
+| 连接唤醒、选择和切换 | [单 CPU 运行过程](#dispatch) |
+| 连接选核、信号和迁移 | [多 CPU 运行过程](#placement) |
+| 理解 RT、锁和资源控制的影响 | [约束怎样作用于运行过程](#constraints) |
+| 开始读某个实现专题 | **[专题目录](sub/index.md#route)** |
+| 开发时查询接口 | [API 选型](api.md) · [详细契约与示例](api-reference.md#quick) |
+| 查术语和资料 | [术语](#terms) · [依据与核对范围](99-evidence.md) |
 
-本树是 PREEMPT_RT 实时补丁树,调度器的实时性改动集中在**抢占时机**(lazy 抢占),而非锁语义——核心锁本就是 `raw_spinlock_t`。这个判断贯穿全套文档,细节见 [`05-concurrency.md`](05-concurrency.md) §7。
+<a id="architecture"></a>
 
-一张图把上面这段话讲完——三类事件驱动 `__schedule`,`__schedule` 沿 sched_class 优先级链选任务,任务来自 per-CPU 运行队列 `rq` 内嵌的各类子队列:
+## 1. 整体架构：一个调度核心，几组相互协作的机制
 
-```
-              ┌────────────────────────────────────────────────────────────────┐
-   谁触发重调度 │  三类事件 → 置 need_resched / need_resched_lazy(RT)            │
-              │   ① tick 周期    ② wakeup 唤醒抢占    ③ 主动让出/阻塞(schedule)│
-              └───────────────────────────────┬────────────────────────────────┘
-                                               │ 在抢占点/系统调用返回处触发
-                                               ▼
-                                     ┌────────────────────┐
-   谁来选       │                     │   __schedule()     │  core.c:6557
-                                     │   pick_next_task   │  按优先级链逐类询问
-                                     └─────────┬──────────┘
-                                               │
-   选谁         优先级 高 ◄─────────────────────┴───────────────────────► 低
-   ┌────────┐    ┌──────────┐    ┌────────┐    ┌──────────┐    ┌────────┐
-   │  stop  │───►│ deadline │───►│   rt   │───►│   fair   │───►│  idle  │  .next 链
-   └────────┘    └──────────┘    └────────┘    └──────────┘    └────────┘
-   迁移/热插拔    EDF 截止期      FIFO/RR       CFS vruntime    swapper 兜底
-   stop_task.c   deadline.c      rt.c          fair.c          idle.c
-       ▲              ▲              ▲              ▲               ▲
-       │       从哪取任务:每颗 CPU 一个 struct rq(kernel/sched/sched.h:954) │
-   ┌───┴──────────────┴──────────────┴──────────────┴───────────────┴────────┐
-   │ struct rq (per-CPU 主结构)   curr ─► 当前任务    __lock: raw_spinlock_t │
-   │   ┌───────────────┐  ┌───────────────┐  ┌───────────────┐               │
-   │   │ cfs  (CFS)    │  │ rt   (RT)     │  │ dl   (DL)     │  内嵌值(非指针)│
-   │   │ 红黑树        │  │ 优先级位图    │  │ 红黑树        │               │
-   │   │ +min_vruntime │  │ +queue[100]   │  │ 按 deadline 排 │               │
-   │   └───────────────┘  └───────────────┘  └───────────────┘               │
-   │   clock / clock_task(双时钟)     avg_rt / avg_dl(PELT 负载信号)         │
-   └──────────────────────────────────────────────────────────────────────────┘
-```
+调度器对外提供四类能力：管理任务的运行资格，在 CPU 上选择任务，在多 CPU 间安排需求，以及把选择落实为执行交接。运行时间记账贯穿这些过程，既支持后续决策，也给观察和资源控制提供依据。
 
-图里三行分别对应下面的学习主线:"谁触发"是 §4 一次调度怎么发生,"怎么选"是 §2/§3 基本思想与框架,"从哪取"是 `rq` 内嵌子队列([`02-objects.md`](02-objects.md) 逐字段展开)。
+![调度器的组成与依赖关系](images/sched-architecture.svg)
 
-## §2 基本思想:三个核心决定
+这张图是**组成关系**，没有规定每次调度的固定调用顺序。先看中央：调度核心通过每 CPU 的 rq 管理当前状态，向调度类询问如何组织候选、更新执行进度和选择 next。再看两侧：运行需求从创建、唤醒等入口进入，等待与退出使需求离开；拓扑、历史信号、锁依赖和资源控制影响不同决策。
 
-理解调度器,先理解设计者做的三个关键决定——它们解释了后面所有结构为什么长这样。
+### 1.1 调度核心与调度类
 
-**决定一:为什么每颗 CPU 一个运行队列?** 若全系统共用一条就绪队列,每次选任务都要抢同一把锁,核越多锁争用越致命。于是每颗 CPU 独享一个 `struct rq`(`kernel/sched/sched.h:954`),选任务只碰本地锁 `rq->__lock`(`:956`,`raw_spinlock_t`)。代价是负载会失衡,于是另设一层**负载均衡**(§5)把任务在 rq 间搬平——"本地快、全局补"是调度器的第一性权衡。
+调度核心负责共同协议：状态转换、入退队包装、调度请求、时钟更新、执行交接。调度类负责不同服务规则：怎样排列候选、怎样记账、什么事件值得重新选择。
 
-**决定二:为什么把任务分成调度类,连成优先级链?** 实时任务要求"到点必跑",普通任务要求"长期公平",两种诉求无法用一个算法同时满足。于是按诉求分成五个**调度类**,用 `.next` 指针连成一条硬优先级链(stop > dl > rt > fair > idle),`__schedule` 从高到低逐类询问"你有任务可跑吗",第一个应答的就赢。高类不空,低类就一直等——RT/DL 能压过普通任务正源于此。链的框架见 §3。
+目标树按以下优先关系组织调度类：
 
-**决定三:为什么事件驱动、tick 不直接换人?** 调度器不主动轮询,只在三类事件发生时"打个标记"(`need_resched`),真正的换人推迟到最近的**抢占点**(中断返回、系统调用返回、主动 `schedule()`)才做。tick 只负责判断"该不该抢"并置标记,不在中断上下文里直接切任务——这让切换点可控、可关抢占保护。RT 树进一步把标记分成"立即抢"和"lazy 抢"两档(`resched_curr` vs `resched_curr_lazy`),普通任务用 lazy 档减少无谓切换。三类事件的时间线见 §4。
+| 类 | 对应需求 | 核心规则 | 主要实现 |
+| --- | --- | --- | --- |
+| stop | CPU 停止、迁移等内核特殊工作 | 特殊最高优先级工作 | `kernel/sched/stop_task.c` |
+| deadline | 预算与截止期预约 | EDF 选择、CBS 预算管理 | `kernel/sched/deadline.c` |
+| rt | 用户 FIFO/RR、适用实时内核任务 | 固定优先级，同级按 FIFO/RR 规则 | `kernel/sched/rt.c` |
+| fair | 普通、batch、用户 idle 策略 | CFS 带权服务进度 | `kernel/sched/fair.c` |
+| idle | CPU 无其他可选任务 | 每 CPU 的兜底空闲任务 | `kernel/sched/idle.c` |
 
-这三个决定是理解全篇的钥匙:每 CPU 一队(§5 均衡)、分类成链(§3 框架)、事件驱动(§4 流程)。想再直白些,见 [`08-feynman.md`](08-feynman.md) 的大白话讲解。
+这里先介绍所有类，再讨论 CFS。这样才能理解：公平类的“下一任务”只是公平类内部的答案，还要放回跨类选择中。
 
-## §3 大体框架:五个调度类
+类的排列由链接段和遍历规则建立，入口在 `include/asm-generic/vmlinux.lds.h` 的 `SCHED_DATA` 和 `kernel/sched/sched.h`，不是一条 `sched_class.next` 指针链。用户 `SCHED_IDLE` **属于 fair**，与内核 idle 类是两件事。
 
-优先级链上五个类,从高到低。每类只讲**核心思想 + 关键结构 + 深入指针**,细节下沉。
+### 1.2 多核机制与需求信号
 
-**① stop(最高)** — 不是给用户任务的,是内核用来"抢占一切"做迁移、CPU 热插拔的特权通道。每 CPU 一个 `migration/N` 线程,一旦就绪压过所有类。无内部排队结构(至多一个任务)。选任务 `pick_next_task_stop`(`stop_task.c:44`),注册 `DEFINE_SCHED_CLASS(stop)`(`stop_task.c:117`)。深入见 [`sub/idle-stop/00-overview.md`](sub/idle-stop/00-overview.md)。
+每 CPU 有自己的候选和当前任务。因此，单 CPU 选择之外还有两种工作：
 
-**② deadline / DL(EDF)** — 面向硬实时:每个任务声明(运行时间 runtime、截止期 deadline、周期 period),内核用 EDF(最早截止期优先)+ CBS(恒定带宽服务器)保证"到点前拿到足额 CPU",并靠**准入控制**拒绝会超载的任务。关键结构 `struct dl_rq`(`kernel/sched/sched.h:704`),按 deadline 排的红黑树。选任务 `pick_next_task_dl`(`deadline.c:2033`)。深入见 [`sub/deadline/00-overview.md`](sub/deadline/00-overview.md)。
+- 唤醒、新建或策略相关路径为任务寻找初始 CPU。
+- 平衡路径检查已有分布，决定是否移动某些任务。
 
-**③ rt(FIFO/RR)** — 面向软实时:100 个静态优先级,用**位图 O(1)** 选最高优先级的就绪队列,同级按 FIFO 或时间片轮转(RR)。为防实时任务饿死普通任务,设 **RT 带宽节流**(默认每 1s 最多跑 0.95s)。关键结构 `struct rt_rq`(`:663`)= 位图 `active`(`:664`)+ `queue[100]`。选任务 `pick_next_task_rt`(`rt.c:1818`)。深入见 [`sub/rt/00-overview.md`](sub/rt/00-overview.md)。
+这些决策使用允许 CPU 集合、调度拓扑、负载和容量信号。PELT 提供带衰减的历史需求，util_est 补充近期激活的估计，capacity 描述归一化供给。RT/DL 又有自己的跨 CPU 优先级和截止期辅助状态，不把所有任务交给 CFS 的负载均衡。
 
-**④ fair / CFS(默认)** — 承载绝大多数普通任务的公平类:用**虚拟运行时间 vruntime** 度量"谁被亏待最多",红黑树按 vruntime 排序,永远选最左(vruntime 最小)的跑,跑一会 vruntime 增加就往右沉,从而长期公平。关键结构 `struct cfs_rq`(`:550`)= `rb_root_cached` 红黑树 + `min_vruntime`。选任务 `pick_next_task_fair`(`fair.c` 快路径 `core.c:5986`)。**本轮唯一完整展开的类**,深入见 [`sub/fair/00-overview.md`](sub/fair/00-overview.md)。
+### 1.3 控制、同步与观察
 
-**⑤ idle(最低)** — 兜底:当且仅当上面四类全空,才跑每 CPU 的 `swapper/N` 空闲线程,进而进入省电的 idle 状态。选任务 `pick_next_task_idle`(`idle.c:447`)。深入见 [`sub/idle-stop/00-overview.md`](sub/idle-stop/00-overview.md)。
+任务策略、nice、亲和性和 cgroup 是输入；它们分别改变服务规则、相对权重、合法位置或资源额度。PI 锁协议可以临时改变任务的有效优先级，帮助锁拥有者推进。调度统计和事件则记录执行、等待、唤醒和迁移等事实。
 
-五类的注册即优先级顺序:`DEFINE_SCHED_CLASS` 于 `stop_task.c:117` / `deadline.c:2738` / `rt.c:2692` / `fair.c:12443` / `idle.c:499`,链接段逆序排布,`for_each_class` 按 stop→dl→rt→fair→idle 遍历。
+这些部分与架构主体的关系可概括为：
 
-## §4 一次调度怎么发生(时间维度)
+| 部分 | 提供什么 | 消费方 |
+| --- | --- | --- |
+| 任务状态、rq 和类队列 | 当前候选及执行事实 | 唤醒、选择、迁移、切换 |
+| PELT、util_est、capacity | 需求与供给估计 | 放置、均衡、适用调频 |
+| 拓扑、亲和性、cpuset | 合法范围与比较范围 | 选核、迁移、准入 |
+| 策略、权重、配额、PI | 服务规则、上限和依赖需求 | 类选择、记账、资格维护 |
+| 统计、trace、PSI | 已发生的行为及压力 | 开发者和运维分析 |
 
-把 §2 的"事件驱动"落到一条时间线上:从被触发到切走,`__schedule`(`core.c:6557`)内部按什么次序做事。下图纵向为时间,每步对应 [`03-lifecycle.md`](03-lifecycle.md) §3 的跳编号。
+进程管理创建/释放任务，同步模块管理业务条件，mm 管理地址空间，arm64 代码保存/恢复线程现场。调度器与它们协作，而不是独自拥有这些对象的全部生命周期。
 
-```
-   时间↓   __schedule()   core.c:6557
-   ──────────────────────────────────────────────────────────
-   t0  │ 关中断; rq_lock; update_rq_clock;  prev = rq->curr
-   t1  │ 处理 prev:睡眠?→ deactivate 出队 | 抢占?→ 留在队上
-   t2  │ next = pick_next_task()  按优先级链 stop→dl→rt→fair→idle
-   t3  │ clear_need_resched(prev)
-   t4  │ prev≠next?→ rq->curr=next; context_switch(切 mm/寄存器)
-        │           → finish_task_switch(回收 prev,若已 dead)
-   ──────────────────────────────────────────────────────────
-   触发来源(t0 之前已置好 need_resched):
-     ① tick:scheduler_tick → task_tick_* → 判时间片 → resched
-     ② wakeup:try_to_wake_up → 入队 → check_preempt_curr → resched
-     ③ 主动:schedule()/阻塞/yield 直接进 __schedule
-   RT 差异:①② 的置位在普通任务上走 resched_curr_lazy(§05 §7)
-```
+<a id="design"></a>
 
-一句话:**三类事件先置标记,抢占点进 `__schedule`,按优先级链选出 next,再切换**。任务的完整生死状态机(fork→runnable→running→sleeping→dead 及迁移中转)见 [`03-lifecycle.md`](03-lifecycle.md)。
+## 2. 设计思路：为什么分成这些部分？
 
-## §5 多核怎么协作(SMP 与负载均衡)
+### 2.1 局部运行，全局协调
 
-§2 决定一说"每 CPU 一队,靠均衡补失衡"。多核协作就是这层:
+把常见选择留在本 CPU，可以减少全机共享队列的锁竞争并保持局部性。代价是队列可能不均衡，所以需要另外的放置和迁移机制。**本地公平与全机合理分布是不同层面的目标**，一个满足不代表另一个自动满足。
 
-- **fair 的周期均衡**:tick 里触发 `run_rebalance_domains`,沿 `sched_domain` 层级(SMT→MC→NUMA)从最忙的组往本 CPU 拉任务,`imbalance_pct` 是每层的容忍阈值。域层级由 topology 子模块构建。
-- **rt/dl 的 push/pull**:实时类不做周期均衡,改用即时的 push(本 CPU 多出高优先级任务就推给别人)/ pull(本 CPU 要空了就从别人那拉),靠 `cpupri`(RT)/ `cpudeadline`(DL)两个 CPU 优先级堆快速定位目标核。
-- **RT 带宽 / DL 准入是全局的**:RT 节流预算、DL 准入判断跨 CPU 共享 `root_domain`(`kernel/sched/sched.h:822`)里的参数,DL 消耗还会挤占 RT 带宽账(一处强耦合)。
+### 2.2 共同机制与服务策略分离
 
-这些跨模块、跨 CPU 的关系,谁依赖谁、通过什么依赖,逐格登记在 [`04-interactions.md`](04-interactions.md)(空间维度骨架)。
+睡眠任务恢复资格、当前任务切出、next 恢复上下文，都需要一致的状态协议。普通任务与实时任务则有不同的服务目标。调度类接口把策略接入共同机制，使 core 不必在每个入口重新实现五种完整算法。
 
-至此全局观已建立:五类成链(§3)、一次调度的内部次序(§4)、多核如何补平(§5)。下面是查阅性内容。
+阅读 `enqueue_task`、`pick_next_task`、`task_tick` 等回调时，应同时问：core 已保证了什么？当前类又维护了什么？一个回调通常只是某次事务中的一段。
 
-## §6 边界:什么算调度器,什么不算
+### 2.3 资格、决策、请求和执行是四层
 
-| 属于 | 不属于(相邻子系统) |
-|---|---|
-| `kernel/sched/` 全部:选任务、入/出队、负载均衡、带宽节流、PELT 负载跟踪、CPU 频率选择 hook(schedutil) | 定时器/hrtimer(`kernel/time/`)——只是 tick 的来源 |
-| sched_class 五类实现 + 各自 runqueue | RCU(`kernel/rcu/`)——`rcu_nocbs` 等属它 |
-| syscall(sched_setscheduler 等)与内核内 API | rtmutex/futex(`kernel/locking/`)——经 PI 与调度器耦合,但不在此 |
-| /proc、debugfs、tracepoint 观测面 | cpuset/cgroup 框架本身(`kernel/cgroup/`)——调度器只提供 cpu controller |
+“条件满足”通过同步协议进入唤醒；唤醒恢复任务资格；类规则可能判断应该换人；调度请求再在适用入口兑现。最后才是线程现场交接。
 
-跨边界的耦合点(PI 提优、cpufreq、cpuset 域重建等)在 [`04-interactions.md`](04-interactions.md) 逐条登记。
+这种分层允许任务在其他 CPU 上被唤醒，允许短临界区完成后再切换，也解释了“唤醒成功但还没有运行”的常见现象。
 
-## §7 子模块划分(11 个)
+### 2.4 不同时间尺度解决不同问题
 
-按职责与文件聚类。本轮完整展开 fair 作样板,rt/deadline/idle-stop 各补一篇原理速览(`sub/*/00-overview.md`),其余给定位与文件锚点。
+当前执行增量用来记账；CFS 虚拟进度用来比较带权服务；PELT 历史用来估计需求；DL 截止期和配额周期用来约束时间窗口。它们都叫“时间”或“负载”，但时钟、单位和用途各不相同。后续专题会先给口径，再给计算。
 
-| # | 子模块 | 主要文件 | 职责 |
-|---|---|---|---|
-| 1 | core(核心) | core.c / core_sched.c / build_*.c | rq、`__schedule`、唤醒、抢占、syscall、cgroup、preempt dynamic/lazy |
-| 2 | fair(CFS) | fair.c | 普通任务:vruntime 公平 + 负载均衡 + NUMA/EAS/util_est(**已展开**) |
-| 3 | rt | rt.c | FIFO/RR 实时任务 + RT 带宽节流(**速览已补**) |
-| 4 | deadline | deadline.c | EDF 截止期调度 + 准入控制(**速览已补**) |
-| 5 | idle/stop | idle.c / stop_task.c | 最低(swapper)与最高(迁移/热插拔)两端类(**速览已补**) |
-| 6 | pelt | pelt.c | Per-Entity Load Tracking,负载/利用率信号源 |
-| 7 | topology | topology.c / isolation.c | sched_domain 层级构建、isolcpus/nohz_full housekeeping |
-| 8 | cpupri/cpudeadline | cpupri.c / cpudeadline.c | RT/DL 的 CPU 优先级堆,支撑 push/pull |
-| 9 | cpufreq(schedutil) | cpufreq.c / cpufreq_schedutil.c | 用调度负载驱动 CPU 调频 |
-| 10 | 可观测(observability) | debug.c / stats.c / cpuacct.c / psi.c | /proc/sched_debug、schedstat、PSI 压力 |
-| 11 | 工具/同步(utility) | wait.c / swait.c / completion.c / wait_bit.c / loadavg.c / clock.c / cputime.c / autogroup.c / membarrier.c | 等待队列、完成量、时钟、负载均值、autogroup、membarrier |
+<a id="tasks"></a>
 
-## §8 文档导航(按解决的问题查)
+## 3. 对象关系：任务、实体、rq 与两种“组”
 
-| 篇 | 解决什么问题 | 何时读 |
-|---|---|---|
-| [`00-overview.md`](00-overview.md)(本篇) | 原理导览:基本思想→框架→流程→导航 | 入口 / 复习 |
-| [`01-api.md`](01-api.md) | syscall ABI + 内核内 API 有哪些、uapi 落点 | 接调度器接口时 |
-| [`02-objects.md`](02-objects.md) | 核心对象 `struct rq` 的字段与同名陷阱、RCU | 读数据结构时 |
-| [`03-lifecycle.md`](03-lifecycle.md) | 任务从 fork 到 exit、一次调度的 10 跳状态机 | 追一次调度全流程时 |
-| [`04-interactions.md`](04-interactions.md) | 子模块间与跨子系统的耦合、依赖环 | 排查跨模块问题时 |
-| [`05-concurrency.md`](05-concurrency.md) | 锁清单、加锁偏序、RT 差异 | 排查竞态/死锁时 |
-| [`06-tuning.md`](06-tuning.md) | 可调项(sysctl/cgroup/boot/debugfs) | 调参/部署时 |
-| [`07-debug.md`](07-debug.md) | 观测面(/proc/tracepoint/BPF/schedstat) | 出问题从哪看 |
-| [`08-feynman.md`](08-feynman.md) | 四个最难跨模块概念的大白话 | 概念卡壳时 |
-| [`99-evidence.md`](99-evidence.md) | 顶层所有结论的可复现出处 | 核实/复现时 |
-| [`sub/fair/`](sub/fair/00-overview.md) | fair 子模块四篇(样板,完整展开) | 深入 CFS 时 |
-| [`sub/rt/`](sub/rt/00-overview.md) · [`sub/deadline/`](sub/deadline/00-overview.md) · [`sub/idle-stop/`](sub/idle-stop/00-overview.md) | 三个实时/退化类的原理速览 | 深入对应类时 |
+![任务、调度实体和每 CPU 调度对象](images/sched-rq-objects.svg)
 
-## §9 推荐阅读顺序
+`task_struct` 是线程对象，包含策略、有效优先级、等待状态、CPU 关联和各类实体。`sched_class` 指向当前采用的类，`se`、`rt`、`dl` 保存对应竞争规则需要的状态。
 
-```
-   ① 建立全局观(本篇一条龙)      ② 看清接口与对象        ③ 逐个子模块展开
-   ┌────────────────────────┐   ┌──────────────┐        ┌──────────────────────┐
-   │ 00 §1 架构图            │   │ 01 API       │        │ sub/fair(CFS 样板)   │
-   │ 00 §2 三个核心决定      │──►│ 02 对象 rq   │───────►│ sub/rt  sub/deadline  │
-   │ 00 §3 五个调度类        │   │ 03 生命周期  │        │ sub/idle-stop         │
-   │ 00 §4 一次调度  §5 多核 │   │ 04 交互 05并发│       │ (各篇 §深入指针)      │
-   └────────────────────────┘   └──────────────┘        └──────────┬───────────┘
-        懂"跑哪个、谁来选、          懂"从哪调、                    │
-         多核怎么补"                 字段怎么放"        运维/回味 ◄──┘
-                                                        06 调参 07 观测 08 回味 99 取证
+`rq` 是每 CPU 的管理对象，含 `curr`、类子队列、时钟、计数和原始锁。它不是一条统一链表：fair 维护实体树，RT 维护优先级数组与链表，DL 维护截止期相关树。
+
+### 3.1 用不同关系表达运行状态
+
+| 关系 | 回答的问题 | 一个典型细节 |
+| --- | --- | --- |
+| `p->__state` | 是否等待某类事件？ | `TASK_RUNNING=0` 同时包含等待 CPU 和正在执行 |
+| `p->on_rq` | 当前由哪种 rq 候选协议管理？ | queued 与 migrating 是不同状态 |
+| 类成员，如 `se.on_rq`、RB 节点 | 在本类中怎样组织？ | CFS current 在树外，但仍可运行 |
+| `p->on_cpu` | 旧执行使用关系是否已交接？ | SMP 切换中可短暂出现两个任务均为 1 |
+| `rq->curr` | 本 CPU 当前选择谁？ | 有切换窗口，读取还需相应保护 |
+
+因此，“R 状态”“在队列中”“在树中”“正在执行”不能互相替代。完整快照和生命周期见 [任务/rq](sub/core/01-task-rq.md#states)。
+
+### 3.2 任务组与调度域是两张独立关系图
+
+启用公平组调度时，`task_group` 的每 CPU 子队列可以由组实体参加父级竞争。它回答**资源怎样按层级分享和限制**。
+
+`sched_domain`、`sched_group` 描述 CPU 平衡范围和拓扑分组，`root_domain` 保存适用 CPU 集合及 RT/DL 等共享管理状态。它们回答**在哪些 CPU 间比较和协调**。
+
+一个任务可以同时属于某个资源组，并在某个拓扑范围内放置。cgroup 的层级不会自动变成 CPU 拓扑，调度域也不另外拥有一套全体任务队列。
+
+<a id="dispatch"></a>
+
+## 4. 单 CPU 运行过程：从事件到下一任务
+
+![唤醒、tick 和主动阻塞汇入共同调度交接](images/sched-single-cpu-cycle.svg)
+
+这张图是**运行关系**。三条入口各自有触发条件，汇入共同选择；没有规定每次切换都先经过一次唤醒和一次 tick。
+
+### 4.1 唤醒分支：恢复需求，再考虑抢占
+
+以消费者 A 等待数据、生产者发布数据为例：
+
+1. 等待接口把 A 登记到相应等待对象，设置状态并重新检查条件；条件仍不满足才睡眠。
+2. 生产者按业务对象的同步协议发布数据，再通知等待者。
+3. `try_to_wake_up` 检查匹配状态，协调旧 rq 和 `on_cpu` 交接，选择合法 CPU。
+4. 入队恢复运行资格，类的抢占检查决定是否请求该 CPU 重新选择。
+
+本地 RT 分支默认 `TTWU_QUEUE=false`，通常由唤醒者在目标 rq 原始锁下入队。远程 IPI 可用于请求重调度；它与另行启用的异步 wake-list 不是同一个机制。
+
+唤醒成功表示协议取得进展，不表示 A 已开始处理数据。A 恢复后还要重检条件，因为别的消费者可能先取走了数据。详情见 [等待/唤醒协议](sub/core/02-wait-wakeup.md#protocol)。
+
+### 4.2 Tick 分支：更新进度，再判断当前是否仍合适
+
+Tick 为正在运行的类提供一次更新机会。类对执行量记账，并检查服务进度、RR 时间片或 DL 预算等条件。结果可能是继续运行，也可能是记录重调度请求。
+
+<a id="time"></a>
+
+公平类的例子最能说明“规则如何接入循环”：权重 A:B=1:2 时，实际执行增量转换为
+
+```text
+Δvruntime ≈ Δexec × 基准权重 / 实体权重
 ```
 
-- 初次通读(上图主线):00 全篇 → 01 → 02 → 03 → 04/05 → sub/fair → sub/{rt,deadline,idle-stop} → 06/07 → 08 → 99。
-- 只想懂原理:00 §2→§5 → 08-feynman 四概念 → 各类 `sub/*/00`。
-- 排障速查:症状 → §8 表定位到篇 → 篇内 RT 差异节 → 99 复现。
+B 执行 2 ms，才与 A 执行 1 ms 得到相同虚拟进度。CFS 比较这类进度，同时用运行粒度控制过于频繁的交接。RT 则首先比较固定优先级；DL 比较动态截止期并扣预算。三者共用 tick 入口，但维护不同状态。
 
-## §10 全局约定(读所有篇通用)
+详细运行循环见 [CFS](sub/fair/01-cfs.md#selection)、[FIFO/RR](sub/realtime/01-fifo-rr.md#rr)、[Deadline](sub/realtime/02-deadline.md#edf)。
 
-- 行号格式 `文件:行` 或 `@行`,指向 6.1.158 源码;宏(SYSCALL_DEFINE、TRACE_EVENT、sched_feat 等)是索引盲区,行号指宏调用点,各篇末尾有盲区声明。
-- 每篇有"RT 差异"节:本树是 `-rt58`,凡与主线不同处强制标注。
-- 跨 ≥2 子模块的结论一律"上溢"到顶层 03/04/05;子模块篇只反向引用,不重复展开。
-- 架构只跟 arm64;x86/ppc/arm32 差异忽略。
+### 4.3 主动阻塞分支：结束候选关系
+
+当前任务发现需要等待，把相应状态交给调度入口。`__schedule` 在 rq 保护下重新核对状态：若并发唤醒已经恢复 RUNNING，就保持资格；若确实仍等待，则按阻塞路径退队并选择别人。
+
+被抢占的任务通常仍可运行，所以与主动阻塞的退队不同。这是“暂时没用 CPU”和“当前没有运行需求”的关键区别。
+
+### 4.4 汇合处：选择、交接与收尾
+
+`__schedule` 更新 rq 状态并选 next；`prev==next` 时可以结束本轮而不发生线程切换。确需交接时：
+
+1. 类状态完成旧实体与新实体的关系更新。
+2. `context_switch` 与 mm 协作处理地址空间和 `active_mm`。
+3. arm64 `__switch_to` 处理适用架构状态，`cpu_switch_to` 保存/恢复 x19～x29、SP、返回位置等线程现场。
+4. 切入者完成旧任务执行资格释放和适用引用收尾。
+
+Next 继续自己的栈和返回位置；不是每次从线程函数开头启动。共享 mm 的线程不必每次换一套全新用户页表。A 将来恢复时，旧调用栈上的收尾对象还可能是刚切出的 C，详见 [完整交接](sub/core/03-schedule-switch.md#finish)。
+
+源包缺少 `arch/arm64/include/asm/switch_to.h`，本系列只以实际存在的调用点、`process.c` 和 `entry.S` 实现为依据，不补造包装宏。
+
+<a id="placement"></a>
+
+## 5. 多 CPU 运行过程：放置、观察、调整
+
+![合法范围、历史信号、放置与迁移组成多核反馈循环](images/sched-multi-cpu-cycle.svg)
+
+单 CPU 循环负责“这颗 CPU 运行谁”。多核循环负责“需求分布是否合适”。一次唤醒可能完成初始放置，随后多次本地执行更新历史，再由平衡事件调整分布。
+
+### 5.1 先确定可放范围，再评价位置
+
+任务允许掩码、cpuset、CPU 状态以及类相关条件限定合法目标。拓扑再决定从局部共享资源、更大范围或适用性能域中寻找候选。
+
+公平类 `select_task_rq_fair` 会按路径综合唤醒关联、空闲 CPU、容量和域搜索等信息。它不是遍历全机找“人数最少的 CPU”，也不保证初始选择永远最佳。
+
+### 5.2 执行历史形成下一轮决策输入
+
+| 输入 | 含义 | 典型消费者 |
+| --- | --- | --- |
+| load | 带权需求的历史 | 适用负载比较、组需求 |
+| runnable | 可运行需求，包括等待 CPU | 竞争/需求判断 |
+| util | 已执行所反映的归一化利用率 | 能力匹配、调频、能效评估 |
+| util_est | 近期激活的需求估计 | 适用唤醒放置和调频 |
+| capacity | CPU 的归一化能力及适用可用供给 | misfit、放置和均衡 |
+
+PELT 使用自己的归一化时钟；runnable、util 的输入也不同。两个持续竞争的任务可各有 runnable≈1024、util≈512，而 CPU 总 util≈1024。把这几个信号都读成“CPU 百分比”，会丢掉竞争与获得服务的区别。
+
+### 5.3 不均衡判断与真正移动分开
+
+平衡先比较域中的组，再寻找源 rq 和可移动任务。load、util、task、misfit 等迁移类型各自有不同的目标量与单位。
+
+真正移动还要在源 rq 退队、标记迁移、改变 CPU 关联，在目标 rq 入队并恢复稳定状态。正在运行、亲和性受限或局部性不适合的任务，可能需要跳过或转入其他迁移路径。因此“决定需要减轻负载”与“成功搬走一个任务”不是同一步。
+
+RT 通过优先级辅助状态及 push/pull，DL 通过截止期辅助状态等协调多核需求。它们服务本类目标，不是公平负载均衡的一个权重选项。
+
+### 5.4 能效与调频是协作，不是替代选择
+
+具备相关配置、拓扑和能量模型时，EAS 比较候选放置带来的能量增量，同时考虑能力和约束。arm64 不必是异构大小核，异构系统也不必满足 EAS 条件。
+
+Schedutil 接收适用利用率信号，向 cpufreq 提出频率请求。需求估计、频率请求和硬件达到工作点各有时间与成本。`uclamp` 约束利用率相关输入，既不是执行时间配额，也不是直接指定固定频率。
+
+按“时钟与信号 → 决策输入 → 选核 → 迁移”继续读 [PELT](sub/placement/01-pelt.md) 和 [放置/均衡/EAS](sub/placement/02-placement.md)。
+
+<a id="constraints"></a>
+
+## 6. RT 与资源约束怎样作用于前面的过程？
+
+把约束放回对应阶段，比把它们全部当作最后的例外更容易理解。
+
+| 作用阶段 | 机制 | 对前面过程的实际影响 |
+| --- | --- | --- |
+| 等待与唤醒 | RT 锁、PI、saved_state | 锁等待有独立协议；业务通知与取得锁资格分别维护 |
+| 候选资格 | CFS/RT 带宽、DL 预算 | 任务仍有业务工作，类或祖先实体却可能暂不能竞争 |
+| 选择规则 | FIFO/RR、DL、PI 有效属性 | 使用固定优先级或截止期，PI 可临时改变拥有者的有效需求 |
+| 请求兑现 | PREEMPT_RT、raw 锁、关中断、独立 lazy 条件 | 已请求重调度，何时可以真正交接仍受上下文约束 |
+| 多核位置 | 亲和性、cpuset、容量、域、准入 | 可选范围和可承诺供给受到限制 |
+
+### 6.1 PREEMPT_RT 已经是本系列的工作环境
+
+普通 `spinlock_t` 按 RT 实现由 rt-mutex 机制支撑；竞争时可发生锁等待，持锁任务仍可被抢占。其 `irqsave` 变体不能按非 RT 语义理解为关闭硬中断。rq 锁和任务 `pi_lock` 则仍是原始锁，真实关中断/禁止抢占区间仍限制交接。
+
+普通等待队列头的 `spinlock_t` 与 completion 的 raw swait 又有不同上下文契约，开发时要查 [详细参考](api-reference.md#waitqueue)。RT 不会把所有线程变成 FIFO，也不会自动启用 lazy 抢占、EAS 或组带宽。
+
+### 6.2 策略保证建立在模型和可用供给上
+
+FIFO/RR 的高优先级让适用可运行任务先获得服务；它无法让仍等待设备或锁的任务凭空推进。DL 的 Q/D/P 预约把运行预算、相对截止期、周期联系起来，通过准入和 CBS 管理供给；业务执行时间、外部等待和硬件条件仍需独立分析。
+
+目标树中 DL 的执行还在相关条件下进入根 RT 带宽记账，体现跨类共享供给的联系；它与 DL 自身预算是两份账，具体见 [DL 的时间与记账](sub/realtime/02-deadline.md#edf)。
+
+CFS `cpu.weight` 调整同层相对份额，`cpu.max` 限制组的累计运行额度。两 CPU 并行消费同一额度，可以比一个 CPU 更早用尽；祖先限流也会阻止仍有本地余量的子组。
+
+### 6.3 一个场景串起这些影响
+
+<a id="examples"></a>
+
+A 被数据通知唤醒，选入 CPU1，但没有立刻执行。可以沿同一架构逐层定位：
+
+1. 同步层：数据确实发布了吗？A 是业务等待还是 RT 锁等待？
+2. 资格层：A 已稳定入队吗？所属组或 DL 预算是否被限流？
+3. 策略层：CPU1 上是否有更高类或更应优先的候选？
+4. 执行层：CPU1 是否尚在原始锁或真实关中断区间？
+5. 位置层：允许范围是否使 A 只能等待 CPU1？
+
+这不是要求每次故障检查全部层，而是让证据指向相应机制。观察方法见 [调度排障](sub/observation/01-observe.md)。
+
+<a id="next"></a>
+
+## 7. 阅读与使用地图
+
+### 7.1 按问题进入深入专题
+
+| 架构部分 | 建议入口 | 阅读后应能解释 |
+| --- | --- | --- |
+| 核心对象 | [任务/rq](sub/core/01-task-rq.md) | 状态、成员资格、当前执行和生命周期 |
+| 核心协议 | [等待/唤醒](sub/core/02-wait-wakeup.md) → [切换](sub/core/03-schedule-switch.md) | 条件发布、竞态、旧执行交接和恢复现场 |
+| 服务策略 | [CFS](sub/fair/01-cfs.md) · [FIFO/RR](sub/realtime/01-fifo-rr.md) · [DL](sub/realtime/02-deadline.md) | 每类的对象、记账、选择、退出和恢复循环 |
+| 多核输入与决策 | [PELT](sub/placement/01-pelt.md) → [放置](sub/placement/02-placement.md) | 信号口径、候选范围、不均衡目标与迁移 |
+| 资源与依赖 | [组带宽](sub/fair/02-bandwidth.md) · [PI](sub/synchronization/01-pi-preempt.md) | 额度怎样改变资格，锁依赖怎样改变有效需求 |
+| 使用与观察 | [API](api.md) · [排障](sub/observation/01-observe.md) | 选择接口、处理错误/存活、解释统计与事件 |
+
+**[专题首页](sub/index.md)** 同时提供推荐顺序和按现象查询。专题不是源码文件的机械拆分：一个协议可能穿过多个文件，一个大文件也包含多种机制。
+
+<a id="interfaces"></a>
+
+### 7.2 开发时从 API 查询入口走
+
+用户线程的权重、策略、CPU 范围分别查询 nice/priority、scheduler/attr、affinity 接口。内核同步先区分条件等待和完成事件，再查询 waitqueue 或 completion；专用线程查询 kthread 的创建与停止协议。
+
+[API 选型](api.md) 回答“用哪一类”；[详细参考](api-reference.md#quick) 回答“参数、单位、上下文、返回值和清理怎样处理”。内部 `try_to_wake_up`、`__schedule`、类回调在机制篇用于阅读，不作为普通模块的直接调用建议。
+
+<a id="terms"></a>
+
+### 7.3 按概念分组的术语速查
+
+| 组别 | 名称 | 含义 |
+| --- | --- | --- |
+| 对象 | rq / sched_entity | runqueue 管理对象 / 调度实体，实体可代表任务或组 |
+| 对象 | task_group / sched_group / root_domain | 资源任务组 / 拓扑 CPU 分组 / 适用根管理范围 |
+| 状态 | TTWU / activation | Try To Wake Up / 恢复运行需求至再次阻塞的一轮激活 |
+| 状态 | `TASK_IDLE` / `SCHED_IDLE` / idle 类 | 不计相应系统负载的等待状态 / fair 策略 / CPU 空闲兜底类 |
+| 公平 | CFS / vruntime | Completely Fair Scheduler / 带权虚拟运行进度 |
+| 实时 | RT / PREEMPT_RT | Real-Time / 本系列的实时抢占内核模型 |
+| 实时 | FIFO / RR | First-In First-Out / Round-Robin，同级规则 |
+| 实时 | EDF / CBS / GRUB | 最早截止期选择 / 恒定带宽服务器 / 未使用带宽回收 |
+| 实时 | WCET / 0-lag | 最坏执行时间 / 阻塞任务的带宽可退出 active 集合的适用时刻 |
+| 多核 | SMP / IPI | 多 CPU 并行体系 / CPU 间中断通知 |
+| 信号 | PELT / EWMA / util_est | 每实体负载跟踪 / 指数加权移动平均 / 近期激活利用率估计 |
+| 能力 | capacity / misfit / pinning | 归一化供给 / 能力不匹配 / 放置范围限制 |
+| 能效 | EAS / perf domain | 能效调度 / 性能与能量评估域 |
+| 能效 | DVFS / OPP / AMU | 动态电压频率调整 / 性能工作点 / arm64 活动计数单元 |
+| 控制 | uclamp / quota | 利用率约束 / 可消费执行额度，含义不同 |
+| 同步 | PI / RCU | 优先级继承 / Read-Copy Update 并发读及存活协议 |
+| 切换 | TLB / ASID | 地址翻译缓存 / 地址空间标识 |
+| 时间 | rq clock / clock_task | 调度时间 / 任务执行记账时间 |
+| 观察 | PSI / load average | 压力停顿统计 / 系统平均负载，后者不同于 PELT util |
+
+资料、版本差异和关键源码核对统一见 [依据附录](99-evidence.md)。总览提供坐标；深入篇负责把某个模型推到完整状态变化；API 页负责可查询的调用契约。

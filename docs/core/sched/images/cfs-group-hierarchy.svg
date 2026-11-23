@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 530" role="img" aria-labelledby="title desc">
+  <title id="title">公平组调度的两级竞争</title>
+  <desc id="desc">固定一个CPU和给定有效同级权重，无配额干扰。父级两个同权组实体G和H，my_q分别联系子队列。G内A和B权重1比2，H内只有C，理想份额为六分之一、三分之一和二分之一。基础周期12毫秒且无粒度修正时得到2、4、6毫秒。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 10 5 0 10z" fill="#52606d"/>
+    </marker>
+  </defs>
+  <rect width="960" height="530" fill="#ffffff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="28" font-size="22">先在父级竞争，再在选中的组内选择任务</text>
+    <rect x="328" y="54" width="304" height="64" rx="4" fill="#f1f5f9" stroke="#64748b"/>
+    <text x="480" y="81" font-size="20">CPU 0 的父级 cfs_rq</text>
+    <text x="480" y="106" font-size="17">G : H = 1 : 1</text>
+    <path d="M480 118V142H272V165M480 142H688V165" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="144" y="173" width="256" height="78" rx="4" fill="#e0f2fe" stroke="#0284c7"/>
+    <rect x="560" y="173" width="256" height="78" rx="4" fill="#ffe4e6" stroke="#be123c"/>
+    <text x="272" y="202" font-size="21">组实体 G</text>
+    <text x="688" y="202" font-size="21">组实体 H</text>
+    <text x="272" y="231" font-size="17">代表 G 内的需求</text>
+    <text x="688" y="231" font-size="17">代表 H 内的需求</text>
+    <path d="M272 251V287M688 251V287" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="318" y="277" font-size="16">my_q</text>
+    <text x="734" y="277" font-size="16">my_q</text>
+    <rect x="120" y="295" width="304" height="70" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <rect x="536" y="295" width="304" height="70" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="272" y="323" font-size="20">G 的本 CPU cfs_rq</text>
+    <text x="688" y="323" font-size="20">H 的本 CPU cfs_rq</text>
+    <text x="272" y="352" font-size="17">A : B = 1024 : 2048</text>
+    <text x="688" y="352" font-size="17">只有 C</text>
+    <path d="M272 365V386H188V402M272 386H356V402M688 365V402" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="120" y="410" width="136" height="48" rx="4" fill="#fef9c3" stroke="#a16207"/>
+    <rect x="288" y="410" width="136" height="48" rx="4" fill="#fef9c3" stroke="#a16207"/>
+    <rect x="620" y="410" width="136" height="48" rx="4" fill="#fef9c3" stroke="#a16207"/>
+    <text x="188" y="441" font-size="20">A：1/6</text>
+    <text x="356" y="441" font-size="20">B：1/3</text>
+    <text x="688" y="441" font-size="20">C：1/2</text>
+    <text x="480" y="493" font-size="16">启用公平组调度的单 CPU 理想模型，固定有效同级权重；不包含额度或其他干扰</text>
+    <text x="480" y="518" font-size="15">my_q 箭头为子队列联系，其余枝线示意候选组织；不是源码的固定调用链</text>
+  </g>
+</svg>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="550" viewBox="0 0 1100 550" role="img" aria-labelledby="title desc">
+  <title id="title">Deadline预算与补充时刻</title>
+  <desc id="desc">隐式截止期2/10/10毫秒模型用尽预算后到10毫秒补充；受限截止期2/5/10模型中旧截止期5毫秒不等于补充时刻10毫秒。</desc>
+  <rect width="1100" height="550" fill="#fff"/>
+  <g font-family="Noto Sans CJK SC,Microsoft YaHei,sans-serif" fill="#20252b">
+    <text x="30" y="40" font-size="24">预算 q 与调度截止期 d 分开推进</text>
+    <text x="30" y="90" font-size="20">① Q = 2，D = P = 10 ms；单 CPU 满能力，无 reclaim / PI</text>
+    <rect x="150" y="120" width="140" height="50" fill="#338768"/>
+    <rect x="290" y="120" width="560" height="50" fill="#f9e5eb" stroke="#a84d68"/>
+    <rect x="850" y="120" width="140" height="50" fill="#338768"/>
+    <text x="165" y="152" font-size="18" fill="#fff">执行 2 ms</text>
+    <text x="400" y="152" font-size="18">q = 0；正常候选限流</text>
+    <text x="860" y="152" font-size="18" fill="#fff">新预算</text>
+    <text x="147" y="205" font-size="17">0</text>
+    <text x="280" y="205" font-size="17">2</text>
+    <text x="830" y="205" font-size="17">10 ms</text>
+    <text x="30" y="252" font-size="18">补充：q 加 Q，d 加 P；超额时可能多次推进，而非一律 q = Q。</text>
+    <path d="M30 280 H1070" stroke="#d1d7dd"/>
+    <text x="30" y="325" font-size="20">② Q = 2，D = 5，P = 10 ms；独立受限截止期模型</text>
+    <path d="M150 400 H1020" stroke="#7b8793" stroke-width="2"/>
+    <path d="M150 380 V420 M500 355 V420 M850 355 V420" stroke="#7b8793" stroke-width="2"/>
+    <text x="135" y="450" font-size="18">0：周期起点</text>
+    <text x="440" y="450" font-size="18">5：旧 d</text>
+    <text x="785" y="450" font-size="18">10：补充目标</text>
+    <text x="410" y="370" font-size="18" fill="#a84d68">不能总在 d 补充</text>
+    <text x="30" y="515" font-size="19">本地 dl_next_period = d - D + P；仅 D = P 时，补充时刻才等于旧 d。</text>
+  </g>
+</svg>

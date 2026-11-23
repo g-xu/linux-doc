@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 500" role="img" aria-labelledby="title desc">
+  <title id="title">阻塞退队与CPU执行关系分阶段交接</title>
+  <desc id="desc">A业务阻塞时先改变等待状态，再退队，再准备B执行，最后由B收尾清除A的on_cpu。准备阶段A和B的on_cpu可以短暂同时为1，不表示物理并行。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#52606d"/></marker></defs>
+  <rect width="1120" height="500" fill="#fff"/>
+  <g font-family="Microsoft YaHei,Noto Sans CJK SC,sans-serif" fill="#20252b">
+    <text x="30" y="38" font-size="23">一颗CPU的交接：状态、队列资格、执行保护分别改变</text>
+    <g stroke="#7b8793" fill="#f4f6f8">
+      <rect x="30" y="100" width="200" height="220"/><rect x="245" y="100" width="200" height="220"/>
+      <rect x="460" y="100" width="200" height="220"/><rect x="675" y="100" width="200" height="220"/>
+      <rect x="890" y="100" width="200" height="220"/>
+    </g>
+    <g font-size="18">
+      <text x="45" y="133">① A执行</text><text x="260" y="133">② 业务重检为假</text>
+      <text x="475" y="133">③ A阻塞退队</text><text x="690" y="133">④ 准备B切入</text><text x="905" y="133">⑤ B完成收尾</text>
+    </g>
+    <g font-size="16">
+      <text x="45" y="177">A state=RUNNING</text><text x="45" y="213">A on_rq=1</text><text x="45" y="249">A on_cpu=1</text><text x="45" y="285">curr=A</text>
+      <text x="260" y="177">state=INTERRUPTIBLE</text><text x="260" y="213">A on_rq=1</text><text x="260" y="249">A on_cpu=1</text><text x="260" y="285">curr=A</text>
+      <text x="475" y="177">state=INTERRUPTIBLE</text><text x="475" y="213">A on_rq=0</text><text x="475" y="249">A on_cpu=1</text><text x="475" y="285">继续选择next</text>
+      <text x="690" y="177">A on_rq=0</text><text x="690" y="213">A on_cpu=1</text><text x="690" y="249">B on_cpu=1</text><text x="690" y="285">curr=B</text>
+      <text x="905" y="177">A仍等业务条件</text><text x="905" y="213">A on_rq=0</text><text x="905" y="249">A on_cpu=0</text><text x="905" y="285">curr=B</text>
+    </g>
+    <path d="M230 210 H242 M445 210 H457 M660 210 H672 M875 210 H887" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="30" y="375" font-size="19">④ 的两个 on_cpu=1 是保护窗口，不是一颗CPU同时执行两个线程。</text>
+    <text x="30" y="417" font-size="18">退队前早到的通知可取消睡眠；退队后唤醒须与旧 on_cpu 的 release/acquire 完成交接。</text>
+    <text x="30" y="463" font-size="17">RT + SMP教学模型：A/B为普通fair任务，无迁移、组限流和RT锁竞争；只列关键快照。</text>
+  </g>
+</svg>

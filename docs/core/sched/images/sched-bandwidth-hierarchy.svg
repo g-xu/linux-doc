@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 560" role="img" aria-labelledby="title desc">
+  <title id="title">组限流截断上层候选关系</title>
+  <desc id="desc">同CPU父级有G和H两个组，G内A B，H内C。G限流后叶任务保留，G父级实体退出，父级可见层级任务从3减到1，H不被一起删除。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#52606d"/></marker></defs>
+  <rect width="1100" height="560" fill="#fff"/>
+  <g font-family="Microsoft YaHei,Noto Sans CJK SC,sans-serif" fill="#20252b">
+    <text x="30" y="40" font-size="23">限流移除上层机会，不必将叶任务改成业务睡眠</text>
+    <text x="30" y="84" font-size="19">同一CPU的两个快照；不含祖先已限流、迁移或其他调度类</text>
+    <text x="85" y="130" font-size="21">限流前</text><text x="640" y="130" font-size="21">G限流后</text>
+    <rect x="60" y="150" width="440" height="70" fill="#f4f6f8" stroke="#7b8793"/>
+    <rect x="600" y="150" width="440" height="70" fill="#f4f6f8" stroke="#7b8793"/>
+    <text x="80" y="180" font-size="18">父级：G / H两实体</text><text x="80" y="208" font-size="18">h_nr_running=3</text>
+    <text x="620" y="180" font-size="18">父级：只通过H取得候选</text><text x="620" y="208" font-size="18">h_nr_running=1</text>
+    <g stroke="#338768" fill="#e1f2eb">
+      <rect x="60" y="290" width="200" height="110"/><rect x="300" y="290" width="200" height="110"/><rect x="840" y="290" width="200" height="110"/>
+    </g>
+    <rect x="600" y="290" width="200" height="110" fill="#f9e5eb" stroke="#a84d68"/>
+    <g font-size="19">
+      <text x="80" y="327">G叶队列：A / B</text><text x="80" y="369">两任务可运行</text>
+      <text x="320" y="327">H叶队列：C</text><text x="320" y="369">一任务可运行</text>
+      <text x="620" y="327">G仍保存A / B</text><text x="620" y="369">上层机会被截断</text>
+      <text x="860" y="327">H仍可提供C</text><text x="860" y="369">兄弟关系保留</text>
+    </g>
+    <path d="M180 220 V285 M400 220 V285 M950 220 V285" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M710 220 V270" stroke="#a84d68" stroke-width="2" stroke-dasharray="5 5"/>
+    <path d="M690 265 L730 280 M690 280 L730 265" stroke="#a84d68" stroke-width="3"/>
+    <text x="30" y="468" font-size="18">G自己的任务和数据结构继续存活；恢复须补回组实体、层级运行量和相应限制状态。</text>
+    <text x="30" y="514" font-size="17">包含关系示意，非源码固定调用链；计数分别属于本级实体与层级任务。</text>
+  </g>
+</svg>

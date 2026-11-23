@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 570" role="img" aria-labelledby="title desc">
+  <title id="title">多 CPU 放置和迁移的反馈循环</title>
+  <desc id="desc">允许范围与拓扑限定候选，唤醒选核建立初始放置，各CPU本地运行产生历史信号。均衡事件使用信号判断不均衡，迁移协议调整归属。RT和DL有本类的跨CPU协调；适用能效和调频与这些过程协作。</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#52606d"/></marker></defs>
+  <rect width="1000" height="570" fill="white"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="500" y="32" font-size="23">初始放置 → 本地运行 → 历史更新 → 按事件调整</text>
+    <rect x="30" y="65" width="940" height="70" rx="4" fill="#f1f5f9" stroke="#64748b"/>
+    <text x="500" y="94" font-size="20">合法范围与比较范围</text>
+    <text x="500" y="121" font-size="17">亲和性 / cpuset / CPU 状态　+　sched_domain / root_domain / 适用性能域</text>
+    <rect x="30" y="190" width="280" height="85" rx="4" fill="#e0f2fe" stroke="#0284c7"/>
+    <text x="170" y="220" font-size="20">新建 / 唤醒选核</text>
+    <text x="170" y="249" font-size="17">类规则建立初始位置</text>
+    <rect x="360" y="190" width="280" height="85" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="500" y="220" font-size="20">各 CPU 本地运行</text>
+    <text x="500" y="249" font-size="17">各 rq 选择、记账与交接</text>
+    <rect x="690" y="190" width="280" height="85" rx="4" fill="#fef9c3" stroke="#a16207"/>
+    <text x="830" y="220" font-size="20">需求与供给信号</text>
+    <text x="830" y="249" font-size="17">PELT / util_est / capacity</text>
+    <path d="M170 135V178M310 232H348M640 232H678" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="30" y="365" width="280" height="85" rx="4" fill="#ffe4e6" stroke="#be123c"/>
+    <text x="170" y="395" font-size="20">实际迁移交接</text>
+    <text x="170" y="424" font-size="17">源退队 → 归属转换 → 目标入队</text>
+    <rect x="360" y="365" width="280" height="85" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="500" y="395" font-size="20">本类跨 CPU 决策</text>
+    <text x="500" y="424" font-size="17">fair 均衡 / RT-DL 协调</text>
+    <rect x="690" y="365" width="280" height="85" rx="4" fill="#f1f5f9" stroke="#64748b"/>
+    <text x="830" y="395" font-size="20">相应事件触发评估</text>
+    <text x="830" y="424" font-size="17">周期 / 空闲 / 本类触发路径</text>
+    <path d="M830 275V353M690 407H652M360 407H322M170 365V320H500V287" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="500" y="313" font-size="16">改变分布后继续本地运行</text>
+    <path d="M830 190V157H310" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="551" y="178" font-size="15">历史也参与下一次唤醒选核</text>
+    <text x="500" y="506" font-size="18">适用 EAS：评价候选放置的能量增量　适用 schedutil：由需求提出频率请求</text>
+    <text x="500" y="542" font-size="16">协调事件按各类条件触发；不是每轮本地调度都执行一次全机均衡</text>
+  </g>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 540" role="img" aria-labelledby="title desc">
+  <title id="title">带单位的均衡目标和一次任务移动</title>
+  <desc id="desc">migrate_load模型中两组容量相同1024，负载4096和1024，平均2560，目标1536。移动负载1024后剩512，再移动一个1024会超过目标。</desc>
+  <rect width="1100" height="540" fill="#fff"/>
+  <g font-family="Microsoft YaHei,Noto Sans CJK SC,sans-serif" fill="#20252b">
+    <text x="30" y="40" font-size="23">均衡目标是load，不是毫秒，也不必一次得到相等人数</text>
+    <text x="30" y="83" font-size="18">限定已进入migrate_load，两组capacity=1024；给定load 4096 / 1024</text>
+    <text x="110" y="130" font-size="20">搬前：目标1536</text><text x="660" y="130" font-size="20">搬一个1024后：目标剩512</text>
+    <path d="M60 360 H500 M600 360 H1040" stroke="#7b8793"/>
+    <rect x="130" y="160" width="105" height="200" fill="#338768"/>
+    <rect x="320" y="310" width="105" height="50" fill="#9f7532"/>
+    <rect x="670" y="210" width="105" height="150" fill="#338768"/>
+    <rect x="860" y="260" width="105" height="100" fill="#9f7532"/>
+    <path d="M60 235 H500 M600 235 H1040" stroke="#a84d68" stroke-dasharray="5 5"/>
+    <g font-size="18" text-anchor="middle">
+      <text x="182" y="153">4096</text><text x="372" y="301">1024</text>
+      <text x="722" y="202">3072</text><text x="912" y="251">2048</text>
+      <text x="182" y="391">源</text><text x="372" y="391">目标</text>
+      <text x="722" y="391">源</text><text x="912" y="391">目标</text>
+    </g>
+    <text x="30" y="445" font-size="19">平均2560；min(4096-2560, 2560-1024)=1536；1536-1024=512。</text>
+    <text x="30" y="487" font-size="18">再搬1024会超过当前剩余目标；普通分支可以跳过，后续均衡继续校正。</text>
+    <text x="30" y="522" font-size="16">独立聚合输入模型，无失败放宽；虚线是平均负载，不代表每个任务固定时间片。</text>
+  </g>
+</svg>

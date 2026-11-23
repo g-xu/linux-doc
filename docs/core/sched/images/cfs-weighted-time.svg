@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 450" role="img" aria-labelledby="title desc">
+  <title id="title">两种权重的实际执行与虚拟进度</title>
+  <desc id="desc">给定A逻辑权重1024，B2048。教学算法每步执行1ms并比较虚拟进度，相等选A，顺序为A B B A B B。A实际执行2ms，B4ms，虚拟进度都增加2ms。这不是Linux实际tick或trace。</desc>
+  <rect width="960" height="450" fill="#ffffff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="29" font-size="22">权重 1:2：实际时间不同，虚拟进度可以追平</text>
+    <text x="480" y="56" font-size="16">每步 1 ms 的教学算法，相等选 A；不是目标机 tick、时间片或 trace</text>
+    <text x="62" y="117" font-size="18">CPU</text>
+    <g stroke-width="1">
+      <rect x="120" y="86" width="120" height="48" fill="#e0f2fe" stroke="#0284c7"/>
+      <rect x="240" y="86" width="120" height="48" fill="#fef9c3" stroke="#a16207"/>
+      <rect x="360" y="86" width="120" height="48" fill="#fef9c3" stroke="#a16207"/>
+      <rect x="480" y="86" width="120" height="48" fill="#e0f2fe" stroke="#0284c7"/>
+      <rect x="600" y="86" width="120" height="48" fill="#fef9c3" stroke="#a16207"/>
+      <rect x="720" y="86" width="120" height="48" fill="#fef9c3" stroke="#a16207"/>
+    </g>
+    <g font-size="21">
+      <text x="180" y="118">A</text><text x="300" y="118">B</text><text x="420" y="118">B</text>
+      <text x="540" y="118">A</text><text x="660" y="118">B</text><text x="780" y="118">B</text>
+    </g>
+    <g font-size="16">
+      <text x="120" y="157">0</text><text x="240" y="157">1</text><text x="360" y="157">2</text>
+      <text x="480" y="157">3</text><text x="600" y="157">4</text><text x="720" y="157">5</text><text x="840" y="157">6 ms</text>
+    </g>
+    <text x="310" y="193" font-size="17" fill="#0369a1">A：w=1024，执行 1 ms 增长 v=1 ms</text>
+    <text x="684" y="193" font-size="17" fill="#a16207">B：w=2048，执行 1 ms 增长 v=0.5 ms</text>
+    <path d="M120 225H840M120 295H840M120 365H840" fill="none" stroke="#cbd5e1" stroke-dasharray="4 4"/>
+    <path d="M120 211V365H850" fill="none" stroke="#64748b"/>
+    <g font-size="16" text-anchor="end">
+      <text x="108" y="230">v=2</text><text x="108" y="300">v=1</text><text x="108" y="370">v=0</text>
+    </g>
+    <polyline points="120,365 240,295 480,295 600,225 840,225" fill="none" stroke="#0284c7" stroke-width="3"/>
+    <polyline points="120,365 240,365 480,295 600,295 840,225" fill="none" stroke="#a16207" stroke-width="3"/>
+    <g font-size="16">
+      <text x="120" y="393">0</text><text x="480" y="393">3</text><text x="840" y="393">6 ms</text>
+    </g>
+    <text x="480" y="431" font-size="17">6 ms 内 A 用 2 ms、B 用 4 ms；两者虚拟进度均为 2 ms</text>
+  </g>
+</svg>

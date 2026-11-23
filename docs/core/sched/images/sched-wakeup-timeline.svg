@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+  <title id="title">唤醒成功与实际执行的时间关系</title>
+  <desc id="desc">同一CPU上的教学时间线。A先等待条件，唤醒完成后处于可运行等待，后来才被实际选择并执行。B在此期间继续运行，切换后等待CPU。间隔没有固定数值，不对应真实trace。</desc>
+  <rect width="960" height="360" fill="#ffffff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="29" font-size="22">同一 CPU：被唤醒，不等于当场执行</text>
+    <text x="128" y="76" font-size="16">较早</text>
+    <text x="912" y="76" font-size="16">较晚</text>
+    <text x="60" y="149" font-size="20">任务 A</text>
+    <text x="60" y="223" font-size="20">任务 B</text>
+    <rect x="128" y="115" width="212" height="52" fill="#f1f5f9" stroke="#64748b"/>
+    <rect x="340" y="115" width="364" height="52" fill="#fef9c3" stroke="#a16207"/>
+    <rect x="704" y="115" width="208" height="52" fill="#e0f2fe" stroke="#0284c7"/>
+    <rect x="128" y="189" width="576" height="52" fill="#dcfce7" stroke="#15803d"/>
+    <rect x="704" y="189" width="208" height="52" fill="#fef9c3" stroke="#a16207"/>
+    <g font-size="18">
+      <text x="234" y="148">等待条件</text>
+      <text x="522" y="148">可运行，尚未执行</text>
+      <text x="808" y="148">执行</text>
+      <text x="416" y="222">执行</text>
+      <text x="808" y="222">等待 CPU</text>
+    </g>
+    <path d="M340 88V256M704 88V256" fill="none" stroke="#52606d" stroke-dasharray="5 4"/>
+    <text x="340" y="278" font-size="17">唤醒完成</text>
+    <text x="704" y="278" font-size="17">实际调度并切换</text>
+    <path d="M340 298V306H704V298" fill="none" stroke="#a16207" stroke-width="2"/>
+    <text x="522" y="328" font-size="17">这一段不是 A 的 CPU 执行时间</text>
+    <text x="480" y="352" font-size="15">一次普通交接的示意；策略、额度和执行条件影响间隔，不表示固定延迟或实测结果</text>
+  </g>
+</svg>

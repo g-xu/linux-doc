@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" role="img" aria-labelledby="title desc">
+  <title id="title">Linux 调度模块的主要组成与协作</title>
+  <desc id="desc">事件和接口请求进入调度核心。核心读写任务与每CPU运行队列，通过调度类规则完成选择和更新，并受拓扑、负载、容量和控制策略影响。图是组织关系，不是固定调用链。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 10 5 0 10z" fill="#52606d"/>
+    </marker>
+  </defs>
+  <rect width="960" height="560" fill="#ffffff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="29" font-size="22">调度架构：核心、策略、跨 CPU 协调与外部协作</text>
+    <rect x="328" y="56" width="304" height="68" rx="4" fill="#f1f5f9" stroke="#64748b"/>
+    <text x="480" y="84" font-size="20">事件与使用请求</text>
+    <text x="480" y="110" font-size="17">创建 / 唤醒 / 阻塞 / 退出</text>
+    <path d="M480 124V175" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="574" y="155" font-size="16">相应入口处理</text>
+    <rect x="24" y="185" width="260" height="150" rx="4" fill="#e0f2fe" stroke="#0284c7"/>
+    <text x="154" y="218" font-size="21">任务与 rq</text>
+    <text x="154" y="251" font-size="17">状态、CPU 关联、当前任务</text>
+    <text x="154" y="280" font-size="17">各类子队列与运行记账</text>
+    <text x="154" y="309" font-size="17">每 CPU 维护适用管理对象</text>
+    <rect x="328" y="185" width="304" height="150" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="480" y="218" font-size="21">调度核心</text>
+    <text x="480" y="251" font-size="17">资格、入队、唤醒与调度请求</text>
+    <text x="480" y="280" font-size="17">调用规则，确定 prev / next</text>
+    <text x="480" y="309" font-size="17">组织 mm 与架构执行交接</text>
+    <rect x="676" y="185" width="260" height="150" rx="4" fill="#fef9c3" stroke="#a16207"/>
+    <text x="806" y="218" font-size="21">调度类</text>
+    <text x="806" y="251" font-size="17">stop → deadline → rt</text>
+    <text x="806" y="280" font-size="17">→ fair → idle</text>
+    <text x="806" y="309" font-size="17">入队、记账、选择与抢占规则</text>
+    <path d="M328 260H292M632 244H668M676 292H640" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="300" y="363" font-size="16">读写任务与 rq 状态</text>
+    <text x="666" y="363" font-size="16">策略调用与结果</text>
+    <rect x="24" y="425" width="912" height="78" rx="4" fill="#ffe4e6" stroke="#be123c"/>
+    <text x="480" y="451" font-size="18">多核：拓扑 / 放置 / 迁移 / RT-DL push-pull　信号：PELT / capacity / util_est</text>
+    <text x="480" y="482" font-size="17">控制：策略 / 配额 / 亲和性 / PI　协作：mm / arm64 / 调频　观察：统计 / trace</text>
+    <path d="M480 425V345" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="612" y="397" font-size="16">约束与决策输入</text>
+    <text x="480" y="541" font-size="16">组织与依赖示意，不是固定调用链；各功能受配置和当前状态约束</text>
+  </g>
+</svg>

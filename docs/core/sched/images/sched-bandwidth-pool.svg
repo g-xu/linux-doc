@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="620" viewBox="0 0 1100 620" role="img" aria-labelledby="title desc">
+  <title id="title">CFS共享组额度与双CPU累计消耗</title>
+  <desc id="desc">组共享额度池向每CPU组队列分发局部额度；20毫秒预算在两CPU同时运行时可约10毫秒墙上时间用尽。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#4b5563"/></marker></defs>
+  <rect width="1100" height="620" fill="#fff"/>
+  <g font-family="Noto Sans CJK SC,Microsoft YaHei,sans-serif" fill="#20252b">
+    <text x="30" y="40" font-size="24">共享预算，局部消费；可运行 ≠ 尚有执行额度</text>
+    <rect x="335" y="70" width="430" height="90" fill="#f4f6f8" stroke="#7b8793"/>
+    <text x="355" y="102" font-size="20">G：cfs_bandwidth 共享池</text>
+    <text x="355" y="137" font-size="18">quota / period / runtime / 定时器</text>
+    <rect x="100" y="225" width="330" height="90" fill="#e1f2eb" stroke="#338768"/>
+    <text x="120" y="257" font-size="20">G 在 CPU0 的 cfs_rq</text>
+    <text x="120" y="292" font-size="18">本地 runtime_remaining</text>
+    <rect x="670" y="225" width="330" height="90" fill="#e1f2eb" stroke="#338768"/>
+    <text x="690" y="257" font-size="20">G 在 CPU1 的 cfs_rq</text>
+    <text x="690" y="292" font-size="18">本地 runtime_remaining</text>
+    <path d="M435 160 L265 220 M665 160 L835 220" stroke="#4b5563" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="250" y="197" font-size="17">不足时批量领额</text>
+    <text x="720" y="197" font-size="17">不足时批量领额</text>
+    <path d="M30 350 H1070" stroke="#d1d7dd"/>
+    <text x="30" y="385" font-size="20">限定模型：quota = 20 ms，period = 100 ms，忽略 burst / 局部余量</text>
+    <text x="30" y="435" font-size="18">CPU0</text>
+    <rect x="150" y="410" width="85" height="38" fill="#338768"/>
+    <rect x="235" y="410" width="765" height="38" fill="#f9e5eb" stroke="#a84d68"/>
+    <text x="415" y="435" font-size="18">组限流；等待适用补充</text>
+    <text x="30" y="490" font-size="18">CPU1</text>
+    <rect x="150" y="465" width="85" height="38" fill="#338768"/>
+    <rect x="235" y="465" width="765" height="38" fill="#f9e5eb" stroke="#a84d68"/>
+    <text x="415" y="490" font-size="18">组限流；等待适用补充</text>
+    <text x="147" y="532" font-size="17">0</text>
+    <text x="220" y="532" font-size="17">10 ms</text>
+    <text x="980" y="532" font-size="17">100 ms</text>
+    <text x="30" y="577" font-size="18">两个 CPU 各执行 10 ms → 合计消耗 20 ms；不是每 CPU 各得到一份 quota。</text>
+  </g>
+</svg>

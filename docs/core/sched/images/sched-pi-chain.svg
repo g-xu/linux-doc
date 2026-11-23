@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="550" viewBox="0 0 1100 550" role="img" aria-labelledby="title desc">
+  <title id="title">锁依赖链与有效优先级传播</title>
+  <desc id="desc">H等L拥有的X，L又等K拥有的Y；PI使需求向链尾传播。解除依赖后按剩余等待者和正常属性恢复，不永久修改policy。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#4b5563"/></marker></defs>
+  <rect width="1100" height="550" fill="#fff"/>
+  <g font-family="Noto Sans CJK SC,Microsoft YaHei,sans-serif" fill="#20252b">
+    <text x="30" y="40" font-size="24">让依赖链尾推进，而不是让等待者越过锁</text>
+    <rect x="30" y="100" width="180" height="90" fill="#f9e5eb" stroke="#a84d68"/>
+    <text x="50" y="133" font-size="20">H：高需求</text><text x="50" y="166" font-size="18">等待 X</text>
+    <rect x="320" y="100" width="180" height="90" fill="#fff0d7" stroke="#9f7532"/>
+    <text x="340" y="133" font-size="20">锁 X</text><text x="340" y="166" font-size="18">拥有者 L</text>
+    <rect x="610" y="100" width="180" height="90" fill="#e1f2eb" stroke="#338768"/>
+    <text x="630" y="133" font-size="20">L：拥有 X</text><text x="630" y="166" font-size="18">又等待 Y</text>
+    <rect x="900" y="100" width="170" height="90" fill="#f4f6f8" stroke="#7b8793"/>
+    <text x="920" y="133" font-size="20">锁 Y</text><text x="920" y="166" font-size="18">拥有者 K</text>
+    <path d="M210 145 H315 M500 145 H605 M790 145 H895" fill="none" stroke="#4b5563" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="900" y="275" width="170" height="90" fill="#e1f2eb" stroke="#338768"/>
+    <text x="920" y="308" font-size="20">K：链尾</text><text x="920" y="342" font-size="18">需继续释放 Y</text>
+    <path d="M985 190 V270" fill="none" stroke="#4b5563" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="30" y="278" font-size="20">需求传播：H → L → K</text>
+    <text x="30" y="323" font-size="18">锁等待者树：谁在等这把锁？</text>
+    <text x="30" y="358" font-size="18">任务 PI 树：自己所持锁的最高等待需求是什么？</text>
+    <path d="M30 395 H1070" stroke="#d1d7dd"/>
+    <text x="30" y="438" font-size="19">解除依赖 → 重新计算剩余依赖 → 恢复适用有效属性与队列</text>
+    <text x="30" y="480" font-size="18">有效 prio / class 可临时变化；正常属性和用户 policy 不等于永久被改成提升值。</text>
+    <text x="30" y="520" font-size="18">只在支持 PI 的同步协议中成立；不能修复死锁、无限临界区或长设备等待。</text>
+  </g>
+</svg>

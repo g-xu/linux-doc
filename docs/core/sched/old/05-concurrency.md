@@ -13,7 +13,7 @@
 | 覆盖的上下文 | 进程上下文 + tick/软中断 + hrtimer;NMI 不涉及 sched 锁 |
 | 未覆盖 | cpuset 互斥锁(在 `kernel/cgroup/cpuset.c`,经回调进入,不在本子系统);wait_queue 的 `spinlock_t`(属 wait 基础设施) |
 
-关键结论(前置):**kernel/sched 核心数据结构的锁全部是 `raw_spinlock_t`**(`kernel/sched/sched.h:2663/2672` 的 `double_lock`/`double_lock_irq` 仅是接收 `spinlock_t*` 的泛型辅助器,不代表 sched 自身有 `spinlock_t` 成员)。因此 RT 树上这些锁语义不变——调度器自身不能睡眠是 RT 化必须保留的底线(见 [`references/methodology.md`](../../.qoder/skills/kernel-core-subsystem-docs/references/methodology.md) §F)。
+关键结论(前置):**kernel/sched 核心数据结构的锁全部是 `raw_spinlock_t`**(`kernel/sched/sched.h:2663/2672` 的 `double_lock`/`double_lock_irq` 仅是接收 `spinlock_t*` 的泛型辅助器,不代表 sched 自身有 `spinlock_t` 成员)。因此 RT 树上这些锁语义不变——调度器自身不能睡眠是 RT 化必须保留的底线(见 [`references/methodology.md`](../../../.qoder/skills/kernel-core-subsystem-docs/references/methodology.md) §F)。
 
 ## §1 锁清单
 
@@ -149,5 +149,5 @@ RCU 那行的关键区别:`rcu_read_lock` 保护的是"curr 指向的 task_struc
 - fair.c 全部抢占置位用 `resched_curr_lazy()` 而非 `resched_curr()`:落点 `fair.c:4918,4942`(check_preempt_tick)、`5088`(entity_tick)、`5237`(HRTICK)、`7742`(check_preempt_wakeup)。定义 `core.c:1056`,声明 `kernel/sched/sched.h:2355`(非 RT 时为 inline stub `kernel/sched/sched.h:2357`)。这是 fair 与 RT 补丁交互的唯一形态——fair.c 内无 `#ifdef CONFIG_PREEMPT_RT` 直接条件编译块,差异全经 `resched_curr_lazy` 间接体现。
 - `features.h:49-53` 的 `SCHED_FEAT(PREEMPT_LAZY, true)` 仅在 `CONFIG_PREEMPT_RT && CONFIG_PREEMPT_LAZY` 下启用;`TTWU_QUEUE` 特性 RT 下关闭(`features.h:49-50`)。
 - `__schedule` 中 `clear_tsk_need_resched_lazy(prev)`(`core.c:6642`);RT 抢占决策 `preemptible_lazy()`(`core.c:6864-6870`);`SM_MASK_PREEMPT`/`SM_RTLOCK_WAIT` 语义(`core.c:6512-6520`)。
-- 与 git status 中 arm64 `thread_info.h`/`preempt.h`/`asm-offsets.c` 改动一致(`RESCHED_LAZY` 标志位 backport)。RT 的真实影响在抢占时机而非锁语义——符合核心子系统"关键锁多半已是 raw_spinlock"的规律(见 [`references/methodology.md`](../../.qoder/skills/kernel-core-subsystem-docs/references/methodology.md) §F)。
+- 与 git status 中 arm64 `thread_info.h`/`preempt.h`/`asm-offsets.c` 改动一致(`RESCHED_LAZY` 标志位 backport)。RT 的真实影响在抢占时机而非锁语义——符合核心子系统"关键锁多半已是 raw_spinlock"的规律(见 [`references/methodology.md`](../../../.qoder/skills/kernel-core-subsystem-docs/references/methodology.md) §F)。
 

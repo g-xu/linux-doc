@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 510" role="img" aria-labelledby="title desc">
+  <title id="title">三任务切换中的续执行和实际切出者</title>
+  <desc id="desc">A切到B后B收尾A；B切到C后C收尾B；C切到A后A恢复早前暂停的栈，但本次实际切出者为C，所以收尾C而不是早前B。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#52606d"/></marker></defs>
+  <rect width="1080" height="510" fill="#fff"/>
+  <g font-family="Microsoft YaHei,Noto Sans CJK SC,sans-serif" fill="#20252b">
+    <text x="30" y="40" font-size="23">恢复自己的旧栈，接住本次实际切出者 last</text>
+    <text x="55" y="85" font-size="18">切换前current</text><text x="390" y="85" font-size="18">恢复的任务与栈</text><text x="755" y="85" font-size="18">切换后收尾对象</text>
+    <g stroke="#7b8793" fill="#f4f6f8">
+      <rect x="40" y="110" width="235" height="65"/><rect x="370" y="110" width="300" height="65"/><rect x="760" y="110" width="275" height="65"/>
+      <rect x="40" y="220" width="235" height="65"/><rect x="370" y="220" width="300" height="65"/><rect x="760" y="220" width="275" height="65"/>
+      <rect x="40" y="330" width="235" height="65"/><rect x="370" y="330" width="300" height="65"/><rect x="760" y="330" width="275" height="65"/>
+    </g>
+    <g font-size="20">
+      <text x="65" y="150">① A切向B</text><text x="395" y="150">B从保存的上下文继续</text><text x="785" y="150">finish：A</text>
+      <text x="65" y="260">② B切向C</text><text x="395" y="260">C从保存的上下文继续</text><text x="785" y="260">finish：B</text>
+      <text x="65" y="370">③ C切向A</text><text x="395" y="370">A恢复①暂停的调用栈</text><text x="785" y="370">finish：C，不是B</text>
+    </g>
+    <path d="M275 143 H365 M670 143 H755 M275 253 H365 M670 253 H755 M275 363 H365 M670 363 H755" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="30" y="452" font-size="18">A的调用最初指向B，但返回时最近切出的是C；不能用调用前缓存的next作收尾。</text>
+    <text x="30" y="487" font-size="17">同CPU的三个既有续接任务；不含新任务启动、完整包装宏或架构扩展。</text>
+  </g>
+</svg>

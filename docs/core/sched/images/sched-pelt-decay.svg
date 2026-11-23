@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="470" viewBox="0 0 1000 470" role="img" aria-labelledby="title desc">
+  <title id="title">PELT 的一份历史贡献衰减</title>
+  <desc id="desc">原有历史贡献在32、64、96个PELT段后约剩二分之一、四分之一、八分之一。持续活动另有新贡献。</desc>
+  <rect width="1000" height="470" fill="#fff"/>
+  <g font-family="Noto Sans CJK SC,Microsoft YaHei,sans-serif" fill="#20252b">
+    <text x="30" y="40" font-size="24">跟踪一份旧贡献，不是整个活跃任务的 util 曲线</text>
+    <path d="M105 85 V365 H935" fill="none" stroke="#7b8793"/>
+    <g stroke="#d1d7dd"><path d="M105 125 H935 M105 245 H935 M105 305 H935 M105 335 H935"/></g>
+    <text x="35" y="132" font-size="18">1</text>
+    <text x="35" y="252" font-size="18">1/2</text>
+    <text x="35" y="312" font-size="18">1/4</text>
+    <text x="35" y="342" font-size="18">1/8</text>
+    <rect x="160" y="125" width="105" height="240" fill="#338768"/>
+    <rect x="365" y="245" width="105" height="120" fill="#338768"/>
+    <rect x="570" y="305" width="105" height="60" fill="#338768"/>
+    <rect x="775" y="335" width="105" height="30" fill="#338768"/>
+    <text x="188" y="395" font-size="18">0 段</text>
+    <text x="387" y="395" font-size="18">32 段</text>
+    <text x="592" y="395" font-size="18">64 段</text>
+    <text x="797" y="395" font-size="18">96 段</text>
+    <text x="145" y="435" font-size="18">y^32 = 1/2；本地一段为 1,048,576 ns 的 PELT 时钟，非固定墙上时间。</text>
+  </g>
+</svg>

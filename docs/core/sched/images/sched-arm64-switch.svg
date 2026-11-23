@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" role="img" aria-labelledby="title desc">
+  <title id="title">调度核心与 arm64 的上下文切换</title>
+  <desc id="desc">调度核心决定prev和next，需要切换时按context_switch的协议处理mm，再进入arm64的线程状态和寄存器、栈切换。next恢复已有上下文或新任务入口，不能把每次切换理解为重新执行线程函数。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 10 5 0 10z" fill="#52606d"/>
+    </marker>
+  </defs>
+  <rect width="960" height="400" fill="#ffffff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="28" font-size="22">选择 next 与恢复执行上下文，分别看职责</text>
+    <rect x="24" y="75" width="230" height="120" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="139" y="109" font-size="21">调度核心</text>
+    <text x="139" y="141" font-size="17">确定 prev / next</text>
+    <text x="139" y="171" font-size="17">需要时组织切换</text>
+    <rect x="320" y="64" width="310" height="100" rx="4" fill="#fef9c3" stroke="#a16207"/>
+    <text x="475" y="94" font-size="21">mm 协议</text>
+    <text x="475" y="122" font-size="17">共享 mm / active_mm 等情形</text>
+    <text x="475" y="148" font-size="17">按路径处理用户地址空间</text>
+    <path d="M254 135H286V114H312" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="237" y="56" font-size="16">context_switch</text>
+    <path d="M475 164V207" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="320" y="215" width="310" height="112" rx="4" fill="#e0f2fe" stroke="#0284c7"/>
+    <text x="475" y="247" font-size="21">arm64 线程切换</text>
+    <text x="475" y="278" font-size="17">__switch_to：线程状态与同步</text>
+    <text x="475" y="309" font-size="17">cpu_switch_to：寄存器与栈</text>
+    <rect x="700" y="140" width="236" height="130" rx="4" fill="#ffe4e6" stroke="#be123c"/>
+    <text x="818" y="175" font-size="21">next 恢复执行</text>
+    <text x="818" y="207" font-size="17">已有栈与返回位置</text>
+    <text x="818" y="239" font-size="17">或新任务入口</text>
+    <path d="M630 271H664V205H692" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="664" y="297" font-size="16">恢复</text>
+    <text x="480" y="365" font-size="16">源码职责示意：共享地址空间不要求每次装入全新页表；架构扩展按配置参与</text>
+    <text x="480" y="390" font-size="15">图省略完整锁、异常与引用协议；不是保存全部寄存器后重新调用线程函数</text>
+  </g>
+</svg>

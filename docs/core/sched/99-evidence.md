@@ -1,138 +1,159 @@
----
-title: 取证附录
----
+# 调度文档：基线、来源与核对范围
 
-# 99 · 顶层取证附录
+本附录供[总览](00-overview.md)、[深入专题](sub/index.md)和[API 参考](api-reference.md)共用。正文解释机制，这里集中说明资料如何使用、关键结论在哪里核对，以及没有验证什么。历史写作日志不作为读者必须阅读的章节。
 
-> 本篇记录顶层各篇(00-08)结论的可复现出处。fair 子模块的取证在 [`sub/fair/99-evidence.md`](sub/fair/99-evidence.md)。所有行号指 6.1.158 源码,文件除注明外均在 `kernel/sched/`;宏类结论标"盲区"并给 rg 复现命令。
->
-> 基线:Linux 6.1.158(**PREEMPT_RT `-rt58`**,`CONFIG_PREEMPT_LAZY` 确认),arm64。
+## 1. 分析基线
 
-## §1 版本与 RT 树判定
+<a id="rt-baseline"></a>
 
-| 结论 | 证据 |
-|---|---|
-| 版本 6.1.158 | `./Makefile:2-4`(VERSION/PATCHLEVEL/SUBLEVEL) |
-| PREEMPT_RT 树 `-rt58` | 三判据全中:localversion `-rt58`;`CONFIG_PREEMPT_RT`/`CONFIG_PREEMPT_LAZY` 存在;core.c/fair.c/features.h/sched.h 有 RT 专属块 |
-| lazy 抢占核心 | `resched_curr_lazy`@core.c:1056(`#ifdef CONFIG_PREEMPT_LAZY`@:1045);kernel/sched/sched.h:2355(非 RT stub@2357) |
+| 项目 | 依据与边界 |
+| --- | --- |
+| 版本 | 本地 `linux-6.1.158`，Makefile 的版本字段为 6/1/158，`localversion-rt` 为 `-rt58` |
+| 架构 | arm64 / AArch64，架构实现只追踪本地 `arch/arm64/` |
+| RT 前提 | 用户明确指定源码均已打 RT 补丁，统一假定 `PREEMPT_RT=y` |
+| 独立配置 | SMP、PREEMPT_LAZY、FAIR_GROUP_SCHED、CFS_BANDWIDTH、RT_GROUP_SCHED、EAS 等按各自条件讨论 |
+| 来源完整性 | 源包没有 `.git` 元数据，完整补丁来源没有逐项审计；不据缺少 `.config` 否定用户已指定的 RT 分析前提 |
+| 已知缺项 | 缺少 `arch/arm64/include/asm/switch_to.h`，不把缺失包装宏作为已读源码 |
+| 工作范围 | 文档与 SVG 内容重整、源码定向阅读和静态检查；不运行内核、示例、trace 或调参 |
 
-## §2 核心对象(00 §3 / 02)
+2026-11-22 的重整借鉴了旧总览“设计思路、所有调度类、单 CPU 过程、多核协作”的整体组织。旧稿中 `.next` 类指针链、CFS 永远取最左、RT 只改抢占时机不改锁语义等说法不继承；这些结论以本地实现重新核对。旧目录保持原样。
 
-| 符号 | 行 | 备注 |
-|---|---|---|
-| `struct rq` | kernel/sched/sched.h:954 | per-CPU 主结构 |
-| `rq.__lock` | kernel/sched/sched.h:956 | **raw_spinlock_t** |
-| `rq.nr_running` | kernel/sched/sched.h:962 | add@kernel/sched/sched.h:2411 / sub@2428 |
-| `rq.nr_switches` | kernel/sched/sched.h:981 | |
-| `rq.cfs/rt/dl` | kernel/sched/sched.h:990-992 | 内嵌各类 runqueue |
-| `rq->curr` | kernel/sched/sched.h:1008 | `task_struct __rcu *`;RCU_INIT@core.c:6654,rcu_assign@core.c:9210 |
-| `rq->idle/stop` | kernel/sched/sched.h:1009-1010 | |
-| `rq.clock/clock_task` | kernel/sched/sched.h:1015/1017 | 双时钟故意不合并 |
-| `struct cfs_rq` | kernel/sched/sched.h:550 | |
-| `cfs_rq->curr` | kernel/sched/sched.h:574 | 裸 `sched_entity *`,与 rq->curr 同名不同物 |
-| `cfs_rq->nr_running` | kernel/sched/sched.h:552 | 与 rq->nr_running 同名不同物 |
-| `struct rt_rq` / `dl_rq` | kernel/sched/sched.h:663 / 704 | |
-| `struct sched_class` | kernel/sched/sched.h:2148 | ops 回调表 |
-| 同名陷阱三组 | curr(1008 vs 574)/nr_running(962 vs 552)/idle(1009 ptr vs 632 int) | 02 §3.1 |
+## 2. 资料如何用于这套文档？
 
-## §3 sched_class 优先级链(00 §3 / 03 / 04)
+教学资料帮助组织问题和图示；字段、锁序、默认特性、单位与分支以目标源码为准。上游 6.1 文档也可能保留历史简化，不能只因版本 URL 相同就省略实现核对。
 
-`DEFINE_SCHED_CLASS` 实例:stop_task.c:117 / deadline.c:2738 / rt.c:2692 / fair.c:12443 / idle.c:499。链接序即优先级 stop > dl > rt > fair > idle(经 `.next` 或 section 排布)。分派解耦(core 调 `curr->sched_class->回调`)见 04 §3.1。
+| 资料 | 借鉴内容 | 回源码时重点校正 |
+| --- | --- | --- |
+| [CFS 设计](https://www.kernel.org/doc/html/v6.1/scheduler/sched-design-CFS.html)、[nice 设计](https://www.kernel.org/doc/html/v6.1/scheduler/sched-nice-design.html) | 理想共享、带权服务、虚拟进度 | current/树、buddy、粒度、组层级与实际权重表示 |
+| [调度域](https://www.kernel.org/doc/html/v6.1/scheduler/sched-domains.html) | 每 CPU 队列与分层平衡 | 分阶段 detach/attach、不同迁移类型和扫描预算 |
+| [容量感知](https://www.kernel.org/doc/html/v6.1/scheduler/sched-capacity.html)、[schedutil](https://www.kernel.org/doc/html/v6.1/scheduler/schedutil.html) | 需求/供给、归一化、PELT 与调频 | 精确分段单位、util_est 激活结束、平台支持条件 |
+| [Deadline](https://www.kernel.org/doc/html/v6.1/scheduler/sched-deadline.html) | EDF/CBS、准入、GRUB 状态及 0-lag | D<P 的下一补充时刻、负预算、revised wakeup 与定时器状态 |
+| [CFS bandwidth](https://www.kernel.org/doc/html/v6.1/scheduler/sched-bwc.html)、本地 `Documentation/admin-guide/cgroup-v2.rst` | 共享/本地额度、层级、burst、统计 | v1/v2 ABI 与单位，已结束限流区间和周期计数 |
+| [锁类型](https://www.kernel.org/doc/html/v6.1/locking/locktypes.html)、[RT-mutex 设计](https://www.kernel.org/doc/html/v6.1/locking/rt-mutex-design.html) | RT 锁环境、两棵树、继承链、owner 标记 | raw/普通锁、saved_state、top 替换、锁序与有效类 |
+| [Completion](https://www.kernel.org/doc/html/v6.1/scheduler/completion.html) | 完成状态、初始化、超时及存活 | 本地 swait、complete_all 的 RT 上下文与回调收尾 |
+| OSTEP 的[调度](https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched.pdf)、[比例共享](https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-lottery.pdf)、[多核调度](https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-multi.pdf)章节 | 给定假设后算模型，用时间线说明局部性与服务份额 | 只借教学方法，不把基础课程、其他版本/架构写成当前实现 |
 
-## §4 生命周期十跳(03)
+用户态接口曾参照 Linux man-pages 的参数与返回说明，并回到 `kernel/sys.c`、`core.c`、UAPI 头文件检查目标行为。持续更新的 man-pages 不作为“Linux 6.1 实现版本”的证明。
 
-关键落点:`__schedule`@core.c:6675(trace_sched_switch 同址);唤醒 `try_to_wake_up`→trace_sched_waking@core.c:4212 / wakeup@:4214,:3761;新任务 `wake_up_new_task`→trace_sched_wakeup_new@core.c:4858;迁移 trace_sched_migrate_task@core.c:3195;tick `scheduler_tick`(调 `curr->sched_class->task_tick`);fork/exit trace @include/trace/events/sched.h:372/:333。RT 抢占置位改 `resched_curr_lazy`(见 §1)。
+## 3. 核心对象与运行协议
 
-## §5 并发:锁清单与偏序(05)
+| 核对问题 | 本地定位 | 保留的关键区别 |
+| --- | --- | --- |
+| task、实体与 rq | `include/linux/sched.h`；`kernel/sched/sched.h` | task/类成员、current、树节点、on_cpu 各有语义 |
+| 类排序 | `include/asm-generic/vmlinux.lds.h:127`；`kernel/sched/sched.h` 的类遍历 | 链接段顺序，不是 `.next` 指针链 |
+| 公共入退队 | `kernel/sched/core.c:2088`、`:2122` | enqueue/dequeue 包装与 activate/deactivate 的资格发布不同 |
+| rq 时钟 | `kernel/sched/core.c:673` 附近 | 调度时间、任务执行时间与 PELT 时钟不同 |
+| 等待循环 | `include/linux/wait.h`；`kernel/sched/wait.c:305` | 登记后重检、信号/事件竞争、清理栈等待项 |
+| 唤醒遍历 | `kernel/sched/wait.c:80` 附近 | 非独占项不消耗独占唤醒预算 |
+| TTWU | `kernel/sched/core.c:4191`；`features.h:49` | state→on_rq→on_cpu，RT 默认 TTWU_QUEUE=false |
+| RT 保存状态 | `kernel/sched/core.c:4036`；`include/linux/sched.h` | saved_state 成功匹配可只记录通知，不执行新入队 |
+| 选择与调度 | `kernel/sched/core.c:5972`、`:6557` | fair 快路径/RETRY，主动阻塞与抢占，prev==next |
+| 地址空间与低层切换 | `kernel/sched/core.c:5308`；`arch/arm64/kernel/process.c:522`、`entry.S:829` | mm 与线程栈独立；共享/借用 mm 与寄存器切换不同 |
+| 旧任务收尾 | `kernel/sched/core.c:4975`、`:5196` | release on_cpu、引用收尾；恢复 A 的旧栈时实际 last 可是 C |
 
-| 锁 | 行 | 类型 |
-|---|---|---|
-| `rq->__lock` | kernel/sched/sched.h:956 | raw_spinlock_t |
-| `rt_bandwidth.rt_runtime_lock` | kernel/sched/sched.h:280 | raw |
-| `rt_rq.rt_runtime_lock` | kernel/sched/sched.h:688 | raw |
-| `dl_bw.lock` | kernel/sched/sched.h:319 | raw |
-| `cfs_bandwidth.lock` | kernel/sched/sched.h:344 | raw |
-| `cfs_rq.removed.lock` | kernel/sched/sched.h:592 | raw |
-| `rto_lock` | kernel/sched/sched.h:862 | raw |
-| `cpudl.lock` | cpudeadline.h:12 | raw |
-| `pi_lock`(task) | — | raw |
+<a id="cfs"></a>
 
-偏序一等证据:注释 core.c:441-446,:448-449;double_rq 排序 kernel/sched/sched.h:2562-2588。RT 差异:`resched_curr_lazy`@core.c:1055-1082,`migrate_disable`@core.c:2254-2269,`SCHED_NR_MIGRATE_BREAK` RT=8/非=32@kernel/sched/sched.h:2442。全部核心锁为 raw_spinlock,RT 下语义不变。
+## 4. 调度策略的核对
 
-## §6 API / ABI(01)
+| 策略 | 本地入口 | 阅读时跟踪 |
+| --- | --- | --- |
+| 权重来源 | `core.c` 的 `set_load_weight`、`sched_prio_to_weight` | nice 逻辑值与 arm64 缩放表示、idle 特例 |
+| CFS 记账/基准 | `fair.c:694`、`:882`、`:592` | exec 增量、vruntime、min_vruntime 单调基准 |
+| CFS current/候选 | `fair.c:4946`、`:5044`、`:4994` | 资格仍在、current 在树外、buddy 的有界选择 |
+| CFS 粒度与放置 | `fair.c:726`、`:4909`、`:4648`、`:4740`、`:7529` | slice、tick、唤醒阈值、组层级与迁移 flags |
+| RT 队列/选择 | `rt.c:1434`、`:1747`、`:1773` | 位图、链表、current、on_list 与 on_rq |
+| RT 轮转/带宽 | `rt.c:2647`、`:905`、`:1002`、`:1049` | RR 剩余 tick 与 rt_time/runtime 是两种记账 |
+| RT 多核 | `rt.c:2061` 附近；`cpupri.c` | pushable 与 current、临时引用、目标重检 |
+| DL 对象/预算 | `include/linux/sched.h`；`deadline.c:837`、`:1037`、`:1052`、`:1309`、`:1385` | Q/D/P 与 q/d，耗尽、负预算、下一周期、根 RT 共享记账 |
+| DL 唤醒/回调 | `deadline.c:909`、`:957`、`:1110`、`:1243` | 密度检查、D<P、业务资格与补参数分离 |
+| DL 准入/回收 | `deadline.c:227`、`:392`、`:448`、`:1283`、`:2865` | total-old+new、active/total 带宽、0-lag、取消/回调引用 |
 
-- syscall(core.c,SYSCALL_DEFINE):sched_setscheduler@8059、setparam@8074、setattr@8085、getscheduler@8128、getparam@8157、getattr@8238、setaffinity@8413、getaffinity@8465、yield@8518、get_priority_max@8956、min@8983、rr_get_interval@9048(compat@9061)、nice@7288;setpriority/getpriority@kernel/sys.c:211/281。
-- uapi:策略常量 uapi/linux/sched.h:114-123;SCHED_FLAG_*@128-142;`struct sched_param`@types.h:7;`struct sched_attr`@types.h:102(SIZE_VER0 48@11 / VER1 56@12)。
-- 内核内 API(EXPORT 处):wake_up_process@4476、schedule@6759、set_user_nice@7251、set_cpus_allowed_ptr@3019、sched_set_fifo@7947、__cond_resched@8547、yield@8831 等(详见 [`.evidence/R6-api.md`](evidence/R6-api.md))。
-- RT/DYNAMIC:migrate_disable def@2254/EXPORT@2269(仅 CONFIG_SMP@2231);__cond_resched guard@8523;preempt dynamic 8556-8792。
+源码表是回读入口，不代替专题中的完整解释。数字都指这份本地源包；更换源码后以符号重新定位。
 
-## §7 可调项(06)
+<a id="mechanism-depth"></a>
 
-- sysctl 表:rt.c:33(注册@:64)/ deadline.c:29(@:51)/ core.c:4662(@:4701,schedstats+uclamp)/ autogroup.c:12(@:27)/ topology.c:241(@:256)。RT 带宽默认 950000/1000000 us@rt.c:25,19。
-- 6.1 关键事实:sched_latency/min_granularity/wakeup_granularity/migration_cost/nr_migrate **不在 sysctl**,仅 debugfs(debug.c:311-322)。
-- cgroup cpu controller:`cpu_legacy_files[]`@core.c:11094 / `cpu_files[]`@core.c:11303 / `cpu_cgrp_subsys`@core.c:11355。
-- features 全量@features.h(GENTLE_FAIR_SLEEPERS@7 … BASE_SLICE@106);debugfs `features`@debug.c:305/fops@:161。RT:TTWU_QUEUE 默认 false@features.h:50,PREEMPT_LAZY@:52。
-- boot:isolcpus@isolation.c:246、nohz_full@:194、preempt=@core.c:8768、schedstats=@core.c:4636。
-- RT throttling:`sched_rt_runtime_exceeded`@rt.c:1002,置位@:1025,调用@:1081;禁用写 -1(判定 kernel/sched/sched.h:297,654)。
+## 5. 信号、多核、资源与同步
 
-## §8 可观测性(07)
+| 机制 | 本地入口 | 核对重点 |
+| --- | --- | --- |
+| PELT | `pelt.c:57`、`:102`、`:180`、`:257`、`:306`、`:320`；`pelt.h:95` | 时间计量、三段累积、固定点衰减、输入/除数、归一化 |
+| 历史归属/util_est | `fair.c:4174`、`:4283`、`:4299`、`:4330` | attach/detach、blocked/removed、聚合与样本更新 |
+| 调频 | `core.c` 的 `effective_cpu_util`；`cpufreq_schedutil.c` | 类需求、IRQ、预约、rate limit、共享 policy 与驱动落实 |
+| 放置/拓扑 | `fair.c:7459`；`topology.c` | EAS/affine/idle/慢路径是分支，先满足允许范围 |
+| 平衡/迁移 | `fair.c:8137`、`:9971`、`:8408`、`:8459`、`:8624`、`:10540` | 迁移类型的单位、目标量、候选尺寸、锁与迁移窗口 |
+| EAS | `fair.c:4416`、`:7260` | util_fits 的 0/1/-1，能量增量，overutilized 与平台条件 |
+| CFS 带宽 | `fair.c:5182`、`:5222`、`:5310`、`:5397`、`:5480`、`:5527` | 领额、限流重检、祖先可见性、锁序、恢复/统计 |
+| PI | `kernel/locking/rtmutex.c:1180`、`:655`、`:1064`、`:1288`；`core.c:7075` | 两棵树、top 替换、传播/撤销、trylock 重试、通知与取得锁 |
+| RT 锁环境 | `include/linux/spinlock_rt.h`、`local_lock_internal.h`、`kernel/locking/spinlock_rt.c`、`rtmutex_api.c` | 普通锁与 raw 锁、迁移限制、状态保存、嵌套上下文 |
+| 观察 | `fs/proc/base.c:510`；`kernel/sched/stats.h:210`、`:229`；`include/trace/events/sched.h` | schedstat 字段、事件记录点、TID 生命周期和延迟分段 |
 
-- /proc/schedstat:`show_schedstat`@stats.c:108,rq 级字段@:125-131,domain 级@:141-161,注册@:216。
-- /proc/&lt;pid&gt;/sched:`proc_sched_show_task`@debug.c:946(schedstat 区@971-1018 受 `schedstat_enabled()` 门控)。
-- /proc/sched_debug:`sched_debug_show`@debug.c:836;print_cfs/rt/dl_rq@debug.c:581/663/693;分派 print_*_stats@debug.c:769-771→fair.c:12490 / rt.c:3062 / deadline.c:3124。
-- tracepoint:定义 include/trace/events/sched.h(盲区);sched_switch@:222(触发 core.c:6675)、waking/wakeup@:170/:178、migrate@:274、pi_setprio@:528;裸 pelt_*_tp@:694-714。
-- BPF:6.1 无 sched_ext(`find kernel/sched -name '*ext*'`=0);`grep -rin bpf kernel/sched/`=0;唯一面为通用 tracepoint。
-- schedstat:静态键 `sched_schedstats`@core.c:4599,门控 `schedstat_enabled()`@stats.h:37。
+<a id="api"></a>
 
-## §9 索引盲区总声明
+## 6. API 契约与示例
 
-以下类别全套文档统一走 rg + Read,不单靠代码图索引:
+| 接口族 | 核对来源 | 主要风险 |
+| --- | --- | --- |
+| nice/基本策略 | `kernel/sys.c`，`core.c` 的系统调用与属性修改 | 合法 -1、线程作用域、权限、reset 标志 |
+| sched_attr | `include/uapi/linux/sched/types.h`，`core.c` 的复制/设置/查询 | size、flags、纳秒、uclamp 标度、合法性与准入 |
+| affinity | `core.c:2996`、`:3015`；`kernel/kthread.c` 的 bind | 字节数、task 存活、可能阻塞、inactive/possible CPU |
+| waitqueue | `include/linux/wait.h`、`kernel/sched/wait.c` | 反复重检、jiffies、信号、RT 通知上下文、发布/存活 |
+| completion | `include/linux/completion.h`、`kernel/sched/completion.c` | done 消费、超时非取消、complete_all 的 RT 条件 |
+| kthread | `include/linux/kthread.h`、`kernel/kthread.c:698` 及创建/退出 | ERR_PTR、停止响应、提交者停机、退出不自动 drain |
+| 内核策略/直接唤醒 | `core.c:4474`、`:7903`、`:7942`、`:7952`、`:7959` | void/负 errno/0-1、导出与上下文、PI 保存状态 |
+| cgroup CPU | `Documentation/admin-guide/cgroup-v2.rst` 和 CPU 控制实现 | 时间微秒、层级、策略范围、累计与区间 |
+| 栈 work 完成示例 | `include/linux/workqueue.h`、`kernel/workqueue.c` | on-stack 初始化/销毁，成功和超时都 flush，避免等待依赖死锁 |
 
-- 宏定义符号:`SYSCALL_DEFINEn`(真实符号 sys_*/__se_sys_*/__do_sys_* 不字面出现)、`TRACE_EVENT`/`DEFINE_EVENT`/`DECLARE_TRACE`、`DEFINE_SCHED_CLASS`、`sched_feat()`、`schedstat_inc/add/set`、`P/PN/__PS/P_SCHEDSTAT`、`preempt_model_##mode` token-paste、`for_each_sched_entity`。
-- 间接调用:sched_class 回调经函数指针分派,调用图不完整;`resched_curr_lazy` 为 inline/宏。
-- 默认值宏未展开数值:RR_TIMESLICE、SCHED_CAPACITY_SCALE(1024)、SCHED_NR_MIGRATE_BREAK(32)、RUNTIME_INF —— 引用数值须回查头文件。
-- CONFIG 门控:cgroup cftype、uclamp、CFS/RT 带宽项、schedstat 均受 `#ifdef` 包裹,未核对目标 defconfig。
-- 复现命令汇总:
-  - `rg -n 'DEFINE_SCHED_CLASS' kernel/sched/`
-  - `rg -n 'SYSCALL_DEFINE' kernel/sched/core.c`
-  - `rg -n 'TRACE_EVENT|DEFINE_EVENT|DECLARE_TRACE' include/trace/events/sched.h`
-  - `rg -rin 'bpf|sched_ext' kernel/sched/`
-  - `rg -n 'resched_curr_lazy|migrate_disable|PREEMPT_LAZY' kernel/sched/`
-  - `rg -n 'schedstat_(inc|add|set|enabled)' kernel/sched/`
+宏、inline、声明和模块导出分别核对。示例没有编译/运行；真实项目仍需接上资源、错误和停机协议。
 
-## §10 分篇证据文件索引
+## 7. 教学模型的范围
 
-顶层各篇的原始代理证据存于 `.evidence/`:
+每个模型显式给定输入；不把各图拼成一份设备 trace。主要模型包括：
 
-| 文件 | 覆盖篇 |
-|---|---|
-| [`.evidence/R1-objects.md`](evidence/R1-objects.md) | 02-objects |
-| [`.evidence/R2-lifecycle.md`](evidence/R2-lifecycle.md) | 03-lifecycle |
-| [`.evidence/R3-interactions.md`](evidence/R3-interactions.md) | 04-interactions |
-| [`.evidence/R4-concurrency.md`](evidence/R4-concurrency.md) | 05-concurrency |
-| [`.evidence/R5-fair.md`](evidence/R5-fair.md) | sub/fair/* |
-| [`.evidence/R6-api.md`](evidence/R6-api.md) | 01-api |
+| 模型 | 应得到的结果 |
+| --- | --- |
+| CFS A/B=1024/2048，六个 1 ms 教学步 | A、B、B、A、B、B；实际 2/4 ms，虚拟均 2 ms |
+| 两级组 G/H 同权，G 内 A/B=1:2，H 内 C | 份额 1/6、1/3、1/2；给定 period=12 ms 且无下限修正，slice=2/4/6 ms |
+| 唤醒基准100、旧50、有效阈值6 | 新位置94；阈值不是设备默认 |
+| 迁移源基准100、位置110，目标基准500 | 在需重表达的分支得到510 |
+| PELT 段内600，新增2448计量 | 跨2段，旧剩424，中间1024，新段1000 |
+| util_est 旧400，新200，下降权重1/4 | 350；满足 fastup 时新600可升为600 |
+| CFS 本地-1、目标5、共享池3 ms | 需6，领3，最终本地2 ms |
+| RT 已用4.1、runtime4 ms，周期扣一次 | 剩余记账0.1 ms，不总清零 |
+| DL A(2,10,10)、B(1,6,6)，同起点且已准入 | B先运行至q=0，A随后；B在6、A在10恢复相应预算 |
+| DL d=5、D=5、P=10 ms | 下一补充目标10 ms，而非5 |
+| DL q=-4.3、Q=2、P=10、d=10 ms | 正常补充循环三次后q=1.7、d=40 |
+| GRUB Q4/P8、d8/q2，在2阻塞 | 0-lag为4；指定双任务模型在4之后扣减系数0.5 |
+| PI L20，X 的 H80/M70，Z 的 J60 | H取消→70，释放X→60，释放Z→20 |
+| 观察0～20 ms给定区间 | 执行6、业务阻塞8、可运行等待6 ms |
 
-06-tuning / 07-debug 的证据保存在本轮任务记录(R7/R8 代理输出),关键行号已并入本篇 §7/§8。
+其他 buddy、tick、能量和带宽守恒模型在各专题就地解释。计算正确只证明给定模型自洽，不证明目标机具有这些输入。
 
-## §11 官方文档(`Documentation/scheduler/`)对照
+<a id="coverage"></a>
 
-内核自带的调度器文档是策略/设计层一等参考(非本树代码可完整验证的结论,如 CFS 公平性论证、EAS 能量模型,以其为准)。下表把每篇官方原文映射到本套文档的覆盖点;标"本轮未展开"者指该子模块不在本轮范围(顶层 + fair 样板),仅在顶层被提及,深入需读官方原文。
+## 8. 覆盖边界
 
-| 官方原文 | 主题 | 本套覆盖点 |
-|---|---|---|
-| `Documentation/scheduler/sched-design-CFS.rst` | CFS 设计(vruntime 公平) | [`sub/fair/03-algorithm.md`](sub/fair/03-algorithm.md)、[`08-feynman.md`](08-feynman.md) 概念一 |
-| `Documentation/scheduler/sched-nice-design.rst` | nice 值 → 权重映射 | [`sub/fair/03-algorithm.md`](sub/fair/03-algorithm.md) §4(参数敏感性)、[`01-api.md`](01-api.md)(nice syscall) |
-| `Documentation/scheduler/sched-capacity.rst` | CPU 算力模型 | [`02-objects.md`](02-objects.md) §2.5(`cpu_capacity`/`cpu_capacity_orig`) |
-| `Documentation/scheduler/sched-energy.rst` | EAS 能量感知调度 | [`06-tuning.md`](06-tuning.md) §1.3(`sched_energy_aware`)、[`07-debug.md`](07-debug.md) §3.2(`sched_overutilized_tp`) |
-| `Documentation/scheduler/sched-domains.rst` | 调度域层级 | [`02-objects.md`](02-objects.md) §1(`struct sched_domain`)、[`04-interactions.md`](04-interactions.md) §3.6 |
-| `Documentation/scheduler/sched-bwc.rst` | CFS 带宽控制(quota/period/burst) | [`06-tuning.md`](06-tuning.md) §2(cgroup `cpu.cfs_*`)、§6 盲区(`default_cfs_period`) |
-| `Documentation/scheduler/sched-rt-group.rst` | RT 组调度与带宽 | [`06-tuning.md`](06-tuning.md) §5(`RT_GROUP_SCHED` 分叉、`rt_nr_boosted`) |
-| `Documentation/scheduler/sched-deadline.rst` | DL(EDF)调度与准入 | [`00-overview.md`](00-overview.md) §3(DL 类)、[`sub/deadline/00-overview.md`](sub/deadline/00-overview.md)(原理速览)、[`06-tuning.md`](06-tuning.md) §1.1(DL 带宽) |
-| `Documentation/scheduler/sched-stats.rst` | schedstat 计数语义 | [`07-debug.md`](07-debug.md) §1.1、§5(门控与落点) |
-| `Documentation/scheduler/sched-debug.rst` | `/proc/sched_debug` 输出 | [`07-debug.md`](07-debug.md) §2 |
-| `Documentation/scheduler/sched-arch.rst` | 各架构调度接入约定 | [`05-concurrency.md`](05-concurrency.md) §7(arm64 RESCHED_LAZY 落点);arm64 视角,其余架构忽略 |
-| `Documentation/scheduler/completion.rst` | completion 同步原语 | [`00-overview.md`](00-overview.md) §7 #11(utility/sync,`completion.c`) |
-| `Documentation/scheduler/schedutil.rst` | schedutil 调频 | [`04-interactions.md`](04-interactions.md) §3.3、[`02-objects.md`](02-objects.md) §2.6(PELT 无锁读) |
-| `Documentation/scheduler/text_files.rst` | 官方文档索引(无独立主题) | 汇总页,不单独对应章节 |
+| 范围 | 当前内容 | 进一步下钻 |
+| --- | --- | --- |
+| 全局 | 架构/设计、五类、对象、单核/多核过程、约束与入口 | 具体平台和业务的端到端路径 |
+| 核心 | 资格、等待/唤醒、mm 与 arm64 交接 | 完整进程销毁、缺失包装与架构扩展 |
+| 策略 | CFS、FIFO/RR、DL 的模型与主要运行状态 | 全 feature 组合、严格可调度性证明 |
+| 多核 | PELT、util_est、容量、放置/平衡、EAS 与调频协作 | 完整 nohz、隔离/热插拔、DL push/pull、平台能量模型 |
+| 资源/同步 | CFS 配额、层级与统计，PI 树与关键链传播 | rt-mutex 全量死锁检测与具体锁依赖分析 |
+| 使用/观察 | 主要 API 契约、局部示例、事件与统计解释 | 目标工具链编译、设备采集和负载验证 |
 
+<a id="self-review"></a>
+
+## 9. 内容自审与静态验证
+
+自审按三个层次进行：全局是否能解释各部分协作；单篇是否先建立模型再走完整状态变化；跨篇的基线、术语、例子、图示和接口边界是否一致。尤其检查 RT 普通/raw 锁、业务通知/锁通知、候选资格/实际执行、不同时间和负载口径。
+
+2026-11-22 本轮检查结果：
+
+- 17 份 Markdown 分别经 Python-Markdown 与 CommonMark 解析；每种模式检查 241 项本地引用和 117 项片段目标，未发现缺文件、缺锚点或重复 id。
+- 原有 109 个显式章节锚点全部保留；数字章节/小节顺序检查通过。
+- 27 份 SVG 的 XML、viewBox、id 与 marker 引用，以及 8 份导航 YAML 检查通过。新增/改动图的文本做了静态尺寸余量检查，没有做字体渲染验证。
+- 检查 63 项去重的显式完整源码路径/行号引用，没有意外缺失或越界；已声明缺少的 arm64 包装头文件单列为例外。
+- 30 项模型检查通过，覆盖公平份额/层级、时钟/PELT、额度、RT/DL、GRUB、PI、能量增量和观察区间。它们验证的是教学输入下的数值关系。
+- 旧调度稿 25 个文件及其余核心文档的已有文件哈希未变化，`git diff --check` 与新文档尾部空白检查通过；mm 与 skill 的已有修改未被本轮改动。
+
+这些结果证明文档结构与给定模型自洽，不证明整份源码已经逐行审计，也不证明芯片上的实际行为。未做网站预览、构建、内核/示例编译运行、trace、调参或 Git 提交/推送。

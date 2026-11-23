@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 500" role="img" aria-labelledby="title desc">
+  <title id="title">PELT跨段更新的三段贡献</title>
+  <desc id="desc">旧段已过600个计量，新经过2448。旧段剩余424，中间完整1024，新段1000；新段位置1000，跨两次段边界。旧累计和旧段剩余按y平方，中间按y，新段不加边界衰减。</desc>
+  <rect width="1100" height="500" fill="#fff"/>
+  <g font-family="Microsoft YaHei,Noto Sans CJK SC,sans-serif" fill="#20252b">
+    <text x="30" y="40" font-size="23">分段累计：同一次更新时间差，贡献年龄不同</text>
+    <text x="30" y="85" font-size="18">基本计量 = 1024 ns；每段1024计量；旧位置600，新经过2448计量</text>
+    <rect x="50" y="150" width="180" height="75" fill="#f4f6f8" stroke="#7b8793"/>
+    <rect x="230" y="150" width="127.2" height="75" fill="#e0f2fe" stroke="#0284c7"/>
+    <rect x="357.2" y="150" width="307.2" height="75" fill="#fff0d7" stroke="#9f7532"/>
+    <rect x="664.4" y="150" width="300" height="75" fill="#e1f2eb" stroke="#338768"/>
+    <g font-size="19" text-anchor="middle">
+      <text x="140" y="194">此前已过600</text><text x="293.6" y="194">d1=424</text>
+      <text x="510.8" y="194">d2=1024</text><text x="814.4" y="194">d3=1000</text>
+      <text x="293.6" y="270">乘 y²</text><text x="510.8" y="270">乘 y</text><text x="814.4" y="270">乘 1</text>
+    </g>
+    <path d="M230 125 V235 M357.2 125 V235 M664.4 125 V235 M964.4 125 V235" stroke="#7b8793" stroke-dasharray="4 4"/>
+    <text x="200" y="119" font-size="16">上次更新</text><text x="936" y="119" font-size="16">本次更新</text>
+    <text x="30" y="335" font-size="20">600 + 2448 = 3048 → p=2，period_contrib=1000</text>
+    <text x="30" y="385" font-size="19">new_sum = old_sum × y² + 424 × y² + 1024 × y + 1000</text>
+    <text x="30" y="444" font-size="17">给定区间load输入=1的教学模型；未画旧段前更早历史。实际内核用固定点与查表。</text>
+    <text x="30" y="478" font-size="17">这是PELT时钟，不直接表示设备墙上时间；y^32 = 1/2。</text>
+  </g>
+</svg>

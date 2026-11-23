@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 380" role="img" aria-labelledby="title desc">
+  <title id="title">普通任务的阻塞、可运行等待与执行</title>
+  <desc id="desc">常规SMP稳态中，阻塞任务未在运行队列且不在CPU执行。可运行等待与当前执行都可以是TASK_RUNNING并仍由rq管理，但on_cpu不同。唤醒、选择、抢占及主动阻塞改变逻辑状态。迁移和切换窗口没有画入。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 10 5 0 10z" fill="#52606d"/>
+    </marker>
+  </defs>
+  <rect width="960" height="380" fill="#ffffff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="29" font-size="22">运行资格与正在执行，是两个不同问题</text>
+    <text x="480" y="57" font-size="16">字段只用于说明普通 SMP 稳态，不是任意无锁观察的判定表</text>
+    <rect x="24" y="94" width="260" height="115" rx="4" fill="#f1f5f9" stroke="#64748b"/>
+    <rect x="350" y="94" width="260" height="115" rx="4" fill="#fef9c3" stroke="#a16207"/>
+    <rect x="676" y="94" width="260" height="115" rx="4" fill="#e0f2fe" stroke="#0284c7"/>
+    <text x="154" y="123" font-size="21">阻塞 / 等待条件</text>
+    <text x="480" y="123" font-size="21">可运行，等待 CPU</text>
+    <text x="806" y="123" font-size="21">当前执行</text>
+    <g font-size="17">
+      <text x="154" y="154">__state 为相应等待状态</text>
+      <text x="154" y="184">on_rq=0，on_cpu=0</text>
+      <text x="480" y="154">TASK_RUNNING</text>
+      <text x="480" y="184">on_rq=1，on_cpu=0</text>
+      <text x="806" y="154">TASK_RUNNING</text>
+      <text x="806" y="184">on_rq=1，on_cpu=1</text>
+    </g>
+    <path d="M284 166H342M610 166H668" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="317" y="151" font-size="16">唤醒</text>
+    <text x="643" y="151" font-size="16">选中</text>
+    <path d="M806 209V262H480V217" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="656" y="250" font-size="17">被抢占，仍可运行</text>
+    <path d="M822 209V305H154V217" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="396" y="293" font-size="17">等待条件 / 主动阻塞</text>
+    <text x="480" y="345" font-size="16">迁移、限流、睡眠前状态设置及切换窗口另有同步协议</text>
+    <text x="480" y="369" font-size="15">箭头表示逻辑状态变化；等待队列也不等于 CPU 的运行队列</text>
+  </g>
+</svg>

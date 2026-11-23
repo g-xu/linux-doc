@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="660" viewBox="0 0 1100 660" role="img" aria-labelledby="title desc">
+  <title id="title">等待登记与通知的三种竞争窗口</title>
+  <desc id="desc">通知早于登记时依靠重检，登记后睡眠前依靠状态恢复，完成睡眠后依靠唤醒入队。条件发布需正确同步。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#4b5563"/></marker></defs>
+  <rect width="1100" height="660" fill="#fff"/>
+  <g font-family="Noto Sans CJK SC,Microsoft YaHei,sans-serif" fill="#20252b">
+    <text x="30" y="40" font-size="24">正确等待：登记 / 设置状态 → 重检条件 → 必要时睡眠</text>
+    <g stroke="#d1d7dd"><path d="M30 235 H1070 M30 420 H1070" fill="none"/></g>
+    <text x="30" y="85" font-size="20">① 通知早到</text>
+    <text x="30" y="128" font-size="17">生产者</text>
+    <path d="M150 124 H1060" stroke="#7b8793" marker-end="url(#arrow)"/>
+    <rect x="190" y="102" width="190" height="42" fill="#e1f2eb" stroke="#338768"/>
+    <text x="205" y="128" font-size="17">发布条件，再通知</text>
+    <text x="30" y="190" font-size="17">等待者</text>
+    <path d="M150 186 H1060" stroke="#7b8793" marker-end="url(#arrow)"/>
+    <rect x="430" y="165" width="180" height="42" fill="#f4f6f8" stroke="#7b8793"/>
+    <text x="445" y="191" font-size="17">登记并设置状态</text>
+    <rect x="690" y="165" width="330" height="42" fill="#e1f2eb" stroke="#338768"/>
+    <text x="705" y="191" font-size="17">重检已为真 → 取消等待，不睡</text>
+    <text x="30" y="270" font-size="20">② 登记后、退队前通知</text>
+    <text x="30" y="313" font-size="17">生产者</text>
+    <path d="M150 309 H1060" stroke="#7b8793" marker-end="url(#arrow)"/>
+    <rect x="440" y="288" width="230" height="42" fill="#e1f2eb" stroke="#338768"/>
+    <text x="455" y="314" font-size="17">发布 → 唤醒恢复 runnable</text>
+    <text x="30" y="375" font-size="17">等待者</text>
+    <path d="M150 371 H1060" stroke="#7b8793" marker-end="url(#arrow)"/>
+    <rect x="180" y="350" width="220" height="42" fill="#f4f6f8" stroke="#7b8793"/>
+    <text x="195" y="376" font-size="17">登记 / 状态 → 重检为假</text>
+    <rect x="740" y="350" width="280" height="42" fill="#e1f2eb" stroke="#338768"/>
+    <text x="755" y="376" font-size="17">调度不按旧等待状态退队</text>
+    <text x="30" y="455" font-size="20">③ 已完成睡眠后通知</text>
+    <text x="30" y="498" font-size="17">生产者</text>
+    <path d="M150 494 H1060" stroke="#7b8793" marker-end="url(#arrow)"/>
+    <rect x="650" y="473" width="220" height="42" fill="#e1f2eb" stroke="#338768"/>
+    <text x="665" y="499" font-size="17">发布 → 找到等待项唤醒</text>
+    <text x="30" y="560" font-size="17">等待者</text>
+    <path d="M150 556 H1060" stroke="#7b8793" marker-end="url(#arrow)"/>
+    <rect x="180" y="535" width="190" height="42" fill="#f4f6f8" stroke="#7b8793"/>
+    <text x="195" y="561" font-size="17">登记 → 重检 → 睡眠</text>
+    <path d="M390 556 H650" stroke="#a84d68" stroke-width="4"/>
+    <text x="440" y="540" font-size="16">已退出普通候选</text>
+    <text x="895" y="548" font-size="17">恢复候选</text>
+    <text x="895" y="573" font-size="17">得到 CPU 后重检</text>
+    <text x="30" y="628" font-size="18">三条是独立时序；通知不是数据预留。共享条件与结果仍需锁或适用 release/acquire。</text>
+  </g>
+</svg>

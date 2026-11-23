@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" role="img" aria-labelledby="title desc">
+  <title id="title">单 CPU 调度的三种入口与共同交接</title>
+  <desc id="desc">唤醒恢复候选并检查抢占，tick记账并检查进度，两者可产生重调度请求；主动阻塞直接进入调度，核对状态后退队。共同选择next，必要时切换mm和arm64线程现场，收尾后继续执行。三条入口不是固定先后顺序。</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#52606d"/></marker></defs>
+  <rect width="1000" height="640" fill="white"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="500" y="32" font-size="23">不同事件进入共同调度，不是每次都走三条分支</text>
+    <g stroke="#0284c7" fill="#e0f2fe">
+      <rect x="30" y="65" width="285" height="98" rx="4"/>
+      <rect x="357" y="65" width="285" height="98" rx="4"/>
+    </g>
+    <rect x="685" y="65" width="285" height="98" rx="4" stroke="#a16207" fill="#fef9c3"/>
+    <text x="172" y="94" font-size="20">条件满足 → 唤醒</text>
+    <text x="172" y="124" font-size="17">状态 / 旧执行交接 / 选核</text>
+    <text x="172" y="148" font-size="17">恢复候选，检查抢占</text>
+    <text x="500" y="94" font-size="20">Tick / 时间推进</text>
+    <text x="500" y="124" font-size="17">当前类更新执行进度</text>
+    <text x="500" y="148" font-size="17">检查份额 / 时间片 / 预算</text>
+    <text x="827" y="94" font-size="20">当前任务主动等待</text>
+    <text x="827" y="124" font-size="17">登记等待，重检条件</text>
+    <text x="827" y="148" font-size="17">条件仍为假 → 调度入口</text>
+    <rect x="80" y="207" width="540" height="70" rx="4" stroke="#64748b" fill="#f1f5f9"/>
+    <text x="350" y="235" font-size="20">需要换人 → 记录重调度请求</text>
+    <text x="350" y="260" font-size="17">在适用入口、允许交接时兑现</text>
+    <path d="M172 163V195M500 163V195M350 277V323M827 163V340H750" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="250" y="335" width="500" height="80" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="500" y="365" font-size="20">__schedule：更新状态，选择 next</text>
+    <text x="500" y="392" font-size="17">阻塞则核对状态并退队；被抢占则保留资格</text>
+    <rect x="250" y="460" width="500" height="80" rx="4" fill="#ffe4e6" stroke="#be123c"/>
+    <text x="500" y="490" font-size="20">prev ≠ next → 执行交接</text>
+    <text x="500" y="517" font-size="17">类状态 / mm / arm64 现场 → 旧任务收尾</text>
+    <path d="M500 415V448M500 540V577" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="500" y="602" font-size="21">选中的任务继续执行 → 下一次事件</text>
+    <path d="M250 375H80V590H320" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="137" y="436" font-size="17">prev = next</text>
+    <text x="137" y="461" font-size="17">不换线程</text>
+    <text x="500" y="632" font-size="15">本图展开本 CPU 交接；远程唤醒的选核与通知见多 CPU 循环</text>
+  </g>
+</svg>

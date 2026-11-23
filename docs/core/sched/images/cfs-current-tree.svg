@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 370" role="img" aria-labelledby="title desc">
+  <title id="title">CFS 当前实体与候选树的不同关系</title>
+  <desc id="desc">独立快照中三个同级普通实体A B C的虚拟进度为4 6 8，B当前执行。cfs_rq的curr引用B，候选树包含A和C。三者仍有运行资格，所以nr_running可以为3而树只有两节点。枝线为包含关系，不画真实红黑树的平衡拓扑。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 10 5 0 10z" fill="#52606d"/>
+    </marker>
+  </defs>
+  <rect width="960" height="370" fill="#ffffff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
+    <text x="480" y="29" font-size="22">仍可运行的 current，不需要一直留在候选树中</text>
+    <rect x="24" y="70" width="290" height="230" rx="4" fill="#f1f5f9" stroke="#64748b"/>
+    <text x="169" y="107" font-size="21">本级 cfs_rq</text>
+    <text x="169" y="149" font-size="18">nr_running = 3</text>
+    <text x="169" y="187" font-size="18">min_vruntime = 4</text>
+    <text x="169" y="225" font-size="17">三实体仍有运行资格</text>
+    <text x="169" y="263" font-size="17">候选树仅有两个节点</text>
+    <rect x="676" y="60" width="212" height="84" rx="4" fill="#e0f2fe" stroke="#0284c7"/>
+    <text x="782" y="92" font-size="21">B：current</text>
+    <text x="782" y="121" font-size="17">vruntime = 6</text>
+    <path d="M314 130H560V102H668" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="447" y="117" font-size="17">curr 引用</text>
+    <rect x="422" y="166" width="400" height="43" rx="4" fill="#dcfce7" stroke="#15803d"/>
+    <text x="622" y="194" font-size="18">tasks_timeline：待选择实体的树</text>
+    <path d="M314 280H368V187H414" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M622 209V226H492V235M622 226H792V235" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="398" y="243" width="188" height="64" rx="4" fill="#fef9c3" stroke="#a16207"/>
+    <rect x="698" y="243" width="188" height="64" rx="4" fill="#fef9c3" stroke="#a16207"/>
+    <text x="492" y="271" font-size="20">A：v=4</text>
+    <text x="792" y="271" font-size="20">C：v=8</text>
+    <text x="492" y="295" font-size="16">主要最左候选</text>
+    <text x="792" y="295" font-size="16">另一候选</text>
+    <text x="480" y="343" font-size="16">独立快照，进度单位为教学 ms；树枝只示意包含关系，未画真实平衡拓扑</text>
+    <text x="480" y="365" font-size="15">set_next_entity 处理 current 与树；选择还比较 current 及适用附加规则</text>
+  </g>
+</svg>

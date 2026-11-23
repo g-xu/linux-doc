@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 340" role="img" aria-labelledby="title desc">
+  <title id="title">唤醒实体的旧进度和有限参考位置</title>
+  <desc id="desc">普通非极长睡眠的短区间模型中，min_vruntime为100ms，有效阈值6ms，参考位置94ms。旧进度50ms的实体按max比较重新放到94，不追补从50到100的全部差距，也不把基准直接改成94。这不是默认参数。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 10 5 0 10z" fill="#0284c7"/>
+    </marker>
+  </defs>
+  <rect width="960" height="340" fill="#ffffff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a">
+    <text x="480" y="29" text-anchor="middle" font-size="22">唤醒放置：旧进度、局部基准与有限阈值</text>
+    <text x="480" y="57" text-anchor="middle" font-size="16">独立短区间模型，数值不表示目标配置默认值</text>
+    <text x="100" y="110" font-size="18">旧 vruntime = 50</text>
+    <text x="710" y="96" text-anchor="end" font-size="18">参考位置 = 94</text>
+    <text x="800" y="127" text-anchor="middle" font-size="18">min_vruntime = 100</text>
+    <rect x="716" y="158" width="84" height="42" fill="#fef9c3" stroke="#a16207"/>
+    <path d="M100 180H850" fill="none" stroke="#64748b" stroke-width="2"/>
+    <circle cx="100" cy="180" r="6" fill="#be123c"/>
+    <circle cx="716" cy="180" r="6" fill="#a16207"/>
+    <circle cx="800" cy="180" r="6" fill="#15803d"/>
+    <path d="M112 240H703" fill="none" stroke="#0284c7" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="409" y="227" text-anchor="middle" font-size="18">本例重新放到 94，不从 50 补全部差距</text>
+    <text x="758" y="271" text-anchor="middle" font-size="17">有效阈值 6 ms</text>
+    <text x="480" y="304" text-anchor="middle" font-size="16">横坐标是虚拟进度 ms；放置不代表已获得 CPU，基准也不因此倒退</text>
+    <text x="480" y="329" text-anchor="middle" font-size="15">普通非极长睡眠分支；initial、idle 和 long sleeper 等条件另见源码</text>
+  </g>
+</svg>

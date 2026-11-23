@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 450" role="img" aria-labelledby="title desc">
+  <title id="title">手工时间线中的执行、阻塞和排队</title>
+  <desc id="desc">A在0到20毫秒内执行0到2、13到15、18到20，业务阻塞2到10，可运行等待10到13、15到18。合计执行6、阻塞8、可运行等待6。</desc>
+  <rect width="1100" height="450" fill="#fff"/>
+  <g font-family="Microsoft YaHei,Noto Sans CJK SC,sans-serif" fill="#20252b">
+    <text x="30" y="40" font-size="23">手工模型，不是采集记录：响应时间包含不同性质的区间</text>
+    <text x="30" y="145" font-size="19">任务A</text>
+    <g stroke="#fff">
+      <rect x="150" y="110" width="70" height="60" fill="#338768"/>
+      <rect x="220" y="110" width="280" height="60" fill="#7b8793"/>
+      <rect x="500" y="110" width="105" height="60" fill="#9f7532"/>
+      <rect x="605" y="110" width="70" height="60" fill="#338768"/>
+      <rect x="675" y="110" width="105" height="60" fill="#9f7532"/>
+      <rect x="780" y="110" width="70" height="60" fill="#338768"/>
+    </g>
+    <g fill="#fff" font-size="17" text-anchor="middle">
+      <text x="185" y="146">执行</text><text x="360" y="146">业务阻塞</text><text x="552" y="146">排队</text>
+      <text x="640" y="146">执行</text><text x="727" y="146">排队</text><text x="815" y="146">执行</text>
+    </g>
+    <g font-size="17" text-anchor="middle">
+      <text x="150" y="206">0</text><text x="220" y="206">2</text><text x="500" y="206">10</text>
+      <text x="605" y="206">13</text><text x="675" y="206">15</text><text x="780" y="206">18</text><text x="850" y="206">20 ms</text>
+    </g>
+    <text x="30" y="273" font-size="20">执行：2 + 2 + 2 = 6 ms；阻塞：8 ms；可运行等待：3 + 3 = 6 ms。</text>
+    <text x="30" y="324" font-size="19">第一次wakeup到switch-in只看到3 ms；被抢占后的排队不需要新一次wakeup。</text>
+    <text x="30" y="374" font-size="18">业务响应20 ms ≠ 全部调度延迟；需按任务与工作实例关联事件。</text>
+    <text x="30" y="418" font-size="17">横轴按毫秒比例；原始统计仍需按目标配置、记账时机和实际事件解释。</text>
+  </g>
+</svg>

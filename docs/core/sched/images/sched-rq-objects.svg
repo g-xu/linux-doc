@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="520" viewBox="0 0 1080 520" role="img" aria-labelledby="title desc">
+  <title id="title">任务对象与每 CPU 运行队列</title>
+  <desc id="desc">一个任务嵌有各类调度实体，按当前有效类参加一颗 CPU 的竞争；每颗 CPU 的 rq 管理 current、子队列、时钟和锁。</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#4b5563"/></marker></defs>
+  <rect width="1080" height="520" fill="#fff"/>
+  <g font-family="Noto Sans CJK SC,Microsoft YaHei,sans-serif" fill="#20252b">
+    <text x="30" y="40" font-size="24">对象归属与候选关系，不是函数调用链</text>
+    <rect x="30" y="75" width="290" height="330" fill="#f4f6f8" stroke="#7b8793"/>
+    <text x="50" y="108" font-size="21">task_struct：线程 A</text>
+    <text x="50" y="145" font-size="18">状态、策略、有效属性</text>
+    <text x="50" y="178" font-size="18">CPU 关联、允许集合</text>
+    <rect x="50" y="205" width="250" height="48" fill="#e1f2eb" stroke="#338768"/>
+    <text x="65" y="235" font-size="18">se：公平类实体</text>
+    <rect x="50" y="265" width="250" height="48" fill="#fff0d7" stroke="#9f7532"/>
+    <text x="65" y="295" font-size="18">rt：实时类实体</text>
+    <rect x="50" y="325" width="250" height="48" fill="#f9e5eb" stroke="#a84d68"/>
+    <text x="65" y="355" font-size="18">dl：截止期类实体</text>
+    <rect x="470" y="75" width="260" height="330" fill="#f4f6f8" stroke="#7b8793"/>
+    <text x="490" y="108" font-size="21">CPU0：rq</text>
+    <text x="490" y="145" font-size="18">curr → 当前任务</text>
+    <rect x="490" y="175" width="220" height="55" fill="#e1f2eb" stroke="#338768"/>
+    <text x="505" y="210" font-size="18">cfs：树 + current</text>
+    <text x="490" y="270" font-size="18">rt：优先级队列</text>
+    <text x="490" y="310" font-size="18">dl：截止期树</text>
+    <text x="490" y="360" font-size="18">时钟、计数、锁协议</text>
+    <rect x="780" y="75" width="270" height="330" fill="#f4f6f8" stroke="#7b8793"/>
+    <text x="800" y="108" font-size="21">CPU1：另一份 rq</text>
+    <text x="800" y="155" font-size="18">自己的 curr</text>
+    <text x="800" y="205" font-size="18">自己的 cfs / rt / dl</text>
+    <text x="800" y="255" font-size="18">自己的时钟和计数</text>
+    <text x="800" y="335" font-size="18">迁移需交接归属与历史</text>
+    <path d="M300 229 H380 V202 H485" fill="none" stroke="#338768" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="334" y="176" font-size="16">示例：当前属 fair</text>
+    <text x="30" y="452" font-size="19">嵌有三种实体 ≠ 同时在三个类队列中竞争</text>
+    <text x="30" y="487" font-size="18">SMP 教学快照；组实体可代表子队列，最终选择仍需落到真实任务。</text>
+  </g>
+</svg>
