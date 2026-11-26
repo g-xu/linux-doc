@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="720" viewBox="0 0 1100 720" role="img" aria-labelledby="title desc">
+  <title id="title">Buddy 归还与逐阶合并</title>
+  <desc id="desc">A 使用 8 到 9，B 使用 10 到 11，12 到 15 空闲。A 先归还但伙伴 B 还在使用，不能合并。B 归还后先合成 order-2，再与 12 到 15 合成 order-3。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1100" height="720" fill="#fff"/>
+  <text x="35" y="38" class="h">同一组 PFN：伙伴释放之前不能跳过状态检查</text>
+  <text x="35" y="129">初始</text>
+  <rect x="195" y="90" width="200" height="64" fill="#fff1dc" stroke="#c8b391"/>
+  <rect x="395" y="90" width="200" height="64" fill="#e8f0fa" stroke="#9bb5d0"/>
+  <rect x="595" y="90" width="400" height="64" fill="#e2f2ec" stroke="#8eb7a4"/>
+  <text x="295" y="129" text-anchor="middle">A：[8, 10)</text>
+  <text x="495" y="129" text-anchor="middle">B：[10, 12)</text>
+  <text x="795" y="129" text-anchor="middle">[12, 16) 空闲</text>
+  <path d="M295 154V220" class="e"/>
+  <text x="320" y="195" class="s">A 归还，伙伴 B 仍占用</text>
+  <text x="35" y="264">停止合并</text>
+  <rect x="195" y="225" width="200" height="64" fill="#e2f2ec" stroke="#8eb7a4"/>
+  <rect x="395" y="225" width="200" height="64" fill="#e8f0fa" stroke="#9bb5d0"/>
+  <rect x="595" y="225" width="400" height="64" fill="#e2f2ec" stroke="#8eb7a4"/>
+  <text x="295" y="264" text-anchor="middle">order-1 空闲</text>
+  <text x="495" y="264" text-anchor="middle">B 仍使用</text>
+  <text x="795" y="264" text-anchor="middle">order-2 空闲</text>
+  <path d="M495 289V355" class="e"/>
+  <text x="520" y="330" class="s">B 归还：与 A 原块合并</text>
+  <text x="35" y="399">合成 order-2</text>
+  <rect x="195" y="360" width="400" height="64" fill="#e2f2ec" stroke="#8eb7a4"/>
+  <rect x="595" y="360" width="400" height="64" fill="#e2f2ec" stroke="#8eb7a4"/>
+  <text x="395" y="399" text-anchor="middle">[8, 12) 空闲</text>
+  <text x="795" y="399" text-anchor="middle">[12, 16) 空闲</text>
+  <path d="M595 424V505" class="e"/>
+  <text x="620" y="470" class="s">新阶数继续验证伙伴</text>
+  <text x="35" y="549">合成 order-3</text>
+  <rect x="195" y="510" width="800" height="64" fill="#e2f2ec" stroke="#8eb7a4"/>
+  <text x="595" y="549" text-anchor="middle">[8, 16)：仅作为一个 order-3 空闲块登记</text>
+  <text x="35" y="625" class="s">移除旧阶伙伴节点 → 更新块头与阶数 → 继续检查 → 最终挂入一个列表。</text>
+  <text x="35" y="659" class="s">模型假定同一 Zone、普通兼容类型，省略 guard page 和特殊 pageblock 边界。</text>
+  <text x="35" y="694" class="s">真实释放可能先进入 PCP；该图只推演进入 Buddy 后的合并规则。</text>
+</svg>

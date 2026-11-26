@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="338" viewBox="0 0 640 338" role="img" aria-labelledby="title">
+  <title id="title">同一文件偏移的首次访问分支</title>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#425363"/></marker></defs>
+  <rect width="640" height="338" rx="8" fill="#f7fafb"/>
+  <rect x="47" y="24" width="546" height="70" rx="6" fill="#e9f2fa" stroke="#537699" stroke-width="1.5"/>
+  <g fill="none" stroke="#425363" stroke-width="2" marker-end="url(#a)">
+    <path d="M320 98V124H111V155"/><path d="M320 98V155"/><path d="M320 98V124H529V155"/>
+  </g>
+  <g stroke-width="1.5">
+    <rect x="14" y="160" width="194" height="139" rx="6" fill="#edf5ed" stroke="#508164"/>
+    <rect x="223" y="160" width="194" height="139" rx="6" fill="#fff0dc" stroke="#a5763e"/>
+    <rect x="432" y="160" width="194" height="139" rx="6" fill="#edf5ed" stroke="#508164"/>
+  </g>
+  <g text-anchor="middle" font-family="Microsoft YaHei, sans-serif" fill="#1d2d3b">
+    <g font-size="22" font-weight="bold">
+      <text x="320" y="53">文件偏移 S，初始 PTE 为空</text>
+      <text x="111" y="192">读</text><text x="320" y="192">私有写</text><text x="529" y="192">共享写</text>
+    </g>
+    <g font-size="18">
+      <text x="320" y="81">F：对应文件缓存页，可先准备内容</text>
+      <text x="111" y="227">取得文件内容</text><text x="111" y="253">PTE 指向 F</text><text x="111" y="279">读取 F</text>
+      <text x="320" y="227">从 F 复制到 Q</text><text x="320" y="253">PTE 指向匿名 Q</text><text x="320" y="279">不修改 F</text>
+      <text x="529" y="227">按来源准备写入</text><text x="529" y="253">PTE 指向 F</text><text x="529" y="279">写入 F，纳入脏管理</text>
+      <text x="320" y="325">三列是独立场景，不是三个连续步骤</text>
+    </g>
+  </g>
+</svg>

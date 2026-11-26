@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="760" viewBox="0 0 960 760" role="img" aria-labelledby="title desc">
+  <title id="title">后备释放与虚拟地址lazy回流的时序</title>
+  <desc id="desc">业务先停止访问。清除PTE后，旧范围进入lazy，旧TLB转换可能尚存。相应所有者可以按契约处理后备引用。批量TLB失效后才让范围并回free，再为新用途建立映射。不允许业务继续访问旧VA。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+  <rect width="960" height="760" fill="#fff"/>
+  <text x="28" y="36" class="h">普通 lazy 路径：先失效旧转换，再让 VA 回到 free</text>
+  <text x="28" y="69" class="s">图排除 deferred 提交、特殊权限重置及调试即时失效；不是所有配置的固定时序。</text>
+  <rect x="227" y="94" width="505" height="61" fill="#f9eaf0" class="b"/>
+  <text x="480" y="132" text-anchor="middle">业务已结束全部访问，旧 VA 禁止再使用</text>
+  <path class="ar" d="M480 155V190H240V218"/>
+  <rect x="35" y="218" width="410" height="87" fill="#eaf1fb" class="b"/>
+  <text x="57" y="250" class="h">撤销页表映射</text><text x="57" y="286">清 PTE；旧 TLB 可能仍有转换</text>
+  <path class="ar" d="M445 262H515"/><text x="464" y="243" class="s">之后</text>
+  <rect x="515" y="218" width="410" height="87" fill="#fff0e7" class="b"/>
+  <text x="537" y="250" class="h">后备引用由相应所有者处理</text><text x="537" y="286">vmalloc / 转交：vfree；借用：调用者</text>
+  <path class="ar" d="M240 305V343"/><path class="ar" d="M718 305V343"/>
+  <rect x="35" y="343" width="410" height="87" fill="#eaf1fb" class="b"/>
+  <text x="57" y="376" class="h">范围进入 lazy / purge</text><text x="57" y="411">未并回 free，不能交付冲突新映射</text>
+  <rect x="515" y="343" width="410" height="87" fill="#fff0e7" class="b"/>
+  <text x="537" y="376" class="h">原页可失去本映射持有的引用</text><text x="537" y="411">最后引用退出后才可归还，非立即承诺</text>
+  <path class="ar" d="M240 430V468"/>
+  <rect x="35" y="468" width="410" height="87" fill="#e6f4ef" class="b"/>
+  <text x="57" y="501" class="h">批量 TLB 失效完成</text><text x="57" y="536">flush_tlb_kernel_range()</text>
+  <text x="537" y="498" class="s">此时不要求仍持有全部原页。</text>
+  <text x="537" y="534" class="s">安全前提：不再访问旧 VA；</text>
+  <text x="537" y="568" class="s">旧 VA 回流由分配器同步协调。</text>
+  <path class="ar" d="M240 555V593"/>
+  <rect x="35" y="593" width="410" height="67" fill="#e6f4ef" class="b"/>
+  <text x="57" y="634">VA 合并进 free，可重新选择</text>
+  <path class="ar" d="M445 627H515"/>
+  <rect x="515" y="593" width="410" height="67" fill="#eef1f4" class="b"/>
+  <text x="537" y="634">再建立 V→新后备，交付新用途</text>
+  <text x="28" y="710" class="h">不能把“PTE 已清”当成“旧 TLB 已清”，也不能继续使用悬空指针。</text>
+  <text x="28" y="746" class="s">debug / VM_FLUSH_RESET_PERMS 等条件会改变失效时点，按实际分支判断。</text>
+</svg>

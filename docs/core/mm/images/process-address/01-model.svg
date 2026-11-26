@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="600" viewBox="0 0 940 600" role="img" aria-labelledby="title desc">
+  <title id="title">任务、mm、VMA、页表和后备</title><desc id="desc">两任务可共享同一mm。mm包含VMA范围索引和页表根，VMA表示允许语义，页表表示当前转换并关联后备。可写VMA可有COW只读PTE或未准备页，不等于每页已可写驻留。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+  <rect width="940" height="600" fill="#fff"/><text x="28" y="36" class="h">地址空间布局与当前页转换是两层记录</text>
+  <rect x="35" y="80" width="180" height="62" fill="#eef1f4" class="b"/><text x="125" y="118" text-anchor="middle">任务 T0</text>
+  <rect x="725" y="80" width="180" height="62" fill="#eef1f4" class="b"/><text x="815" y="118" text-anchor="middle">任务 T1</text>
+  <rect x="300" y="80" width="340" height="96" fill="#eaf1fb" class="b"/><text x="470" y="113" text-anchor="middle" class="h">同一个 mm_struct</text><text x="470" y="150" text-anchor="middle">mm_mt / pgd / mmap_lock</text>
+  <path class="ar" d="M215 111H300"/><path class="ar" d="M725 111H640"/>
+  <rect x="35" y="252" width="390" height="147" fill="#e6f4ef" class="b"/><text x="57" y="286" class="h">Maple Tree → VMA</text><text x="57" y="323">[B+4P, B+12P)：文件私有读写</text><text x="57" y="360">vm_file / vm_pgoff / vm_flags</text><text x="57" y="387" class="s">描述范围语义，不记录每页驻留状态</text>
+  <rect x="515" y="252" width="390" height="147" fill="#fff0e7" class="b"/><text x="537" y="286" class="h">页表 → 当前后备</text><text x="537" y="323">部分页已有映射，其他页可尚未就绪</text><text x="537" y="360">私有 COW 可先保持只读转换</text><text x="537" y="387" class="s">写权限语义不等于 PTE 立即可写</text>
+  <path class="ar" d="M400 176V218H230V252"/><path class="ar" d="M540 176V218H710V252"/>
+  <text x="35" y="462" class="h">共享 mm：布局变化影响使用该 mm 的其他任务。</text>
+  <text x="35" y="504">复制 mm：可以复制布局并共享后备，不是立即复制每个物理页。</text>
+  <text x="35" y="555" class="s">P 为基本页大小，B 为示意合法用户窗口；图不指定实际 arm64 地址或全部配置。</text>
+</svg>

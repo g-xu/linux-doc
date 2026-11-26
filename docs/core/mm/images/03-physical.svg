@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="680" viewBox="0 0 1040 680" role="img" aria-labelledby="title desc">
+  <title id="title">物理内存组织与启动交接</title>
+  <desc id="desc">RAM 地址范围可能包含空洞和保留区域。Node 与 Zone 组织管理资源，页描述符描述数据页。启动阶段用 memblock，随后建立元数据并将可用页移交运行期分配器。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M-2 2L2 -2M0 10L10 0M8 12L12 8" stroke="#c2cbd1" stroke-width="2"/></pattern>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}.n{stroke:#b9c8d0;stroke-width:1.5;rx:6}</style>
+  </defs>
+  <rect width="1040" height="680" fill="#fff"/>
+  <text x="35" y="37" class="h">硬件地址分布、管理边界和数据描述是三件事</text>
+  <text x="35" y="80">物理地址范围（示意，非固定地址）</text>
+  <rect x="35" y="105" width="310" height="62" fill="#e2f2ec" stroke="#75a794"/>
+  <rect x="345" y="105" width="125" height="62" fill="url(#hatch)" stroke="#b9c8d0"/>
+  <rect x="470" y="105" width="360" height="62" fill="#e2f2ec" stroke="#75a794"/>
+  <rect x="830" y="105" width="170" height="62" fill="#f7e6df" stroke="#c49580"/>
+  <text x="190" y="143" text-anchor="middle">RAM 范围 A</text>
+  <text x="407" y="143" text-anchor="middle">空洞</text>
+  <text x="650" y="143" text-anchor="middle">RAM 范围 B</text>
+  <text x="915" y="143" text-anchor="middle">保留 RAM</text>
+  <path d="M185 172V235" class="e"/>
+  <path d="M650 172V235" class="e"/>
+  <text x="350" y="209" class="s">按拓扑与用途组织，不复制数据</text>
+  <rect x="35" y="240" width="465" height="150" class="n" fill="#f3f7f9"/>
+  <text x="58" y="275">Node 0：节点级资源与统计</text>
+  <rect x="58" y="299" width="192" height="60" rx="5" fill="#e8f0fa" stroke="#a7bdd7"/>
+  <rect x="267" y="299" width="210" height="60" rx="5" fill="#e2f2ec" stroke="#a2c5b7"/>
+  <text x="154" y="335" text-anchor="middle">Zone A：用途约束</text>
+  <text x="372" y="335" text-anchor="middle">Zone B：空闲与水位</text>
+  <rect x="535" y="240" width="465" height="150" class="n" fill="#f3f7f9"/>
+  <text x="558" y="275">Node 1：示例节点，数量不固定</text>
+  <text x="558" y="316" class="s">页帧 PFN k → struct page 描述符</text>
+  <text x="558" y="351" class="s">实际数据与描述符位于不同的内存位置</text>
+  <text x="35" y="426" class="s">folio：一页或一组连续页的管理单位。不是另一份物理内存，也不等于所有大页映射。</text>
+  <line x1="35" y1="459" x2="1000" y2="459" stroke="#d7dfe4"/>
+  <text x="35" y="499" class="h">启动交接</text>
+  <rect x="35" y="529" width="275" height="95" class="n" fill="#fff1dc"/>
+  <text x="172" y="565" text-anchor="middle">memblock</text>
+  <text x="172" y="596" text-anchor="middle" class="s">发现 / 保留 / 早期分配</text>
+  <path d="M310 576H365" class="e"/>
+  <rect x="370" y="529" width="280" height="95" class="n" fill="#e8f0fa"/>
+  <text x="510" y="565" text-anchor="middle">建立管理结构</text>
+  <text x="510" y="596" text-anchor="middle" class="s">Node / Zone / 页描述信息</text>
+  <path d="M650 576H715" class="e"/>
+  <rect x="720" y="529" width="280" height="95" class="n" fill="#e2f2ec"/>
+  <text x="860" y="565" text-anchor="middle">运行期页分配器</text>
+  <text x="860" y="596" text-anchor="middle" class="s">接收可交付空闲页</text>
+  <text x="35" y="658" class="s">这是阶段关系示意；保留页不会全部释放，初始化与释放可能有延后阶段。</text>
+</svg>

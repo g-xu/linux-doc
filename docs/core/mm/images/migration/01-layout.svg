@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="460" viewBox="0 0 960 460" role="img" aria-labelledby="title desc">
+<title id="title">八页规整前后空闲总量不变</title><desc id="desc">模型同zone PFN0到7初始A空B空C空D空，移动A到5和B到7，0到3为空可形成对齐order2块，4到7为CADB。总空闲始终4，数据仍四份，源和目的资格必须满足。</desc>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5}</style>
+<rect width="960" height="460" fill="#fff"/><text x="28" y="40" class="h">四个空页不必构成四页连续块；移动不凭空增加空闲</text>
+<text x="40" y="103">PFN</text><text x="175" y="103">0</text><text x="275" y="103">1</text><text x="375" y="103">2</text><text x="475" y="103">3</text><text x="575" y="103">4</text><text x="675" y="103">5</text><text x="775" y="103">6</text><text x="875" y="103">7</text>
+<text x="40" y="155">之前</text>
+<g class="b"><rect x="135" y="120" width="90" height="55" fill="#eaf1fb"/><rect x="235" y="120" width="90" height="55" fill="#e6f4ef"/><rect x="335" y="120" width="90" height="55" fill="#eaf1fb"/><rect x="435" y="120" width="90" height="55" fill="#e6f4ef"/><rect x="535" y="120" width="90" height="55" fill="#fff0e7"/><rect x="635" y="120" width="90" height="55" fill="#e6f4ef"/><rect x="735" y="120" width="90" height="55" fill="#fff0e7"/><rect x="835" y="120" width="90" height="55" fill="#e6f4ef"/></g>
+<text x="172" y="155">A</text><text x="267" y="155">空</text><text x="372" y="155">B</text><text x="467" y="155">空</text><text x="572" y="155">C</text><text x="667" y="155">空</text><text x="772" y="155">D</text><text x="867" y="155">空</text>
+<text x="135" y="219">合法移动：A → PFN5，B → PFN7</text>
+<text x="40" y="291">之后</text>
+<g class="b"><rect x="135" y="256" width="390" height="55" fill="#e6f4ef"/><rect x="535" y="256" width="90" height="55" fill="#fff0e7"/><rect x="635" y="256" width="90" height="55" fill="#eaf1fb"/><rect x="735" y="256" width="90" height="55" fill="#fff0e7"/><rect x="835" y="256" width="90" height="55" fill="#eaf1fb"/></g>
+<text x="194" y="291">0–3：对齐order-2空闲块</text><text x="572" y="291">C</text><text x="672" y="291">A</text><text x="772" y="291">D</text><text x="872" y="291">B</text>
+<text x="40" y="365">若A不可移动或5/7不能当目的，不能照此模型形成目标块。</text>
+<text x="40" y="414" class="s">同zone、基本页、忽略水位/保留/类型的空间示意，不是扫描器必然顺序或目标实测。</text>
+</svg>

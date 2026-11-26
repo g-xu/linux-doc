@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560" role="img" aria-labelledby="title desc">
+<title id="title">范围终点与对齐决定首次交接块</title>
+<desc id="desc">普通同Zone非延后初始化模型，PFN6是新增元数据后备。可交接7到16分为7单页和8到16八页块；终点改14时分为7单页、8到12四页及12到14两页。块头和order不同于页数，最终合并另需伙伴资格。</desc>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.cell{stroke:#7b8b93;stroke-width:1.2}.br{stroke:#475569;stroke-width:2;fill:none}</style>
+<rect width="1000" height="560" fill="#fff"/>
+<text x="30" y="39" class="h">先按首PFN对齐选块，再用end限制，不能扩张候选范围</text>
+<text x="30" y="86" class="s">同Zone、最大阶至少3、描述已就绪；PFN6元数据占用不能归还。</text>
+<text x="45" y="134">PFN</text>
+<text x="148" y="134">6</text><text x="228" y="134">7</text><text x="308" y="134">8</text><text x="388" y="134">9</text><text x="466" y="134">10</text><text x="546" y="134">11</text><text x="626" y="134">12</text><text x="706" y="134">13</text><text x="786" y="134">14</text><text x="866" y="134">15</text>
+<g class="cell"><rect x="115" y="150" width="80" height="52" fill="#fff0e7"/><rect x="195" y="150" width="80" height="52" fill="#eaf1fb"/><rect x="275" y="150" width="640" height="52" fill="#e6f4ef"/></g>
+<text x="123" y="183" class="s">元数据</text><text x="217" y="183">1页</text><text x="444" y="183">8页：块头8 / order3</text>
+<path class="br" d="M195 214V230H275V214"/><path class="br" d="M275 214V230H915V214"/>
+<text x="195" y="265" class="s">[7,8)</text><text x="519" y="265" class="s">[8,16)，总交接9页</text>
+<text x="30" y="321">只改变end=14：范围不能为凑大块而向外扩张</text>
+<g class="cell"><rect x="115" y="348" width="80" height="52" fill="#fff0e7"/><rect x="195" y="348" width="80" height="52" fill="#eaf1fb"/><rect x="275" y="348" width="320" height="52" fill="#e6f4ef"/><rect x="595" y="348" width="160" height="52" fill="#eaf1fb"/><rect x="755" y="348" width="160" height="52" fill="#eef1f4"/></g>
+<text x="123" y="381" class="s">元数据</text><text x="217" y="381">1页</text><text x="340" y="381">4页 / order2</text><text x="616" y="381">2页 / order1</text><text x="779" y="381" class="s">范围之外</text>
+<text x="195" y="445" class="s">[7,8)</text><text x="367" y="445" class="s">[8,12)</text><text x="628" y="445" class="s">[12,14)</text>
+<text x="30" y="505">此为交接块划分；随后合并需同阶空闲伙伴及Zone/类型资格。</text>
+<text x="30" y="540" class="s">空闲资源单位是页，Buddy列表单位是块；图不是目标机实际内存布局。</text>
+</svg>

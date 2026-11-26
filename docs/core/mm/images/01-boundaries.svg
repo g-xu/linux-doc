@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="610" viewBox="0 0 1040 610" role="img" aria-labelledby="title desc">
+  <title id="title">内存管理的职责边界</title>
+  <desc id="desc">进程、文件系统、设备、存储、cgroup 和 arm64 实现分别与 MM 交换地址空间需求、数据、内存约束和硬件操作。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px} .small{font-size:17px;fill:#455561}.head{font-size:26px;font-weight:700}.node{fill:#f2f6f8;stroke:#c5d1d8;stroke-width:1.5;rx:6}.edge{fill:none;stroke:#52616c;stroke-width:2;marker-start:url(#arrow);marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1040" height="610" fill="#fff"/>
+  <text x="40" y="36" class="head">MM 负责机制，协作方提供语义、需求与实现</text>
+  <rect x="40" y="65" width="280" height="100" class="node"/>
+  <text x="180" y="103" text-anchor="middle">进程管理</text>
+  <text x="180" y="136" text-anchor="middle" class="small">创建 / 共享 / 退出任务</text>
+  <rect x="380" y="65" width="280" height="100" class="node"/>
+  <text x="520" y="103" text-anchor="middle">文件系统与 VFS</text>
+  <text x="520" y="136" text-anchor="middle" class="small">文件语义与文件系统操作</text>
+  <rect x="720" y="65" width="280" height="100" class="node"/>
+  <text x="860" y="103" text-anchor="middle">设备与 DMA</text>
+  <text x="860" y="136" text-anchor="middle" class="small">设备寻址 / 一致性 / 使用寿命</text>
+  <path d="M180 171V246" class="edge"/>
+  <path d="M520 171V246" class="edge"/>
+  <path d="M860 171V246" class="edge"/>
+  <text x="195" y="200" class="small">地址空间</text>
+  <text x="195" y="224" class="small">映射与释放</text>
+  <text x="535" y="200" class="small">页缓存 / 文件映射</text>
+  <text x="535" y="224" class="small">填充与回写</text>
+  <text x="875" y="200" class="small">缓冲与特殊映射</text>
+  <text x="875" y="224" class="small">持有与位置约束</text>
+  <rect x="40" y="250" width="960" height="110" rx="6" fill="#e2f2ec" stroke="#4d947e" stroke-width="2"/>
+  <text x="520" y="292" text-anchor="middle" class="head">内存管理 MM</text>
+  <text x="520" y="327" text-anchor="middle">物理资源 · 分配 · 地址与数据 · 驻留与位置 · 生命周期与控制</text>
+  <path d="M180 366V455" class="edge"/>
+  <path d="M520 366V455" class="edge"/>
+  <path d="M860 366V455" class="edge"/>
+  <text x="195" y="402" class="small">数据传输</text>
+  <text x="195" y="426" class="small">文件 / 交换后备</text>
+  <text x="535" y="402" class="small">记账与限制</text>
+  <text x="535" y="426" class="small">组内回收与 OOM</text>
+  <text x="875" y="402" class="small">异常 / 页表操作</text>
+  <text x="875" y="426" class="small">TLB / 屏障</text>
+  <rect x="40" y="460" width="280" height="100" class="node"/>
+  <text x="180" y="500" text-anchor="middle">存储 I/O</text>
+  <text x="180" y="532" text-anchor="middle" class="small">内存与存储之间的数据路径</text>
+  <rect x="380" y="460" width="280" height="100" class="node"/>
+  <text x="520" y="500" text-anchor="middle">cgroup</text>
+  <text x="520" y="532" text-anchor="middle" class="small">资源控制层次与接口</text>
+  <rect x="720" y="460" width="280" height="100" class="node"/>
+  <text x="860" y="500" text-anchor="middle">arm64 实现</text>
+  <text x="860" y="532" text-anchor="middle" class="small">把通用机制落到硬件</text>
+  <text x="40" y="592" class="small">双向箭头表示交接关系，不表示一次操作必然经过所有协作方。</text>
+</svg>

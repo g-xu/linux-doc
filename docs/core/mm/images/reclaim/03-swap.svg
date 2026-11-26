@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="714" viewBox="0 0 1120 714" role="img" aria-labelledby="title desc">
+<title id="title">交换恢复分清尚驻留P和重新读入Q</title>
+<desc id="desc">交换PTE使用e时P可仍在swapcache，提前fault可命中P并影响冻结。主线保存清洁及引用条件满足后删除原缓存并释放P，后续未命中读入Q；若命中则是其他访问或预读已建立的新缓存，不是复活旧P。恢复仍核缓存身份及PTE。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="1120" height="714" fill="#fff"/><text x="32" y="40" class="h">PTE使用交换项e，不表示原P已离开RAM</text>
+<rect x="32" y="80" width="1056" height="66" fill="#eaf1fb" class="b"/><text x="50" y="121">初态VA → P；内容需要保留，准备交换后备e和swapcache</text>
+<path class="ar" d="M272 146V182"/>
+<rect x="32" y="182" width="480" height="98" fill="#f7ece6" class="b"/><text x="50" y="215">解除映射，PTE记录e</text><text x="50" y="251" class="s">原P仍在swapcache，有缓存/工作持有</text>
+<rect x="640" y="182" width="448" height="98" fill="#eaf1fb" class="b"/><text x="658" y="215">释放前访问：命中原P</text><text x="658" y="251" class="s">等待/确认就绪，取得fault持有</text>
+<path class="ar" d="M512 232H640"/><text x="534" y="214" class="s">提前访问</text>
+<path class="ar" d="M272 280V340"/><path class="ar" d="M864 280V340"/>
+<rect x="32" y="340" width="480" height="98" fill="#e6f4ef" class="b"/><text x="50" y="373">保存、清洁、无映射、预期引用重检</text><text x="50" y="409" class="s">删除原swapcache关联，再释放P</text>
+<rect x="640" y="340" width="448" height="98" fill="#eaf1fb" class="b"/><text x="658" y="373">重检后恢复PTE → P</text><text x="658" y="409" class="s">额外持有可使回收冻结失败，P仍在</text>
+<path class="ar" d="M272 438V508"/>
+<rect x="32" y="508" width="1056" height="106" fill="#eaf1fb" class="b"/><text x="50" y="542">P已释放后的访问：未命中则读入Q；重检缓存身份和原PTE再恢复</text><text x="50" y="580" class="s">此时若命中，是其他访问/预读已建立的新驻留缓存，不是旧P仍留在缓存</text>
+<text x="32" y="658">成功结束本PTE对e的使用；输家只清自己的持有，不删除其他使用者的缓存。</text>
+<text x="32" y="698" class="s">普通单页模型，后备不固定磁盘；保存完成不替代引用和恢复协议。</text>
+</svg>

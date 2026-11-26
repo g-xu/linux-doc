@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="724" viewBox="0 0 1120 724" role="img" aria-labelledby="title desc">
+<title id="title">DAMON合并辅助条件与子区域age更新</title><desc id="desc">10检查3阳性不是3指令。等长L3/R4仅在阈值1及相邻大小条件满足时合为3；主循环若max4初始阈值0不能首轮合，另Kmax10可提供阈值1。给定结果age2，输出后last3清0，成功拆分子区继承。下一窗阈值1时L1计数4使age3，L2计数6使age0；实际数量/大小/动作条件另判。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="1120" height="724" fill="#fff"/><text x="32" y="40" class="h">采样频次、稳定age与区域长度分别变化</text>
+<text x="32" y="82">固定范围10次检查，第1/4/8阳性得到3；不是3指令或3页。</text>
+<rect x="32" y="114" width="1056" height="98" fill="#eaf1fb" class="b"/><text x="50" y="148">合并辅助条件：等长相邻L=3/R=4，阈值1，长度和不超sz_limit → 结果3非7</text><text x="50" y="186" class="s">主循环若仅max=4，初始阈值0不合；另有K测到10时初始阈值才为1</text>
+<path class="ar" d="M560 212V258"/>
+<rect x="32" y="258" width="1056" height="80" fill="#e6f4ef" class="b"/><text x="50" y="290">给定合并结果age=2；聚合输出后last=3，本窗nr_accesses清0</text><text x="50" y="324" class="s">以下假设数量/大小/分配门槛满足，成功拆为L1/L2；不宣称每窗必拆</text>
+<path class="ar" d="M280 338V396"/><path class="ar" d="M842 338V396"/>
+<rect x="32" y="396" width="480" height="170" fill="#f0f4f6" class="b"/><text x="50" y="432">L1：继承age2 / last3，计数从0开始</text><text x="50" y="470">下一窗计数4，阈值1：差1≤1</text><text x="50" y="512">age 2 → 3</text><text x="50" y="548" class="s">非零访问也可保持“稳定”</text>
+<rect x="608" y="396" width="480" height="170" fill="#f9eaf0" class="b"/><text x="626" y="432">L2：继承age2 / last3，计数从0开始</text><text x="626" y="470">下一窗计数6，阈值1：差3&gt;1</text><text x="626" y="512">age 2 → 0</text><text x="626" y="548" class="s">频次明显变化；不是地址出生时长</text>
+<text x="32" y="612">age例限定单次合并遍历，无回调/动作改写；后续合并/拆分仍检查数量和大小。</text>
+<text x="32" y="660" class="s">拆分：总区域数&gt;max/2即跳过，否则通常二分；其他条件可三分或无法分出子区。</text>
+<text x="32" y="704" class="s">DAMOS是动作结果，非region访问日志；vaddr/fvaddr/paddr及刷新合同按来源确认。</text>
+</svg>

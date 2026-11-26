@@ -1,18 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" role="img" aria-labelledby="title desc">
-  <title id="title">arm64 四级页表地址计算示例</title>
-  <desc id="desc">四 KiB 页和四十八位虚拟地址的示例，虚拟地址 0x123456789 的四级索引为 0、4、0x11a、0x56，偏移为 0x789。</desc>
-  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#475569"/></marker></defs>
-  <rect width="960" height="300" fill="#fff"/>
-  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#17202a" text-anchor="middle">
-    <text x="480" y="30" font-size="22">教学配置：4 KiB 基本页、48 位 VA、四级页映射</text>
-    <g fill="#dbeafe" stroke="#2563eb"><rect x="24" y="89" width="192" height="93" rx="4"/><rect x="264" y="89" width="192" height="93" rx="4"/><rect x="504" y="89" width="192" height="93" rx="4"/><rect x="744" y="89" width="192" height="93" rx="4"/></g>
-    <g font-size="20"><text x="120" y="119">L0 / PGD</text><text x="360" y="119">L1 / PUD</text><text x="600" y="119">L2 / PMD</text><text x="840" y="119">L3 / PTE</text></g>
-    <g font-size="18"><text x="120" y="148">索引 0</text><text x="360" y="148">索引 4</text><text x="600" y="148">索引 0x11a</text><text x="840" y="148">索引 0x56</text></g>
-    <g font-size="15"><text x="120" y="172">VA[47:39]</text><text x="360" y="172">VA[38:30]</text><text x="600" y="172">VA[29:21]</text><text x="840" y="172">VA[20:12]</text></g>
-    <path d="M216 135H256M456 135H496M696 135H736" stroke="#475569" fill="none" marker-end="url(#a)"/>
-    <text x="480" y="65" font-size="17">TTBR0_EL1 给根表信息；下级表位置来自上级条目</text>
-    <text x="480" y="221" font-size="19">叶子映射页基址 0x90000000 + 偏移 0x789 = PA 0x90000789</text>
-    <text x="480" y="257" font-size="16">本配置 P4D 折叠；省略 TLB 命中、属性检查、失败与块映射</text>
-    <text x="480" y="284" font-size="16">索引来自 VA，但没有翻译配置和页表内容，不能单独决定数据物理位置</text>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="520" viewBox="0 0 1060 520" role="img" aria-labelledby="t d">
+<title id="t">限定条件下的arm64四级页表遍历</title><desc id="d">仅用于4KiB页、48位VA、四级模型。PGD PUD PMD PTE的索引分别来自47到39、38到30、29到21、20到12位，页内偏移11到0。P4D折叠，没有额外硬件表。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker><style>text{font:20px "Microsoft YaHei",sans-serif;fill:#24323c}.h{font-size:26px;font-weight:bold}.s{font-size:17px}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style></defs>
+<rect width="1060" height="520" fill="white"/><text x="30" y="38" class="h">示例限定：4 KiB基本页 + 48位VA + 四级翻译</text>
+<rect x="30" y="85" width="200" height="85" rx="6" fill="#e8f0fa"/><rect x="295" y="85" width="200" height="85" rx="6" fill="#e8f0fa"/><rect x="560" y="85" width="200" height="85" rx="6" fill="#e8f0fa"/><rect x="825" y="85" width="200" height="85" rx="6" fill="#e8f0fa"/>
+<text x="130" y="118" text-anchor="middle">L0 / PGD</text><text x="130" y="150" text-anchor="middle" class="s">47:39 · 索引1</text><text x="395" y="118" text-anchor="middle">L1 / PUD</text><text x="395" y="150" text-anchor="middle" class="s">38:30 · 索引2</text><text x="660" y="118" text-anchor="middle">L2 / PMD</text><text x="660" y="150" text-anchor="middle" class="s">29:21 · 索引3</text><text x="925" y="118" text-anchor="middle">L3 / PTE</text><text x="925" y="150" text-anchor="middle" class="s">20:12 · 索引4</text>
+<path d="M230 128H290" class="e"/><path d="M495 128H555" class="e"/><path d="M760 128H820" class="e"/><path d="M925 170V257H530V293" class="e"/>
+<rect x="30" y="300" width="995" height="90" rx="6" fill="#e2f2ec"/><text x="528" y="339" text-anchor="middle">末级输出页基址 + 页内偏移 0x120 → 物理地址</text><text x="528" y="372" text-anchor="middle" class="s">偏移来自11:0；索引不是PFN，表页也需要后备内存</text>
+<text x="30" y="440" class="s">本例P4D折叠，不存在第五张真实表；其他页大小/VA配置、大页和属性需要按实际确认。</text>
+<text x="30" y="478" class="s">TLB未命中仍可完成硬件遍历；只有映射、权限或其他检查失败才有对应异常。</text>
 </svg>

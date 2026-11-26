@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="510" viewBox="0 0 960 510" role="img" aria-labelledby="title desc">
+<title id="title">不同内存证据的职责</title><desc id="desc">先确定请求类型范围时间，再从容量状态、路径累计、停顿时间、对象来源和访问采样分别取证，证据不能相加或单独替代因果。配置权限和覆盖缺失必须保留。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="960" height="510" fill="#fff"/><text x="28" y="40" class="h">先固定请求 / 任务或组 / 节点 / 时间，再选择证据</text>
+<rect x="40" y="85" width="880" height="65" fill="#eef1f4" class="b"/><text x="62" y="125">现象：失败、停顿、增长、碎片或越界 → 明确需要检验的机制假设</text>
+<path class="ar" d="M480 150V185H180V220"/><path class="ar" d="M480 185V220"/><path class="ar" d="M480 185H780V220"/>
+<rect x="40" y="220" width="280" height="90" fill="#e6f4ef" class="b"/><text x="62" y="256">容量 / 布局状态</text><text x="62" y="292" class="s">meminfo / zone / buddy</text>
+<rect x="340" y="220" width="280" height="90" fill="#eaf1fb" class="b"/><text x="362" y="256">路径累计 / 时间停顿</text><text x="362" y="292" class="s">vmstat / events / PSI</text>
+<rect x="640" y="220" width="280" height="90" fill="#fff0e7" class="b"/><text x="662" y="256">对象来源 / 访问采样</text><text x="662" y="292" class="s">owner / trace / DAMON</text>
+<text x="40" y="370">状态不是累计；累计不是去重页数；PSI不是使用率；采样不是指令日志。</text>
+<text x="40" y="418">对齐范围/单位/窗口，补充路径与对象证据，区分相关与因果。</text>
+<text x="40" y="480" class="s">接口缺失、权限不足、丢事件或未覆盖历史都需保留，不能默认零或宣布无问题。</text>
+</svg>

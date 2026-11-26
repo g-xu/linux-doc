@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="710" viewBox="0 0 1040 710" role="img" aria-labelledby="title desc">
+  <title id="title">地址范围、映射、驻留和数据来源</title>
+  <desc id="desc">一个 mm_struct 索引多个 VMA。同一匿名 VMA 的页表状态可为空、指向驻留页或包含交换状态。文件 VMA 关联文件来源，页表映射关联缓存数据。TLB 缓存转换，不缓存 VMA 的全部语义。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}.d{fill:none;stroke:#8d6674;stroke-width:2;stroke-dasharray:7 5;marker-end:url(#a)}.n{stroke:#b9c8d0;stroke-width:1.5;rx:6}</style>
+  </defs>
+  <rect width="1040" height="710" fill="#fff"/>
+  <text x="35" y="37" class="h">范围存在 ≠ 映射已建立 ≠ 数据已驻留</text>
+  <rect x="35" y="77" width="190" height="124" class="n" fill="#f2f6f8"/>
+  <text x="130" y="114" text-anchor="middle">mm_struct</text>
+  <text x="130" y="150" text-anchor="middle" class="s">VMA 索引</text>
+  <text x="130" y="178" text-anchor="middle" class="s">页表根与状态</text>
+  <path d="M225 110H325" class="e"/>
+  <text x="244" y="96" class="s">索引</text>
+  <rect x="330" y="77" width="670" height="88" class="n" fill="#e8f0fa"/>
+  <text x="352" y="112">私有匿名 VMA：范围 [start, end)，允许读写</text>
+  <text x="352" y="144" class="s">VMA 保存使用规则，不要求范围内所有数据都已驻留</text>
+  <path d="M225 175H260V236H325" class="e"/>
+  <rect x="330" y="192" width="670" height="88" class="n" fill="#fff1dc"/>
+  <text x="352" y="227">文件 VMA：范围、文件偏移、共享 / 私有语义</text>
+  <text x="352" y="259" class="s">通过文件与 address_space 关联数据来源</text>
+  <line x1="35" y1="318" x2="1000" y2="318" stroke="#d7dfe4"/>
+  <text x="35" y="358">匿名 VMA 中三个地址的当前页表状态</text>
+  <rect x="35" y="382" width="260" height="76" class="n" fill="#f2f6f8"/>
+  <text x="165" y="413" text-anchor="middle">地址 A：PTE 为空</text>
+  <text x="165" y="440" text-anchor="middle" class="s">尚未建立数据映射</text>
+  <rect x="375" y="382" width="260" height="76" class="n" fill="#e8f0fa"/>
+  <text x="505" y="413" text-anchor="middle">地址 B：有效映射</text>
+  <text x="505" y="440" text-anchor="middle" class="s">物理页 + 当前访问属性</text>
+  <rect x="715" y="382" width="285" height="76" class="n" fill="#fff1dc"/>
+  <text x="857" y="413" text-anchor="middle">地址 C：交换状态</text>
+  <text x="857" y="440" text-anchor="middle" class="s">定位可恢复的数据</text>
+  <path d="M165 458V527" class="d"/>
+  <path d="M505 458V527" class="e"/>
+  <path d="M857 458V527" class="d"/>
+  <rect x="35" y="532" width="260" height="74" class="n" fill="#f2f6f8"/>
+  <text x="165" y="562" text-anchor="middle">访问时再处理</text>
+  <text x="165" y="589" text-anchor="middle" class="s">本例没有已有数据页</text>
+  <rect x="375" y="532" width="260" height="74" class="n" fill="#e2f2ec"/>
+  <text x="505" y="562" text-anchor="middle">驻留 RAM 页</text>
+  <text x="505" y="589" text-anchor="middle" class="s">struct page / folio 描述</text>
+  <rect x="715" y="532" width="285" height="74" class="n" fill="#fff1dc"/>
+  <text x="857" y="562" text-anchor="middle">交换子系统</text>
+  <text x="857" y="589" text-anchor="middle" class="s">访问经缺页恢复映射</text>
+  <text x="35" y="647" class="s">MMU / TLB 使用与缓存页表转换；TLB 未命中仍可通过硬件遍历找到有效映射。</text>
+  <text x="35" y="680" class="s">图中的有效映射以基本页示意；大页及特殊映射可能使用不同层级与状态。</text>
+</svg>

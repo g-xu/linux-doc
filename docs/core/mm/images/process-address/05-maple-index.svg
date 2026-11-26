@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="580" viewBox="0 0 1000 580" role="img" aria-labelledby="title desc">
+<title id="title">Maple范围槽与pivot比较</title><desc id="desc">放大节点继承min为B加4P、max为B加16P减1，四slot配三pivot，选择第一项pivot大于等于addr，最后slot用max。8P跳过pivot0选slot1的V1，10P选slot2的NULL，后继继续V2。实际整树不局限此窗口，非固定树高或容量。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#7b8b93;stroke-width:1.2;rx:4}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="1000" height="580" fill="#fff"/><text x="28" y="39" class="h">树节点保存区间与指针；VMA对象不藏在每个页索引中</text>
+<rect x="40" y="82" width="920" height="70" class="b" fill="#eef1f4"/><text x="60" y="112">选择第一项 addr ≤ pivot[i]；否则选末槽（仍须在节点范围内）</text><text x="60" y="139" class="s">此节点继承 min=B+4P，max=B+16P-1；整棵树不限于这一窗口</text>
+<path class="ar" d="M500 152V184"/>
+<text x="40" y="177" class="s">一个概念叶节点的slot窗口</text>
+<path d="M40 191V184H960V191" fill="none" stroke="#7b8b93" stroke-width="1.2"/>
+<rect x="40" y="197" width="250" height="72" class="b" fill="#eaf1fb"/><text x="56" y="226" class="s">pivot0 = B+8P-1</text><text x="56" y="254">slot0 → V0</text>
+<rect x="300" y="197" width="185" height="72" class="b" fill="#e6f4ef"/><text x="313" y="226" class="s">pivot1 = B+9P-1</text><text x="313" y="254">slot1 → V1</text>
+<rect x="495" y="197" width="230" height="72" class="b" fill="#fff0e7"/><text x="510" y="226" class="s">pivot2 = B+11P-1</text><text x="510" y="254">slot2 = NULL</text>
+<rect x="735" y="197" width="225" height="72" class="b" fill="#eaf1fb"/><text x="748" y="226" class="s">末槽上界使用继承max</text><text x="748" y="254">slot3 → V2</text>
+<path class="ar" d="M165 269V326"/><path class="ar" d="M392 269V326"/><path class="ar" d="M847 269V326"/>
+<rect x="40" y="326" width="250" height="82" class="b" fill="#eaf1fb"/><text x="60" y="356">V0：半开[4,8)</text><text x="60" y="390" class="s">边界/flags/来源/pgoff</text>
+<rect x="300" y="326" width="185" height="82" class="b" fill="#e6f4ef"/><text x="315" y="356">V1：[8,9)</text><text x="315" y="390" class="s">独立的VMA记录</text>
+<rect x="735" y="326" width="225" height="82" class="b" fill="#eaf1fb"/><text x="750" y="356">V2：[11,16)</text><text x="750" y="390" class="s">独立的VMA记录</text>
+<text x="505" y="356">没有VMA对象</text><text x="505" y="390" class="s">不等于一页“空数据”</text>
+<text x="40" y="469">B+8P → V1；B+10P → NULL；向后找非空范围继续到V2。</text>
+<text x="40" y="515" class="s">数值范围缩写为虚拟页偏移，树键实际仍是字节；没有复制数据页/页表。</text>
+<text x="40" y="554" class="s">slot0下界为min，其他下界为前pivot+1；游标不持有VMA寿命。</text>
+</svg>

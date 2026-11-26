@@ -1,0 +1,2812 @@
+{
+  "documents": [
+    {
+      "file": "00-overview.md",
+      "sha256": "23b73e7be2b2416884eedd8f19d39eb71cf4d7aa649aa410f4a437a7b98c0b72",
+      "mechanismSha256": "23b73e7be2b2416884eedd8f19d39eb71cf4d7aa649aa410f4a437a7b98c0b72",
+      "links": 115,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 11,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 11,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "01-page-allocation.md",
+      "sha256": "3b46e1854a6ca764807dbc5f331ad9ad16a91da339437e853f2124913c4f3585",
+      "mechanismSha256": "3b46e1854a6ca764807dbc5f331ad9ad16a91da339437e853f2124913c4f3585",
+      "links": 58,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 12,
+          "codeBlocks": 4,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 12,
+          "codeBlocks": 4,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "02-physical-memory.md",
+      "sha256": "94d52347df4578b07bf58412d82d7a65a13bce35111882c973638d3f5eca3de9",
+      "mechanismSha256": "4c6ef0344f1c9c3cdef6c5467602bc8090f337770ddaa6802156d72aa1dadd7e",
+      "links": 42,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 6,
+          "codeBlocks": 4,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 6,
+          "codeBlocks": 4,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "03-kernel-objects.md",
+      "sha256": "cb2a4e99e57ebec805a20b344683aa8bd192900c1a40f48af321020d9c2add3c",
+      "mechanismSha256": "509319b1b6afb5c7b17c801bee60c5239c821e1514ef417958045b5401f49fd0",
+      "links": 65,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 6,
+          "codeBlocks": 7,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 6,
+          "codeBlocks": 7,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "04-kernel-virtual.md",
+      "sha256": "a44273c579ed5e69909295677f2237e2e9413a52d4dff829d8a8d21e2ef95482",
+      "mechanismSha256": "86769e6c61e62be6ed4cb82e9c5afc4a601e495023855f30f6b643823c27a2fb",
+      "links": 62,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 5,
+          "codeBlocks": 7,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 5,
+          "codeBlocks": 7,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "05-process-address.md",
+      "sha256": "d2e1eefb3f3d81b43cf3cf99bfc71825b1594899ce3c24f2628e6acfa6658149",
+      "mechanismSha256": "8b0d493f3842b5db8d6d225eeda5f68814c12cdbc67a96eca5f791293f05faea",
+      "links": 35,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 5,
+          "codeBlocks": 2,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 5,
+          "codeBlocks": 2,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "06-arm64-page-tables.md",
+      "sha256": "40a1e817f72e300d76f1ed29e200ac23d41a83bb5807c64b9ac5f785bf1abda5",
+      "mechanismSha256": "778a618b4a0d970aa1e409cf4c0602c33a31abc8255889ab5cc01b03e691b643",
+      "links": 46,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 6,
+          "codeBlocks": 3,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 6,
+          "codeBlocks": 3,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "07-page-faults.md",
+      "sha256": "aff1bc73ed28a80e627b0fbe3ce05c62c73f5d7e72c7fc9437e746b14a7833a7",
+      "mechanismSha256": "5a1ebc1009359b6adf3ddd98923d5bdaf1f6afcec200dec3f33b6656ee968ab0",
+      "links": 43,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 4,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 4,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "08-page-cache-writeback.md",
+      "sha256": "7499b121091023bcdd3ef627235874d6860e002ba682c85e963ca0e614f81e7c",
+      "mechanismSha256": "a0f3ead90877d9582ee92cd4aff6ab372d79ee36a755347a306af688b51367d2",
+      "links": 33,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 5,
+          "codeBlocks": 4,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 5,
+          "codeBlocks": 4,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "09-reclaim-swap.md",
+      "sha256": "f2ea8422c55b9e2ca34fdd396046a899a42f14fb401f2a2f16f1f4954774fbf3",
+      "mechanismSha256": "150821bfd029fc6ca45b397feb7b840c169019299e0803c84c929a194a746ff1",
+      "links": 36,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 3,
+          "codeBlocks": 2,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 3,
+          "codeBlocks": 2,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "10-migration-compaction.md",
+      "sha256": "7fdd3624654627fcded596bd3497a7aa21a0061191a9d7d616043cd8e74a3d6f",
+      "mechanismSha256": "92a44372d5dd9ee55ce823ece14c611ee8e539c70c12115930c5f1f125c1fb53",
+      "links": 29,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 4,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 4,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "11-page-lifetime-rmap.md",
+      "sha256": "d2073fc161e732d04b6bc3f6760c715628ed72c2ad715e7d84c95c5dc8aa83f8",
+      "mechanismSha256": "6bc479a2414eff059faf9fb07e5af64088a7d56eedc831bfe8f5ed027c939481",
+      "links": 28,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 4,
+          "codeBlocks": 1,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 4,
+          "codeBlocks": 1,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "12-memcg-oom.md",
+      "sha256": "151f1cebf1941e7711e283711f0c035b3fa22160a229ff75d069df4b1760d21e",
+      "mechanismSha256": "da6b39c29c62892eb862c8b45af4a5ba8bd2ee636e73476c7f43523437226f55",
+      "links": 24,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 5,
+          "codeBlocks": 2,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 5,
+          "codeBlocks": 2,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "13-numa-policy.md",
+      "sha256": "98c1ea4694bc01bf57f394c2aba6fe18dd85291807a16acb2fb2dff22eba0317",
+      "mechanismSha256": "37ddf3c6f14168adb34b2c7c79fcf3d35ec20be26b1c070aa56ccfb0d89469e7",
+      "links": 26,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 4,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 4,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "14-observability-extensions.md",
+      "sha256": "11f061596d757c8f05423d9e570dda9aef4a22bb1bdc7019ac4fdd7c9d043fef",
+      "mechanismSha256": "037f0fdb06d2ce622b7fafcede5efe15eab353e4f5f097125ba5adc9f991a025",
+      "links": 44,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 5,
+          "codeBlocks": 2,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 5,
+          "codeBlocks": 2,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "completion-mm-series.md",
+      "sha256": "206ac7208e7077fd1eb8c865172936b09bd7dd7b0cc08ea75eef5ce7588cbf97",
+      "mechanismSha256": "206ac7208e7077fd1eb8c865172936b09bd7dd7b0cc08ea75eef5ce7588cbf97",
+      "links": 15,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "contract-arm64-page-tables.md",
+      "sha256": "66827a48132dd93c68f661101fcf3746ca65d69cbb9fbab4644b3e298a3f0375",
+      "mechanismSha256": "66827a48132dd93c68f661101fcf3746ca65d69cbb9fbab4644b3e298a3f0375",
+      "links": 1,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "contract-kernel-objects.md",
+      "sha256": "1ec139997522332e40e90239872636f04a3d0054fc7e02e6afb4a4fd5c2ec325",
+      "mechanismSha256": "1ec139997522332e40e90239872636f04a3d0054fc7e02e6afb4a4fd5c2ec325",
+      "links": 1,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "contract-kernel-virtual.md",
+      "sha256": "fd8e4bef9bf55992b42640f9f3c7a8fefd159a50b3d502f6b13f39096d65c923",
+      "mechanismSha256": "fd8e4bef9bf55992b42640f9f3c7a8fefd159a50b3d502f6b13f39096d65c923",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "contract-lifetime.md",
+      "sha256": "f95a2842b100019c7138f21c3dd4099feca51dafab7f59e86c96a6cfeeb84c98",
+      "mechanismSha256": "f95a2842b100019c7138f21c3dd4099feca51dafab7f59e86c96a6cfeeb84c98",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "contract-memcg.md",
+      "sha256": "98c85ac2101b43f6c26358798f3cbe49411843ec63e091ec2011a0b70ee16837",
+      "mechanismSha256": "98c85ac2101b43f6c26358798f3cbe49411843ec63e091ec2011a0b70ee16837",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "contract-migration.md",
+      "sha256": "cc71011039c1e1e81920c1c3ee47a94186bba9c94f021f7f83a12b2a1e160801",
+      "mechanismSha256": "cc71011039c1e1e81920c1c3ee47a94186bba9c94f021f7f83a12b2a1e160801",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "contract-numa.md",
+      "sha256": "d64f83bc0568745fbf8cb862bd7761e66711320a8567b5738fb251efaf093e68",
+      "mechanismSha256": "d64f83bc0568745fbf8cb862bd7761e66711320a8567b5738fb251efaf093e68",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "contract-observability.md",
+      "sha256": "ad8bded7d49a775a657cf3da5d905e0cf9fc4fb0bc44b36c3548c7e44b1aae65",
+      "mechanismSha256": "ad8bded7d49a775a657cf3da5d905e0cf9fc4fb0bc44b36c3548c7e44b1aae65",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "contract-page-cache.md",
+      "sha256": "29e1a5f25a844619e15c7aaf3474b7b480cfa78e3dca2526b0e77566bc6c472e",
+      "mechanismSha256": "29e1a5f25a844619e15c7aaf3474b7b480cfa78e3dca2526b0e77566bc6c472e",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "contract-page-faults.md",
+      "sha256": "50a4c290df9c2c62c47ed97ba910ddcf7bc42f4be4ccbf8ee8f74dfe894d0a51",
+      "mechanismSha256": "50a4c290df9c2c62c47ed97ba910ddcf7bc42f4be4ccbf8ee8f74dfe894d0a51",
+      "links": 1,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "contract-physical-memory.md",
+      "sha256": "a6150ddceedbc7f0a1ec68ce13739ddea38531d805857130cfdb9da0757366d4",
+      "mechanismSha256": "a6150ddceedbc7f0a1ec68ce13739ddea38531d805857130cfdb9da0757366d4",
+      "links": 1,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "contract-process-address.md",
+      "sha256": "27f5760e5e5ee7a81dcf7b305175df630dad06c0c72f15b86c9a55ba982a5232",
+      "mechanismSha256": "27f5760e5e5ee7a81dcf7b305175df630dad06c0c72f15b86c9a55ba982a5232",
+      "links": 1,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "contract-reclaim.md",
+      "sha256": "9c8a8655cd290e34a1792d274110ae856f400c744012e7bdbf05e82db5e3ef25",
+      "mechanismSha256": "9c8a8655cd290e34a1792d274110ae856f400c744012e7bdbf05e82db5e3ef25",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "index.md",
+      "sha256": "4a432df8b441ba04a6309fc8261f07ef19d834ce23ae70fedfad5cbb891af8d0",
+      "mechanismSha256": "4a432df8b441ba04a6309fc8261f07ef19d834ce23ae70fedfad5cbb891af8d0",
+      "links": 35,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "pedagogy-revision-mm-series.md",
+      "sha256": "9b47df68a13c5b0ac3f230963fbf1817d9cc716da7f10512487254a7d5fe89cb",
+      "mechanismSha256": "9b47df68a13c5b0ac3f230963fbf1817d9cc716da7f10512487254a7d5fe89cb",
+      "links": 12,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-arm64-page-tables.md",
+      "sha256": "47f87d14187604262c8e674f233267459b933b7b3c8d386e33aa1aa7030bdeec",
+      "mechanismSha256": "47f87d14187604262c8e674f233267459b933b7b3c8d386e33aa1aa7030bdeec",
+      "links": 3,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-figures-final.md",
+      "sha256": "d3c178305a6f278d5b9f9b7370d9598d42495d84ece5d6d443a4f32e73afeefb",
+      "mechanismSha256": "d3c178305a6f278d5b9f9b7370d9598d42495d84ece5d6d443a4f32e73afeefb",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-kernel-objects.md",
+      "sha256": "5ecc669906ae0731be07dba6b6a44e6d3da2bfeddaec206bc66eb5590aa9ea5f",
+      "mechanismSha256": "47bc32782e227635f584e25cfc9c3ecc85fbe6905557dec1ca4477a213a1d356",
+      "links": 4,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-kernel-virtual.md",
+      "sha256": "7d13b7f833ea4a329620d0f1a4828f81b92c34a5e30d1dc57d31f1df3bf5c9c8",
+      "mechanismSha256": "024ffc05c7ab8e1752be860aad4e0710b6068d161addd2818c4e2ee18ad06feb",
+      "links": 4,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-lifetime.md",
+      "sha256": "1208fec9a12063a4354f026c2eed26056cb5e7852e4e20b45204d189336548e1",
+      "mechanismSha256": "1208fec9a12063a4354f026c2eed26056cb5e7852e4e20b45204d189336548e1",
+      "links": 2,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-memcg.md",
+      "sha256": "674d2d1e6aab74e538d60acef95042baa2c3f17d8c15c095e76b338497baa548",
+      "mechanismSha256": "674d2d1e6aab74e538d60acef95042baa2c3f17d8c15c095e76b338497baa548",
+      "links": 2,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-migration.md",
+      "sha256": "d6170b54fca057c5b06a0bbf3ffca4ac1ee449d6d326a979a62fe64646490bb6",
+      "mechanismSha256": "d6170b54fca057c5b06a0bbf3ffca4ac1ee449d6d326a979a62fe64646490bb6",
+      "links": 3,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-mm-series.md",
+      "sha256": "43fe620bb9c39b904828f0b387374b1195d85710ff949b3f9b3818630dbb342a",
+      "mechanismSha256": "43fe620bb9c39b904828f0b387374b1195d85710ff949b3f9b3818630dbb342a",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 1,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 1,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-numa.md",
+      "sha256": "5b7bed7b95999ef461bdda93eb967b68cad1f718bc4da207b8671e131fb2721e",
+      "mechanismSha256": "5b7bed7b95999ef461bdda93eb967b68cad1f718bc4da207b8671e131fb2721e",
+      "links": 2,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-observability.md",
+      "sha256": "dceaf6de40f70b728e2026a505aa5ca22369988645abf3f63e7dfa5d697cfaeb",
+      "mechanismSha256": "dceaf6de40f70b728e2026a505aa5ca22369988645abf3f63e7dfa5d697cfaeb",
+      "links": 2,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-page-allocation.md",
+      "sha256": "559efa2510287e14bae45c171fa8838443a3de11055d901ec878dc219a919800",
+      "mechanismSha256": "559efa2510287e14bae45c171fa8838443a3de11055d901ec878dc219a919800",
+      "links": 11,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-page-cache.md",
+      "sha256": "630c2af346dc2038cc4ae5fb8a362d91b9d3101cc78109ec0a40221b37fb741a",
+      "mechanismSha256": "630c2af346dc2038cc4ae5fb8a362d91b9d3101cc78109ec0a40221b37fb741a",
+      "links": 3,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-page-faults.md",
+      "sha256": "e5339ea3e5ace46233d1ffa666e63a13cde7cb3d4882ba1e298d95f5d12518b4",
+      "mechanismSha256": "e5339ea3e5ace46233d1ffa666e63a13cde7cb3d4882ba1e298d95f5d12518b4",
+      "links": 3,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-pedagogy-02.md",
+      "sha256": "c81232e7f412c4e147c1bf294c3586cf89c1845c9366996af0a28bf4dcffa798",
+      "mechanismSha256": "c81232e7f412c4e147c1bf294c3586cf89c1845c9366996af0a28bf4dcffa798",
+      "links": 1,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-pedagogy-05.md",
+      "sha256": "fecc74ea919d16cf1847fb21b79793e0103639f41e808de192429eae75dfde73",
+      "mechanismSha256": "fecc74ea919d16cf1847fb21b79793e0103639f41e808de192429eae75dfde73",
+      "links": 1,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-pedagogy-06.md",
+      "sha256": "867eb49056a268ad1c2dc8a033dda9eb3437d0b9b1b501a018e7b8c4f112a486",
+      "mechanismSha256": "867eb49056a268ad1c2dc8a033dda9eb3437d0b9b1b501a018e7b8c4f112a486",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-pedagogy-07.md",
+      "sha256": "9f7c1a62f5b65fb2228a81a5b1e78dd24875561b5c368ac482759b760766eb22",
+      "mechanismSha256": "9f7c1a62f5b65fb2228a81a5b1e78dd24875561b5c368ac482759b760766eb22",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-pedagogy-08.md",
+      "sha256": "bd34c8b386d3acdef4bffaab6cb65998f2aae9517f163de56b7813b01a9bb2fc",
+      "mechanismSha256": "bd34c8b386d3acdef4bffaab6cb65998f2aae9517f163de56b7813b01a9bb2fc",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-pedagogy-09.md",
+      "sha256": "6f4c307c557ec46c491921f63ace983523401ade2a328117d315d3c3eb2fc6a9",
+      "mechanismSha256": "6f4c307c557ec46c491921f63ace983523401ade2a328117d315d3c3eb2fc6a9",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-pedagogy-10.md",
+      "sha256": "c84d42fff7e1dafab4c9638c9a0ed7441e6c9a27a086c63921f1ed6c18c51c71",
+      "mechanismSha256": "c84d42fff7e1dafab4c9638c9a0ed7441e6c9a27a086c63921f1ed6c18c51c71",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-pedagogy-11.md",
+      "sha256": "10417910f356d1df228351b4dd5d453a380e4663d8c369db2e08f13109050578",
+      "mechanismSha256": "10417910f356d1df228351b4dd5d453a380e4663d8c369db2e08f13109050578",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-pedagogy-12.md",
+      "sha256": "53c19b9f7c829679c85652c8df7cc98830fc85956edc5fa749e1cd4ce55c1fd9",
+      "mechanismSha256": "53c19b9f7c829679c85652c8df7cc98830fc85956edc5fa749e1cd4ce55c1fd9",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-pedagogy-13.md",
+      "sha256": "b736a66623f22756043b641c16a85cc00cf739f0c47ce7f7aaa27d4bc66b06df",
+      "mechanismSha256": "b736a66623f22756043b641c16a85cc00cf739f0c47ce7f7aaa27d4bc66b06df",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-pedagogy-14.md",
+      "sha256": "46a02a8230af1fdd055453fc91ae4bcec7172273bab407b5521ac37487677a65",
+      "mechanismSha256": "46a02a8230af1fdd055453fc91ae4bcec7172273bab407b5521ac37487677a65",
+      "links": 0,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-physical-memory.md",
+      "sha256": "b08625a0e8dc8dbdd0c1a3a07c9c1a9d37b8dc9ee12e92edffcf31fd0fa38ef9",
+      "mechanismSha256": "a831b0eb308398046fc855bb8fb48bbf00d8710355d94569ebb5be883e6e627f",
+      "links": 3,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-process-address.md",
+      "sha256": "afbe026c3a708b23607c5a3f89196d6ad7c8489b1de13f6f736bfaaa9c604cf1",
+      "mechanismSha256": "afbe026c3a708b23607c5a3f89196d6ad7c8489b1de13f6f736bfaaa9c604cf1",
+      "links": 3,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "review-reclaim.md",
+      "sha256": "16e7774461509336d9533a95a699d6a40d58908bd3e0dd4a5ef58df66befbfd4",
+      "mechanismSha256": "16e7774461509336d9533a95a699d6a40d58908bd3e0dd4a5ef58df66befbfd4",
+      "links": 3,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "verification-mm-series.md",
+      "sha256": "e1fac83b29c91ff48017566afb810341257257f5afc1447651ba5122a29dd607",
+      "mechanismSha256": "d0d1eee20cf4cfb6aedf3315519e57ce1dd6548ee45bbb8cb800a5e7a588f646",
+      "links": 5,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    },
+    {
+      "file": "verification-pedagogy-mm-series.md",
+      "sha256": "92ef6a022a45bb60617507011d3b4b8322c99845213e43e5a7d6fd1850d8bd99",
+      "mechanismSha256": "92ef6a022a45bb60617507011d3b4b8322c99845213e43e5a7d6fd1850d8bd99",
+      "links": 2,
+      "duplicateSections": [],
+      "missing": [],
+      "viewports": [
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "width": 1280,
+          "scrollWidth": 1280,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        },
+        {
+          "viewport": {
+            "width": 480,
+            "height": 900
+          },
+          "width": 480,
+          "scrollWidth": 480,
+          "failedImages": [],
+          "images": 0,
+          "codeBlocks": 0,
+          "tablesOutside": 0
+        }
+      ]
+    }
+  ],
+  "images": [
+    {
+      "file": "images/01-boundaries.svg",
+      "sha256": "0fc354903c0ce2295d62e45f73b4ab7d0b9f2bb77ed872419f3dc2e9fac492a7",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/02-cooperation.svg",
+      "sha256": "d50c6a06d2e014681468d037a2a8d57fb80b793d10e7093eac7d185f44e88c01",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/03-physical.svg",
+      "sha256": "7d9ef47061f720d5a538aeb486ec455bdf51f25b712b19abc7031112a3fa381d",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/04-allocation.svg",
+      "sha256": "ebbee09900981ca634de667890d896c9669108b5cef1a1a85782927e3950d0a3",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/05a-process-layout.svg",
+      "sha256": "9c776252d2d07c22ccf3a642cb1d9e066f2b7fc3d3fe8785a1f0874064d05a88",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/05-address-space.svg",
+      "sha256": "3a9b236d51cffd8cf5234ac6cf8cd3e4a01052fa5304acd5bc082f4bdfbfaafc",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/06-fault-cow.svg",
+      "sha256": "7511f3aa9cf16811ebb647e157e7300cd46a9bf76b03916da9daade314a52156",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/07-file-cache.svg",
+      "sha256": "b68399f9c95bc0fbf54e5e81912cffe73761cf88c9c707c1bf1d35cc4300c123",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/08-pressure.svg",
+      "sha256": "df6f9af1e6144cba2c9c1a0a213ea022882d3124c9c9ceb7a1e68d74bf7dbb18",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/09-lifetime.svg",
+      "sha256": "ae52a8b4f09c8de903012954d3fcaa26bfbbaecb030899dcc3f7c930ef1c0d78",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/10-accounting.svg",
+      "sha256": "3199ce5b102ff29181fb3785320b1f15e5062457a3c0c613403564f1b7721668",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-allocation/01-position.svg",
+      "sha256": "ebf16f52cff29fbdcc5aed52a0eb71c5c537327cbecbcd08d37d0af50236e9ef",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-allocation/02-objects.svg",
+      "sha256": "31e1947bd349d7beadc924375b607ec07d8ab2a91ea060aa34573c532b7bae63",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-allocation/02a-candidates.svg",
+      "sha256": "25dda10c722cc2be01b2bbb4dec834e4cbda886d05cfe259d154a7ac8c46e048",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-allocation/03-buddy-split.svg",
+      "sha256": "d0cda72959f7e2c514ed1b8859c36755bb5d1569f06b30b26d66191df64580be",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-allocation/04-buddy-merge.svg",
+      "sha256": "7bf29d047c760152d4eda342ef01ad0dd5858299fb043f99474226512a55c66e",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-allocation/04a-type-fallback.svg",
+      "sha256": "ab797ed4fffbd7db1296a1a2b654ae4d341121ddbcbde219e00dcbee35a2dc78",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-allocation/05-pcp.svg",
+      "sha256": "f1a2d2a8a8feaff12cdd74ded5ab70b2a71e5f0cd3a705c120a1648a27c3a198",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-allocation/06-watermarks.svg",
+      "sha256": "9deb716496738e7e6eea85e06376753ac0b7e36aac1d444c791eb5cab7f57984",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-allocation/06a-pcp-gate.svg",
+      "sha256": "d93718950bd39a856ad2f5c43293d1bc0d372a908c3a7e48f9f9ed77f8dd174b",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-allocation/07-fast-path.svg",
+      "sha256": "dc892a918c8b7442ae74a3454c2d79854cdaa2e9699ddd707c39fd483a11ce37",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-allocation/08-slow-path.svg",
+      "sha256": "14e083a107c5d26e32f973156cf3306175b4b8d2954e5ddf7aec7a9d8f59fe3f",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-allocation/09-free.svg",
+      "sha256": "e94f884da57342afe61357e60b0bf3eabd3c81930df3b14344ffa0bf44992283",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/physical-memory/01-model.svg",
+      "sha256": "6f268c0de631bd2a1ac799ca21535a636f7964b26d5e53a9cb3b12aee894d894",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/physical-memory/04-section.svg",
+      "sha256": "208b167f03c7026f715d1fdfe057e7c2f898aa2cf4a3de48605fb7e7c9d9c33f",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/physical-memory/02-ranges.svg",
+      "sha256": "719631a79435ecd0691a0b0b6fdc9b33bf47b35d6bcfaced9b5812b64639485b",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/physical-memory/05-window.svg",
+      "sha256": "3ee56145cc6a63ba51ba2e0f6cec0648c92a029f69e7866378702a5604bd8855",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/physical-memory/03-handoff.svg",
+      "sha256": "3e8aa8aa1cd40a8c4da2f55af546d38e201c62788b8437020ae27373f74d0e1d",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/physical-memory/06-range-blocks.svg",
+      "sha256": "b2ab570a738e140e39f76131d325a6f6e453c6100fdb5a6162a6ddda690e9e67",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/kernel-objects/00-slab-slots.svg",
+      "sha256": "22e7108f88b9684efe93af637b0b4978f83359935af59fb9e1597f8d83673823",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/kernel-objects/02-layout.svg",
+      "sha256": "75153f8f1023e594b9a69c56fd16cb1dcfbbeb0d1ec9de4d41dcce45818d1160",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/kernel-objects/01-organization.svg",
+      "sha256": "fbf00198a424e6229911c56acb764cbcc5ff4400f6dec5d859f1fdaa9eb7f7fd",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/kernel-objects/03-two-freelists.svg",
+      "sha256": "291d49d93a2a022968412436dc6ccc8441b7bb658f921ba919e354b98b5ec6aa",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/kernel-objects/04-allocation.svg",
+      "sha256": "479ca64383ae88b1f44f42f9563b6028d55b01ab65df635c16f7065eec925f33",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/kernel-objects/05-deactivate-race.svg",
+      "sha256": "b61bf361299b5f633a0fc24ff3dd32c3af5d5b60c4b32dc0db062075c4fae97e",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/kernel-virtual/01-basic-mapping.svg",
+      "sha256": "d99dcefa107670641ccd9381ebce0491c44c052ebda0a06aafc1eac8086e4f33",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/kernel-virtual/03-objects.svg",
+      "sha256": "df7d61c2ba320b00b676af88f44923977f526734f60dc5ef09e081d458a6e00b",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/kernel-virtual/02-range-fit.svg",
+      "sha256": "8ead8c3e41fb3c1b21f0a1bd657a3799b73795f92d0a37175f981e016005bc32",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/kernel-virtual/04-ownership.svg",
+      "sha256": "cad045b8d3e17a80150d8ae638110b32c35c15d4fd654fe02994b1e70d33cea1",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/kernel-virtual/05-lazy-return.svg",
+      "sha256": "8d56e0db19b6c72fced51839e4f604063e06bf1e794d09b50afb37dd8c0e575b",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/process-address/01-model.svg",
+      "sha256": "bd2939f7f238507adba1cb71e0d1531d0f99868ec9458cd37a13464699b5c3e1",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/process-address/05-maple-index.svg",
+      "sha256": "d5dfedec10b5c2991090b2e52783b8105adcb59158c980c0a7bb5e15bec619e4",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/process-address/03-mm-lifetime.svg",
+      "sha256": "b79ff564b39a361eb0a85106c68e8f1aacc385b52dfb05ed566bd66292dc5e11",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/process-address/02-range-changes.svg",
+      "sha256": "b89d6c438f45ed8cb3a6eabcdd9fc549694ae16cb14e39d13ec1046736747b19",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/process-address/04-unmap-failure.svg",
+      "sha256": "7bcd95299a8d8419c96415aa53ff9b8cf50ab2f3f81e42ad63a5a8a5a444aa6a",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/arm64-page-tables/01-walk.svg",
+      "sha256": "23156f625b2088883013838d10613781f196991c803391dad4dfa2ee5df525c0",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/arm64-page-tables/02-states.svg",
+      "sha256": "7943bbbf5769102f111f2b8513219f36122b905feb651bdb0a6c0e4cdffae5ac",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/arm64-page-tables/06-descriptor-sync.svg",
+      "sha256": "a59d334c918e0a857bdf8849579505056156123b219b02e3b452cc268bdd7aa2",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/arm64-page-tables/03-update.svg",
+      "sha256": "cfa58b300dc5d98e01041440b53a381b2c988f2eaa8c46598533f9ced7052bc6",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/arm64-page-tables/04-asid-rollover.svg",
+      "sha256": "9427dae031899c677d6e8ac5191e8ce37fc78e4246ed8f420c0d9b7544957ccd",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/arm64-page-tables/05-table-lifetime.svg",
+      "sha256": "53173cd376fbcc68746002681d706caa282a7ac5c03dc885a9862ea00f18baaa",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-faults/04-work-contract.svg",
+      "sha256": "2fa94d3be42a27914eed7091434f380e0f4fe1c1bf75edf3defbee92250939d4",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-faults/01-decision.svg",
+      "sha256": "09615d3dddb4a9a048d249ab9ec6ca193d0d811c36b873c49bdbb0edb6463262",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-faults/02-anonymous-cow.svg",
+      "sha256": "a4a64aef20136a84eb894fddaf88e66dcda7fdaf8d7b1d171fc2d323ad55e056",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-faults/03-retry-lock.svg",
+      "sha256": "78c64206006427c488014ecd2ba51b5ddaf3b80acd27cc1cddaec5e2b955a6ab",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-cache/01-objects.svg",
+      "sha256": "69b54f406b8b0e309fc92ae685de974d088b50033fe680d4f50b0923e6fd433d",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-cache/04-block-write.svg",
+      "sha256": "233aa4d2ab6392b3ec97ebe68c9aeac82bed7043d7cad9a963f87cb000b9007e",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-cache/02-writeback.svg",
+      "sha256": "61b0b8ec66e3fbb63e8a266e883480d97e3f44015b0a1c8e21db079d761fcd31",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-cache/03-throttle.svg",
+      "sha256": "4c9cd09468669b9b078ac6c33d786fd6aca251d4f1eb3a3b3fcab604904633f3",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/page-cache/05-rate-feedback.svg",
+      "sha256": "7ad977968103a752f523c89a0e811aa3eb232bce74040cc2d6e9150fe7e4e281",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/reclaim/01-scope.svg",
+      "sha256": "bd2e499b60026d984e5a6f54fb61cdb5a79076773301b6a45029f75b92977f07",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/reclaim/04-generation-lists.svg",
+      "sha256": "e3f217ef2cbaabd1fd9ef10e46bba3808b86a5ba09ef3edfd5897e1ce3b9f95a",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/reclaim/03-swap.svg",
+      "sha256": "e38cb7cc10da87fe1c3970c50ebdabb31236a6c78c708d91f859548a7fea2960",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/migration/01-layout.svg",
+      "sha256": "9b0fbaf6cf3b73b36d75486bb440144b03e7b986923200eae32547690919bdb3",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/migration/02-transfer.svg",
+      "sha256": "5c0363cb705f546cba46ddf0dfe8a9f5be5dc51731044a486ff29c0ed18c2fa7",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/migration/04-scanners.svg",
+      "sha256": "23c95009dbadcb71349e06953a25169f242637d0c8010847f5afa07319cd20f0",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/migration/03-batch.svg",
+      "sha256": "0673637b8380e32a52b4d8cde5b75ee2531d7a4648b2da5ee52078499d4db4ec",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/lifetime/01-relations.svg",
+      "sha256": "10d7f0c0a5ebf5e20e0791c7f5eccbc54c002415ad8c77c33a60005cd148a25a",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/lifetime/02-rmap.svg",
+      "sha256": "2eb50c0fb7c56daee87f4fc4ffafb51213cbbe2709d27dd26b6f0cab7995c1d3",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/lifetime/04-anon-family.svg",
+      "sha256": "2eea1d9b52dd4a8270aa19d10a14d43ae344336d5f7f432736f36f9ddab7e99f",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/lifetime/03-pin.svg",
+      "sha256": "bbde6d51cecd58d64a0da5984ffce7223abb2d8432be8d3f604415155fc7f29d",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/memcg/01-accounting.svg",
+      "sha256": "640f850a1e7e0a4b41cc52b21d6fedcefe659dc983a149e3b6ea68837a8c9b19",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/memcg/02-charge.svg",
+      "sha256": "6787b68c2a124c6709cd2c134242e29441693c37bb88e4a0ec3f26dd26cfaffd",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/memcg/04-stock-owners.svg",
+      "sha256": "6974911a797ef63ba9f64b5e3e00e729dda8cf74323fb6fc5f8d726203aaa395",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/memcg/05-protection-shares.svg",
+      "sha256": "39f488d9a0447c8b3bcf3f9c8ae205dfccb828e7e0675097c80dd0f52b4e79c6",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/memcg/03-oom.svg",
+      "sha256": "b3c7ab58bf2876796b0e2ca157ccd9a224c7bc3014202bc2c1b54f09d5d4d998",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/numa/01-selection.svg",
+      "sha256": "8b7e6139c79ed1a9dddb7605e77f69a8d862ab896c2bee7456c64f7a5c086854",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/numa/02-changes.svg",
+      "sha256": "ce504e91f5048e72a18dabbcc54272d95b18ad65ba416b6d90ec283a93db82e1",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/numa/03-balancing.svg",
+      "sha256": "94c60fca414be9f0bfb620b00dec458ce2f0c1a41f31ef6c5af4d37fc677bcfd",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/numa/04-cpupid-history.svg",
+      "sha256": "82b5632c319549e105eaef0953c536c0e10274ededaff65c8328cdaf48efcb9e",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/observability/01-evidence.svg",
+      "sha256": "e152c2fa0f6bfe922243b68940f6062e4d507731f8e2c91ab31e2cb3ef69cb9e",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/observability/04-stat-pipeline.svg",
+      "sha256": "96eea6c337a7f03af19220b6618bdd6c6ec56aeda8056202716b39dfce0ad1a6",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/observability/02-allocation.svg",
+      "sha256": "bd12881ec530d34da17c7a95e437e4652ccefa72346c5126ee4f69729a37c42d",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/observability/05-psi-weights.svg",
+      "sha256": "437cf3327fcfadc1cebc190f7b34e9d4e744708c24fc48280dcaa139eb029eed",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    },
+    {
+      "file": "images/observability/03-damon.svg",
+      "sha256": "cf8566d4ffffbc5c45548ccc49f6d9dbf567e308fc6e69478806b3a520d3a1ae",
+      "xmlError": false,
+      "outside": [],
+      "overlap": [],
+      "crossings": [],
+      "compoundArrowPaths": []
+    }
+  ],
+  "failures": []
+}

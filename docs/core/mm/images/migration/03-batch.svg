@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="650" viewBox="0 0 1120 650" role="img" aria-labelledby="title desc">
+<title id="title">批次源列表和目的池的成员变化</title><desc id="desc">三普通基本页源A/B/C和目的Q0/Q1/Q2。A/B成功目的交付，C失败后Q2回freepages，未成功源经folios/ret_folios回调用者from。随后C归队，Q2释放。表中计数是目的池成员数，不是全部空闲页；成功2返回未迁移1。</desc>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.line{stroke:#9babb4;stroke-width:1}.ok{fill:#e6f4ef}.pending{fill:#f9eaf0}</style>
+<rect width="1120" height="650" fill="#fff"/><text x="32" y="40" class="h">源工作集合、freepages池与已交付目的逐步分开</text>
+<text x="32" y="86">阶段</text><text x="310" y="86">源集合</text><text x="535" y="86">freepages / nr_freepages</text><text x="875" y="86">已交付目的</text>
+<path d="M32 104H1088" class="line"/>
+<text x="32" y="146">初态，目的补充</text><text x="310" y="146">A → B → C</text><text x="535" y="146">Q0 → Q1 → Q2 / 3</text><text x="875" y="146">无</text>
+<path d="M32 174H1088" class="line"/>
+<rect x="32" y="180" width="1056" height="62" class="ok"/><text x="32" y="218">A取Q0并成功</text><text x="310" y="218">B → C</text><text x="535" y="218">Q1 → Q2 / 2</text><text x="875" y="218">Q0</text>
+<rect x="32" y="254" width="1056" height="62" class="ok"/><text x="32" y="292">B取Q1并成功</text><text x="310" y="292">C</text><text x="535" y="292">Q2 / 1</text><text x="875" y="292">Q0 / Q1</text>
+<rect x="32" y="328" width="1056" height="62" class="pending"/><text x="32" y="366">C取Q2后失败</text><text x="310" y="366">C待重试/返回</text><text x="535" y="366">先空0，Q2回池1</text><text x="875" y="366">不含Q2</text>
+<path d="M32 410H1088" class="line"/>
+<text x="32" y="450">函数出口</text><text x="310" y="450">调用者from含C</text><text x="535" y="450">Q2 / 1</text><text x="875" y="450">Q0 / Q1</text>
+<text x="32" y="506">调用者收尾</text><text x="310" y="506">putback C</text><text x="535" y="506">release Q2 / 0</text><text x="875" y="506">新关系继续持有</text>
+<text x="32" y="566" class="s">批内-EAGAIN留folios重试，永久失败到ret_folios；出口把剩余源接回from。</text>
+<text x="32" y="612" class="s">本例succeeded=2、未迁移返回1；大folio返回计数和负错误边界另见正文。</text>
+</svg>

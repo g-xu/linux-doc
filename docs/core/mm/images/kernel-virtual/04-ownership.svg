@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="550" viewBox="0 0 960 550" role="img" aria-labelledby="title desc">
+  <title id="title">三种虚拟映射的后备所有权</title>
+  <desc id="desc">vmalloc内部取得并管理后备页。普通vmap借用页，调用者保持页寿命并用vunmap。VM_MAP_PUT_PAGES只在成功后转交数组与每页一引用，用vfree；失败仍由调用者清理。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+  <rect width="960" height="550" fill="#fff"/>
+  <text x="28" y="36" class="h">连续 VA 相似，不代表相同清理责任</text>
+  <rect x="25" y="74" width="290" height="203" fill="#e6f4ef" class="b"/>
+  <text x="47" y="108" class="h">vmalloc</text><text x="47" y="147">内部申请页和数组</text><text x="47" y="184">映射管理持有后备</text><text x="47" y="221">成功返回 VA</text><text x="47" y="255" class="s">调用者不另持原数组来清理</text>
+  <rect x="335" y="74" width="290" height="203" fill="#eaf1fb" class="b"/>
+  <text x="357" y="108" class="h">普通 vmap</text><text x="357" y="147">调用者提供页序列</text><text x="357" y="184">不自动给页增加引用</text><text x="357" y="221">调用者维持后备寿命</text><text x="357" y="255" class="s">数组和页引用分开管理</text>
+  <rect x="645" y="74" width="290" height="203" fill="#fff0e7" class="b"/>
+  <text x="667" y="108" class="h">转交所有权 vmap</text><text x="667" y="147" class="s">VM_MAP_PUT_PAGES</text><text x="667" y="184">成功后：数组 + 每页一引用</text><text x="667" y="221">交给映射管理</text><text x="667" y="255" class="s">失败：仍由调用者清理</text>
+  <path class="ar" d="M170 277V329"/><path class="ar" d="M480 277V329"/><path class="ar" d="M790 277V329"/>
+  <rect x="25" y="329" width="290" height="110" fill="#e6f4ef" class="b"/>
+  <text x="47" y="366" class="h">vfree</text><text x="47" y="402">撤映射 + 处理后备 / 数组</text>
+  <rect x="335" y="329" width="290" height="110" fill="#eaf1fb" class="b"/>
+  <text x="357" y="366" class="h">vunmap</text><text x="357" y="402">只撤映射，页由调用者处理</text>
+  <rect x="645" y="329" width="290" height="110" fill="#fff0e7" class="b"/>
+  <text x="667" y="366" class="h">vfree</text><text x="667" y="402">不重复释放已转交资源</text>
+  <text x="28" y="487" class="s">三者都先结束业务访问；页引用丢掉不必等于物理页立刻回到页分配器。</text>
+  <text x="28" y="525" class="s">栈数组只可用于适用借用方式，不能交给要求可释放数组的所有权转移变体。</text>
+</svg>

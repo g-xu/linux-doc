@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="672" viewBox="0 0 1120 672">
+<title>anon_vma的候选树与同一VMA的关联链</title>
+<desc>无复用优化的fork/COW模型。P匿名来源为Av0，Q为Av1，偏移均101。Av0候选树含C_A0和C_B0，Av1树含C_B1；两个B关联指同一子VMA，chain同时链接各自rb_root及VMA关联列表。Av1的root和parent是Av0，共享家族锁，不合并候选树。实际A项P、B项Q仍要PTL核查。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#506574"/></marker></defs>
+<style>text{font-family:Arial,"Microsoft YaHei",sans-serif;font-size:18px;fill:#23343e}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{fill:#f0f6f6;stroke:#7d929f;stroke-width:1.5}.arrow{fill:none;stroke:#506574;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="1120" height="672" fill="white"/>
+<text x="32" y="40" class="h">子COW后：候选祖先关联仍保留，但实际PTE已指Q</text>
+<rect x="32" y="80" width="460" height="102" rx="4" class="b"/>
+<text x="50" y="114">P来源 → Av0，逻辑index=101</text><text x="50" y="152">Av0.rb_root：祖先候选索引</text>
+<rect x="640" y="80" width="448" height="102" rx="4" class="b"/>
+<text x="658" y="114">Q来源 → Av1，逻辑index=101</text><text x="658" y="152">Av1.rb_root：子新页候选索引</text>
+<path d="M140 182 V250" class="arrow"/><path d="M375 182 V250" class="arrow"/><path d="M885 182 V250" class="arrow"/>
+<rect x="32" y="250" width="216" height="96" rx="4" class="b"/><text x="50" y="284">chain C_A0</text><text x="50" y="324" class="s">anon_vma=Av0，vma=A</text>
+<rect x="280" y="250" width="216" height="96" rx="4" class="b"/><text x="298" y="284">chain C_B0</text><text x="298" y="324" class="s">anon_vma=Av0，vma=B</text>
+<rect x="776" y="250" width="216" height="96" rx="4" class="b"/><text x="794" y="284">chain C_B1</text><text x="794" y="324" class="s">anon_vma=Av1，vma=B</text>
+<path d="M140 346 V430" class="arrow"/><path d="M375 346 V430" class="arrow"/><path d="M885 346 V430" class="arrow"/>
+<text x="35" y="394" class="s">关联同一A</text><text x="558" y="394" class="s">两条chain指同一个B</text>
+<rect x="32" y="430" width="216" height="102" rx="4" class="b"/><text x="50" y="464">父VMA A</text><text x="50" y="506" class="s">真实XA+S项 → P</text>
+<rect x="280" y="430" width="808" height="102" rx="4" class="b"/><text x="298" y="464">子VMA B：same_vma关联组织含 C_B0 / C_B1</text><text x="298" y="506" class="s">真实XB+S项 → Q；查P遇到B仍只是候选，PTL下核项才能排除</text>
+<text x="32" y="578">Av1.parent / root = Av0；共享Av0的rwsem，但候选树仍分属Av0 / Av1。</text>
+<text x="32" y="624" class="s">假设A/B vm_pgoff=100、页大小S，101对应起点+S；chain不是数据页，图非全部fork优化。</text>
+</svg>

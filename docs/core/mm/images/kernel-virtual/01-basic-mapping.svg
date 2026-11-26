@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="600" viewBox="0 0 920 600" role="img" aria-labelledby="title desc">
+  <title id="title">连续虚拟地址对应分散物理页</title>
+  <desc id="desc">三个连续虚拟基本页按页数组映射到PFN4、19、8。第四个guard只保留地址空间，不设置数据映射。箭头表示映射，数据页没有移动或复制。跨页偏移需重新选择对应PFN。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+  <rect width="920" height="600" fill="#fff"/>
+  <text x="28" y="36" class="h">虚拟地址相邻，物理页不必相邻</text>
+  <text x="28" y="70" class="s">P 为基本页大小；V 为合法范围的示意基址，图不指定 arm64 实际地址。</text>
+  <text x="28" y="121" class="h">虚拟范围：三个数据页 + 一页 guard 地址空间</text>
+  <rect x="30" y="148" width="200" height="85" fill="#e6f4ef" class="b"/>
+  <rect x="245" y="148" width="200" height="85" fill="#fff0e7" class="b"/>
+  <rect x="460" y="148" width="200" height="85" fill="#eaf1fb" class="b"/>
+  <rect x="675" y="148" width="215" height="85" fill="#eef1f4" class="b"/>
+  <text x="130" y="182" text-anchor="middle">[V, V+P)</text><text x="130" y="214" text-anchor="middle">数据映射 0</text>
+  <text x="345" y="182" text-anchor="middle">[V+P, V+2P)</text><text x="345" y="214" text-anchor="middle">数据映射 1</text>
+  <text x="560" y="182" text-anchor="middle">[V+2P, V+3P)</text><text x="560" y="214" text-anchor="middle">数据映射 2</text>
+  <text x="782" y="182" text-anchor="middle">[V+3P, V+4P)</text><text x="782" y="214" text-anchor="middle">guard：无数据后备</text>
+  <path class="ar" d="M130 233V352"/><path class="ar" d="M345 233V352"/><path class="ar" d="M560 233V352"/>
+  <text x="150" y="289" class="s">页表关系</text><text x="693" y="293" class="s">保留 VA，不映射数据页</text>
+  <rect x="30" y="352" width="200" height="89" fill="#e6f4ef" class="b"/>
+  <rect x="245" y="352" width="200" height="89" fill="#fff0e7" class="b"/>
+  <rect x="460" y="352" width="200" height="89" fill="#eaf1fb" class="b"/>
+  <text x="130" y="387" text-anchor="middle" class="h">PFN 4</text><text x="130" y="421" text-anchor="middle">物理页 P4</text>
+  <text x="345" y="387" text-anchor="middle" class="h">PFN 19</text><text x="345" y="421" text-anchor="middle">物理页 P19</text>
+  <text x="560" y="387" text-anchor="middle" class="h">PFN 8</text><text x="560" y="421" text-anchor="middle">物理页 P8</text>
+  <text x="28" y="482" class="s">物理块按页数组顺序展示，不表示相邻物理地址；没有复制或搬移内容。</text>
+  <text x="28" y="531" class="h">V+P-1 → 5P-1；下一字节 V+P → 19P</text>
+  <text x="28" y="569" class="s">虚拟偏移跨过页边界时换用下一项映射，不能线性递增首物理地址。</text>
+</svg>

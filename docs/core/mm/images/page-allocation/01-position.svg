@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650" viewBox="0 0 1100 650" role="img" aria-labelledby="title desc">
+  <title id="title">物理页分配器的职责与交接</title>
+  <desc id="desc">内核对象、用户数据、页缓存和页表向分配器提出需求。分配器取得普通物理资源，按条件协调压力处理，向调用者交付页块而非用户映射或设备地址。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.n{stroke:#bdcbd3;stroke-width:1.5;rx:6}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1100" height="650" fill="#fff"/>
+  <text x="35" y="38" class="h">页供给集中管理，使用语义由调用者继续承担</text>
+  <rect x="35" y="80" width="300" height="96" class="n" fill="#fff1dc"/>
+  <text x="185" y="116" text-anchor="middle">内核对象与虚拟空间</text>
+  <text x="185" y="148" text-anchor="middle" class="s">缓存扩展 / 后备页需求</text>
+  <rect x="400" y="80" width="300" height="96" class="n" fill="#e8f0fa"/>
+  <text x="550" y="116" text-anchor="middle">用户数据与缺页路径</text>
+  <text x="550" y="148" text-anchor="middle" class="s">按需取得数据页</text>
+  <rect x="765" y="80" width="300" height="96" class="n" fill="#e8f0fa"/>
+  <text x="915" y="116" text-anchor="middle">页缓存与页表等</text>
+  <text x="915" y="148" text-anchor="middle" class="s">各自维护后续状态</text>
+  <path d="M185 176V275" class="e"/>
+  <path d="M550 176V275" class="e"/>
+  <path d="M915 176V275" class="e"/>
+  <text x="203" y="225" class="s">数量 / 行为约束</text>
+  <text x="568" y="225" class="s">位置 / 用途约束</text>
+  <text x="933" y="225" class="s">调用与释放契约</text>
+  <rect x="35" y="280" width="1030" height="106" class="n" fill="#e2f2ec"/>
+  <text x="550" y="320" text-anchor="middle">物理页分配器：候选资源 + Buddy / PCP + 水位与策略</text>
+  <text x="550" y="354" text-anchor="middle" class="s">成功交付首页描述符及连续页块；不自动建立用户映射、文件内容或 DMA 地址</text>
+  <path d="M185 490V391" class="e"/>
+  <text x="204" y="445" class="s">可交付空闲资源</text>
+  <path d="M550 391V490" class="e"/>
+  <text x="568" y="445" class="s">作用于请求与交付</text>
+  <path d="M870 391V490" class="e"/>
+  <path d="M965 490V391" class="e"/>
+  <text x="810" y="445" class="s" text-anchor="end">按条件请求</text>
+  <text x="984" y="445" class="s">改善供给</text>
+  <rect x="35" y="495" width="300" height="96" class="n" fill="#e2f2ec"/>
+  <text x="185" y="532" text-anchor="middle">Node / Zone</text>
+  <text x="185" y="564" text-anchor="middle" class="s">已初始化的普通资源</text>
+  <rect x="400" y="495" width="300" height="96" class="n" fill="#f8edf0"/>
+  <text x="550" y="532" text-anchor="middle">位置与资源控制</text>
+  <text x="550" y="564" text-anchor="middle" class="s">NUMA / cpuset / 适用 memcg</text>
+  <rect x="765" y="495" width="300" height="96" class="n" fill="#fff1dc"/>
+  <text x="915" y="532" text-anchor="middle">回收 / 规整 / OOM</text>
+  <text x="915" y="564" text-anchor="middle" class="s">独立机制，不是固定必经步骤</text>
+  <text x="35" y="626" class="s">归还前必须结束相关使用；页分配器不替使用者解决共享、异步访问或设备寿命。</text>
+</svg>

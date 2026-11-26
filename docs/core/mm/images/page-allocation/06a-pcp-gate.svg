@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="740" viewBox="0 0 1120 740" role="img" aria-labelledby="title desc">
+  <title id="title">PCP 有高阶块仍不能绕过首次水位检查</title>
+  <desc id="desc">简化稳定场景中 Buddy 统计有 100 页，但只有低阶块；PCP 有兼容 order-2 块，count 为 4。数量通过但 Buddy 高阶检查失败。适用排空后，Buddy 统计为 104 并出现 order-2 块，才可能通过两项检查。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}.n{stroke:#bdcbd3;stroke-width:1.5;rx:6}</style>
+  </defs>
+  <rect width="1120" height="740" fill="#fff"/>
+  <text x="35" y="38" class="h">一般候选路径：水位 / 高阶检查在 PCP 取页之前</text>
+  <text x="35" y="80" class="s">order = 2；mark = 80；reserve = 16。无额外扣除、特殊保留覆盖、节点回收或并发。</text>
+  <rect x="35" y="120" width="470" height="220" class="n" fill="#fff1dc"/>
+  <text x="270" y="162" text-anchor="middle">排空前：Buddy 一侧</text>
+  <text x="270" y="207" text-anchor="middle">NR_FREE_PAGES = 100</text>
+  <text x="270" y="253" text-anchor="middle">只有 order-0 / 1 空闲块</text>
+  <text x="270" y="300" text-anchor="middle" class="s">允许类别的 free_area[2…] 为空</text>
+  <path d="M505 230H610" class="e"/>
+  <text x="560" y="211" text-anchor="middle" class="s">drain</text>
+  <rect x="615" y="120" width="470" height="220" class="n" fill="#e2f2ec"/>
+  <text x="850" y="162" text-anchor="middle">适用排空后：Buddy 一侧</text>
+  <text x="850" y="207" text-anchor="middle">NR_FREE_PAGES = 104</text>
+  <text x="850" y="253" text-anchor="middle">加入兼容 order-2 块</text>
+  <text x="850" y="300" text-anchor="middle" class="s">本例 [8, 12) 转入 free_area[2]</text>
+  <rect x="35" y="375" width="470" height="100" class="n" fill="#e8f0fa"/>
+  <text x="270" y="413" text-anchor="middle">PCP：count = 4</text>
+  <text x="270" y="447" text-anchor="middle" class="s">本已有兼容 [8, 12) 块，但未进 Buddy 口径</text>
+  <rect x="615" y="375" width="470" height="100" class="n" fill="#e8f0fa"/>
+  <text x="850" y="413" text-anchor="middle">PCP：count = 0</text>
+  <text x="850" y="447" text-anchor="middle" class="s">该块回流；没有凭空新增物理内存</text>
+  <rect x="35" y="515" width="470" height="118" class="n" fill="#f8edf0"/>
+  <text x="270" y="550" text-anchor="middle">数量：97 &gt; 96，通过</text>
+  <text x="270" y="588" text-anchor="middle">Buddy 高阶列表：失败</text>
+  <text x="270" y="616" text-anchor="middle" class="s">首次跳过该 Zone，不先绕到 PCP</text>
+  <rect x="615" y="515" width="470" height="118" class="n" fill="#e2f2ec"/>
+  <text x="850" y="550" text-anchor="middle">数量：101 &gt; 96，通过</text>
+  <text x="850" y="588" text-anchor="middle">Buddy 高阶列表：有候选</text>
+  <text x="850" y="616" text-anchor="middle" class="s">其他条件不变时，才可能继续取页</text>
+  <text x="35" y="682" class="s">图不承诺每次失败立即排空；drain 的触发由适用慢路径或其他工作决定。</text>
+  <text x="35" y="718" class="s">使用稳定统计的教学模型；实际局部统计累计 / 刷新可能使采样值有延迟。</text>
+</svg>

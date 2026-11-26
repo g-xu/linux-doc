@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="430" viewBox="0 0 1000 430" role="img" aria-labelledby="t d">
+<title id="t">迁移前、中、后的映射关系</title><desc id="d">同一用户地址X原映射源页P，协调期间通过迁移状态等协议等待，成功后映射目的Q。失败需保留或恢复合法旧状态，不能释放仍被使用的P。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker><style>text{font:20px "Microsoft YaHei",sans-serif;fill:#24323c}.h{font-size:26px;font-weight:bold}.s{font-size:17px}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style></defs>
+<rect width="1000" height="430" fill="white"/><text x="30" y="38" class="h">地址不变，后备与使用关系经过受控交接</text>
+<rect x="30" y="100" width="250" height="125" rx="6" fill="#e8f0fa"/><rect x="375" y="100" width="250" height="125" rx="6" fill="#fff1dc"/><rect x="720" y="100" width="250" height="125" rx="6" fill="#e2f2ec"/>
+<text x="155" y="142" text-anchor="middle">之前：X → P</text><text x="155" y="182" text-anchor="middle" class="s">P提供有效数据</text><text x="500" y="142" text-anchor="middle">协调：迁移状态 / 等待</text><text x="500" y="182" text-anchor="middle" class="s">不暴露未完成Q</text><text x="845" y="142" text-anchor="middle">成功：X → Q</text><text x="845" y="182" text-anchor="middle" class="s">转移数据、索引与引用</text>
+<path d="M280 162H370" class="e"/><path d="M625 162H715" class="e"/>
+<text x="30" y="304">成功后满足条件才可归还P；失败要保留/恢复源状态，清理未交付目的资源。</text>
+<text x="30" y="359" class="s">普通用户映射的逻辑阶段；不同页类型、pin、回写、大页与设备状态有各自条件。</text>
+</svg>

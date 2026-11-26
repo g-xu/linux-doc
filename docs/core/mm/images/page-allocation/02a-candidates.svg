@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="710" viewBox="0 0 1120 710" role="img" aria-labelledby="title desc">
+  <title id="title">候选顺序、区域上界与节点筛选</title>
+  <desc id="desc">假设 zonelist 顺序为 N0 的 MOVABLE、NORMAL、DMA32，再是 N1 的对应区域。NORMAL 上界排除两个 MOVABLE。进一步只允许 N1 后保留 N1 NORMAL 和 DMA32。ThisNode 另改变是否有跨节点候选。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}.n{stroke:#bdcbd3;stroke-width:1.5;rx:6}</style>
+  </defs>
+  <rect width="1120" height="710" fill="#fff"/>
+  <text x="35" y="38" class="h">先确定顺序，再按区域上界与允许节点筛选</text>
+  <text x="35" y="80" class="s">示例假设两个节点及这些区域存在，普通约束稳定，无特殊保留覆盖。</text>
+  <text x="35" y="124">zonelist 顺序</text>
+  <text x="500" y="124">上界 NORMAL</text>
+  <text x="830" y="124">再仅允许 N1</text>
+  <rect x="35" y="150" width="395" height="54" class="n" fill="#f2f6f8"/>
+  <rect x="35" y="222" width="395" height="54" class="n" fill="#e8f0fa"/>
+  <rect x="35" y="294" width="395" height="54" class="n" fill="#fff1dc"/>
+  <rect x="35" y="366" width="395" height="54" class="n" fill="#f2f6f8"/>
+  <rect x="35" y="438" width="395" height="54" class="n" fill="#e8f0fa"/>
+  <rect x="35" y="510" width="395" height="54" class="n" fill="#fff1dc"/>
+  <text x="58" y="185">1. N0 / ZONE_MOVABLE</text>
+  <text x="58" y="257">2. N0 / ZONE_NORMAL</text>
+  <text x="58" y="329">3. N0 / ZONE_DMA32</text>
+  <text x="58" y="401">4. N1 / ZONE_MOVABLE</text>
+  <text x="58" y="473">5. N1 / ZONE_NORMAL</text>
+  <text x="58" y="545">6. N1 / ZONE_DMA32</text>
+  <path d="M430 177H495" class="e"/><path d="M430 249H495" class="e"/><path d="M430 321H495" class="e"/><path d="M430 393H495" class="e"/><path d="M430 465H495" class="e"/><path d="M430 537H495" class="e"/>
+  <rect x="500" y="150" width="260" height="54" class="n" fill="#f2f6f8"/>
+  <rect x="500" y="222" width="260" height="54" class="n" fill="#e2f2ec"/>
+  <rect x="500" y="294" width="260" height="54" class="n" fill="#e2f2ec"/>
+  <rect x="500" y="366" width="260" height="54" class="n" fill="#f2f6f8"/>
+  <rect x="500" y="438" width="260" height="54" class="n" fill="#e2f2ec"/>
+  <rect x="500" y="510" width="260" height="54" class="n" fill="#e2f2ec"/>
+  <text x="630" y="185" text-anchor="middle">高于上界，跳过</text>
+  <text x="630" y="257" text-anchor="middle">区域允许</text>
+  <text x="630" y="329" text-anchor="middle">较低区域仍允许</text>
+  <text x="630" y="401" text-anchor="middle">高于上界，跳过</text>
+  <text x="630" y="473" text-anchor="middle">区域允许</text>
+  <text x="630" y="545" text-anchor="middle">较低区域仍允许</text>
+  <path d="M760 177H825" class="e"/><path d="M760 249H825" class="e"/><path d="M760 321H825" class="e"/><path d="M760 393H825" class="e"/><path d="M760 465H825" class="e"/><path d="M760 537H825" class="e"/>
+  <rect x="830" y="150" width="255" height="54" class="n" fill="#f2f6f8"/>
+  <rect x="830" y="222" width="255" height="54" class="n" fill="#f2f6f8"/>
+  <rect x="830" y="294" width="255" height="54" class="n" fill="#f2f6f8"/>
+  <rect x="830" y="366" width="255" height="54" class="n" fill="#f2f6f8"/>
+  <rect x="830" y="438" width="255" height="54" class="n" fill="#e2f2ec"/>
+  <rect x="830" y="510" width="255" height="54" class="n" fill="#e2f2ec"/>
+  <text x="957" y="185" text-anchor="middle">已因上界排除</text>
+  <text x="957" y="257" text-anchor="middle">N0 不在掩码，跳过</text>
+  <text x="957" y="329" text-anchor="middle">N0 不在掩码，跳过</text>
+  <text x="957" y="401" text-anchor="middle">已因上界排除</text>
+  <text x="957" y="473" text-anchor="middle">候选 1：N1 NORMAL</text>
+  <text x="957" y="545" text-anchor="middle">候选 2：N1 DMA32</text>
+  <text x="35" y="614" class="s">若仅首选 N0 而允许回退，仍可继续 N1；__GFP_THISNODE 选择无跨节点回退列表。</text>
+  <text x="35" y="652" class="s">GFP_KERNEL 与单加 __GFP_MOVABLE 的上界均是 NORMAL；流动性列表可以不同。</text>
+  <text x="35" y="688" class="s">筛选后仍需水位、类型与取页判断；不代表这些区域在每台 arm64 上都实际存在。</text>
+</svg>

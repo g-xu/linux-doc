@@ -1,1 +1,20 @@
 title: 内存管理
+nav:
+  - index.md
+  - 00-overview.md
+  - 01-page-allocation.md
+  - 02-physical-memory.md
+  - 03-kernel-objects.md
+  - 04-kernel-virtual.md
+  - 05-process-address.md
+  - 06-arm64-page-tables.md
+  - 07-page-faults.md
+  - 08-page-cache-writeback.md
+  - 09-reclaim-swap.md
+  - 10-migration-compaction.md
+  - 11-page-lifetime-rmap.md
+  - 12-memcg-oom.md
+  - 13-numa-policy.md
+  - 14-observability-extensions.md
+  - reference-reading.md
+  - old

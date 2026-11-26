@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470" role="img" aria-labelledby="title desc">
+<title id="title">物理位置和控制层次不同维度</title><desc id="desc">普通非根子组A与非根父T的模型，F在Node1但可收费A并计入T。其他组B映射不重复收费，stock非物理页池。全局控制根的普通folio收费及接口不同，不把其计数当整机完整用量。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="960" height="470" fill="#fff"/><text x="28" y="40" class="h">Node决定位置，memcg决定消耗归属与层次约束</text>
+<rect x="40" y="100" width="320" height="100" fill="#e6f4ef" class="b"/><text x="62" y="138">Node1驻留folio F</text><text x="62" y="176" class="s">不是组A的独占物理分区</text>
+<rect x="570" y="100" width="350" height="100" fill="#eaf1fb" class="b"/><text x="592" y="138">子组A：F收费关联</text><text x="592" y="176" class="s">page_counter / css寿命</text>
+<path class="ar" d="M360 150H570"/><text x="413" y="134" class="s">归属</text>
+<path class="ar" d="M745 200V247"/>
+<rect x="570" y="247" width="350" height="85" fill="#fff0e7" class="b"/><text x="592" y="280">非根父T计入子层用量</text><text x="592" y="313" class="s">父+子current不能重复求和</text>
+<rect x="40" y="247" width="320" height="85" fill="#f1eef7" class="b"/><text x="62" y="280">组B映射同一文件F</text><text x="62" y="313" class="s">RSS可增加，F不重复收费</text>
+<text x="40" y="386">stock缓存预收费额度，不是空闲页；任务移组不使所有既有页即时改归属。</text>
+<text x="40" y="436" class="s">单页共享缓存模型；内核对象/交换另有记账，位置与额度相互独立但共同约束交付。</text>
+</svg>

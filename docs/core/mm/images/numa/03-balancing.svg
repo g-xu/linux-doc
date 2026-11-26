@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+<title id="title">仅非RT可用的自动NUMA平衡</title><desc id="desc">非RT配置及运行准入满足，taskwork还检查策略MOF，默认回退可带标志，显式LOCAL或普通BIND不可一概扫描。hint fault判断页迁移，排除分层及早期放宽时前后采样节点不同可拒绝。恢复访问并收集结果、周期选择任务位置。RT=y排除此时序。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="960" height="520" fill="#fff"/><text x="28" y="40" class="h">前提：非RT且配置/运行启用满足；RT=y明确排除</text>
+<rect x="40" y="85" width="880" height="65" fill="#eaf1fb" class="b"/><text x="62" y="125">task_work预算 / vma_policy_mof准入 → 探测保护，不改合法VMA语义</text>
+<path class="ar" d="M480 150V189"/>
+<rect x="40" y="189" width="880" height="75" fill="#fff0e7" class="b"/><text x="62" y="220">N0任务访问N1页 → hinting fault → 判断策略/访问/共享与目的资格</text><text x="62" y="252" class="s">成功迁移或失败恢复原后备访问；不是普通文件I/O判据</text>
+<path class="ar" d="M480 264V303"/>
+<rect x="40" y="303" width="880" height="75" fill="#e6f4ef" class="b"/><text x="62" y="334">task_numa_fault统计 → 历史/组信息 → 周期选择preferred_nid</text><text x="62" y="366" class="s">页面迁移与调度任务迁移是两种动作，共享页不追每次最近访问</text>
+<text x="40" y="437">排除分层/早期放宽后，前后采样节点不同可拒绝迁页；仍恢复合法访问。</text>
+<text x="40" y="486" class="s">静态策略、显式迁移和demotion按自身条件判断，不因排除自动平衡一并排除。</text>
+</svg>

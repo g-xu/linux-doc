@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="530" viewBox="0 0 920 530" role="img" aria-labelledby="title desc">
+  <title id="title">三数据页加guard的范围选择</title>
+  <desc id="desc">普通基本页对齐，虚拟页号表示偏移。free8到11只有三页，不够四页保留长度。free16到24满足要求，从16到20保留，数据映射16到19，guard19到20，余下20到24仍free。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5}.ar{stroke:#475569;stroke-width:2;fill:none;marker-end:url(#a)}</style>
+  <rect width="920" height="530" fill="#fff"/>
+  <text x="28" y="37" class="h">数据需要三页，保留范围却需要四页</text>
+  <text x="28" y="70" class="s">普通基本页对齐；一单位为一页 VA。编号是示意偏移，不是 PFN。</text>
+  <text x="50" y="119" class="h">分配前</text>
+  <rect x="50" y="146" width="150" height="64" fill="#e6f4ef" class="b"/>
+  <rect x="200" y="146" width="250" height="64" fill="#eef1f4" class="b"/>
+  <rect x="450" y="146" width="400" height="64" fill="#e6f4ef" class="b"/>
+  <text x="125" y="184" text-anchor="middle">free：3 页</text><text x="325" y="184" text-anchor="middle">其他用途占用</text><text x="650" y="184" text-anchor="middle">free：8 页</text>
+  <text x="50" y="235">8</text><text x="200" y="235">11</text><text x="450" y="235">16</text><text x="850" y="235">24</text>
+  <text x="50" y="269" class="s">[8,11) 长度不足，不改变</text><text x="450" y="269" class="s">[16,24) 中切出 [16,20)</text>
+  <path class="ar" d="M650 280V315"/>
+  <text x="50" y="325" class="h">分配后</text>
+  <rect x="50" y="349" width="150" height="64" fill="#e6f4ef" class="b"/>
+  <rect x="200" y="349" width="250" height="64" fill="#eef1f4" class="b"/>
+  <rect x="450" y="349" width="150" height="64" fill="#fff0e7" class="b"/>
+  <rect x="600" y="349" width="50" height="64" fill="#f9eaf0" class="b"/>
+  <rect x="650" y="349" width="200" height="64" fill="#e6f4ef" class="b"/>
+  <text x="125" y="388" text-anchor="middle">free：3 页</text><text x="325" y="388" text-anchor="middle">其他用途占用</text><text x="525" y="388" text-anchor="middle">数据：3 页</text>
+  <text x="625" y="388" text-anchor="middle" class="s">保护</text><text x="750" y="388" text-anchor="middle">free：4 页</text>
+  <text x="50" y="440">8</text><text x="200" y="440">11</text><text x="450" y="440">16</text><text x="592" y="440" class="s">19</text><text x="644" y="440" class="s">20</text><text x="850" y="440">24</text>
+  <text x="28" y="484" class="s">保留 VA 为 [16,20)；guard 仅占地址空间，不增加第四个数据页。</text>
+  <text x="28" y="516" class="s">搜索和切分改变虚拟范围组织，不改变数据页的物理位置。</text>
+</svg>

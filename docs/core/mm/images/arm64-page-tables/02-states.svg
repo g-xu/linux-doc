@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="740" viewBox="0 0 940 740" role="img" aria-labelledby="title desc">
+  <title id="title">软件present和硬件valid不同</title><desc id="desc">在正确层级和保护下判别条目。全零为none，非零nonpresent可表示软件状态。present还包括PROT_NONE，该状态valid0不能普通访问。valid后仍要按类型权限访问标志和实际配置判断。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+  <rect width="940" height="740" fill="#fff"/><text x="28" y="36" class="h">非零 ≠ present ≠ valid ≠ 当前可访问</text>
+  <rect x="45" y="82" width="465" height="65" fill="#eef1f4" class="b"/><text x="278" y="121" text-anchor="middle">先确认页表层级、条目类型与读取保护</text>
+  <path class="ar" d="M278 147V184"/><rect x="45" y="184" width="465" height="65" fill="#eaf1fb" class="b"/><text x="278" y="223" text-anchor="middle">全零？pte_none()</text>
+  <rect x="660" y="184" width="245" height="65" fill="#eef1f4" class="b"/><text x="782" y="223" text-anchor="middle">none：尚无映射</text><path class="ar" d="M510 216H660"/><text x="572" y="201" class="s">是</text>
+  <path class="ar" d="M278 249V292"/><text x="294" y="277" class="s">否</text>
+  <rect x="45" y="292" width="465" height="65" fill="#eaf1fb" class="b"/><text x="278" y="332" text-anchor="middle">Linux pte_present()？</text>
+  <rect x="660" y="292" width="245" height="65" fill="#fff0e7" class="b"/><text x="782" y="318" text-anchor="middle">相应软件状态</text><text x="782" y="347" text-anchor="middle" class="s">不可直接解释为数据PA</text>
+  <path class="ar" d="M510 325H660"/><text x="572" y="309" class="s">否</text>
+  <path class="ar" d="M278 357V399"/><text x="294" y="383" class="s">是</text>
+  <rect x="45" y="399" width="465" height="65" fill="#eaf1fb" class="b"/><text x="278" y="439" text-anchor="middle">硬件 pte_valid()？</text>
+  <rect x="660" y="399" width="245" height="65" fill="#f9eaf0" class="b"/><text x="782" y="426" text-anchor="middle">PROT_NONE</text><text x="782" y="454" text-anchor="middle" class="s">present但非valid</text>
+  <path class="ar" d="M510 431H660"/><text x="572" y="416" class="s">否</text>
+  <path class="ar" d="M278 464V506"/><text x="294" y="490" class="s">是</text>
+  <rect x="45" y="506" width="465" height="65" fill="#e6f4ef" class="b"/><text x="278" y="546" text-anchor="middle">类型 / 权限 / AF 及配置能完成允许访问？</text>
+  <rect x="660" y="506" width="245" height="65" fill="#fff0e7" class="b"/><text x="782" y="533" text-anchor="middle">异常或对应处理</text><text x="782" y="561" text-anchor="middle" class="s">不一律表示无物理后备</text>
+  <path class="ar" d="M510 538H660"/><text x="572" y="523" class="s">否</text>
+  <path class="ar" d="M278 571V613"/><rect x="45" y="613" width="465" height="65" fill="#e6f4ef" class="b"/><text x="278" y="653" text-anchor="middle">可以形成适用转换，不自动赋予软件页引用</text>
+  <text x="28" y="719" class="s">普通PTE模型；旧TLB可能另有缓存，读内存项不能代替失效与资源寿命协议。</text>
+</svg>

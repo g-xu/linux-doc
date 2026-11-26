@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="640" viewBox="0 0 900 640" role="img" aria-labelledby="title desc">
+  <title id="title">cache、slab、槽位和业务对象的基本关系</title>
+  <desc id="desc">一个 cache 规定共同布局并管理多个 slab。每个 slab 以一个或多个连续页为后备，划分出多个槽位。槽位是存储区域，不是另一个容器对象；空闲槽位分配后供调用者建立业务实例。图用四槽位缩小示意，不代表真实页大小或容量。</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.box{stroke:#70818c;stroke-width:1.5;rx:5}.arrow{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#arrow)}</style>
+  <rect width="900" height="640" fill="#fff"/>
+  <text x="26" y="36" class="h">先看存储关系：一组后备内存，多个可复用区域</text>
+  <rect x="230" y="65" width="440" height="76" fill="#eef1f4" class="box"/>
+  <text x="450" y="96" text-anchor="middle" class="h">一个对象 cache</text>
+  <text x="450" y="126" text-anchor="middle">规定共同布局，管理多个 slab</text>
+  <path class="arrow" d="M320 141V174H230V200"/>
+  <path class="arrow" d="M580 141V174H670V200"/>
+  <rect x="35" y="200" width="395" height="187" fill="#f8fafb" class="box"/>
+  <text x="57" y="234" class="h">slab S</text><text x="57" y="267" class="s">后备：一个或多个物理连续基本页</text>
+  <rect x="57" y="292" width="80" height="62" fill="#f9eaf0" class="box"/>
+  <rect x="149" y="292" width="80" height="62" fill="#e6f4ef" class="box"/>
+  <rect x="241" y="292" width="80" height="62" fill="#e6f4ef" class="box"/>
+  <rect x="333" y="292" width="75" height="62" fill="#e6f4ef" class="box"/>
+  <text x="97" y="318" text-anchor="middle">槽位 A</text><text x="97" y="344" text-anchor="middle" class="s">对象 X</text>
+  <text x="189" y="318" text-anchor="middle">槽位 B</text><text x="189" y="344" text-anchor="middle" class="s">空闲</text>
+  <text x="281" y="318" text-anchor="middle">槽位 C</text><text x="281" y="344" text-anchor="middle" class="s">空闲</text>
+  <text x="371" y="318" text-anchor="middle">槽位 D</text><text x="371" y="344" text-anchor="middle" class="s">空闲</text>
+  <text x="57" y="375" class="s">四个区域都在 S 的后备内存之中</text>
+  <rect x="470" y="200" width="395" height="187" fill="#f8fafb" class="box"/>
+  <text x="492" y="234" class="h">slab T</text><text x="492" y="267" class="s">另一组后备页，使用同一 cache 布局</text>
+  <rect x="492" y="292" width="80" height="62" fill="#e6f4ef" class="box"/>
+  <rect x="584" y="292" width="80" height="62" fill="#e6f4ef" class="box"/>
+  <rect x="676" y="292" width="80" height="62" fill="#e6f4ef" class="box"/>
+  <rect x="768" y="292" width="75" height="62" fill="#e6f4ef" class="box"/>
+  <text x="532" y="331" text-anchor="middle">空槽位</text><text x="624" y="331" text-anchor="middle">空槽位</text><text x="716" y="331" text-anchor="middle">空槽位</text><text x="805" y="331" text-anchor="middle">空槽位</text>
+  <text x="492" y="375" class="s">S 和 T 是不同 slab，不是对象的副本</text>
+  <text x="35" y="431" class="h">单看槽位 A：位置可复用，业务身份会改变</text>
+  <rect x="35" y="460" width="224" height="81" fill="#e6f4ef" class="box"/>
+  <text x="147" y="492" text-anchor="middle">A 的存储已存在</text><text x="147" y="523" text-anchor="middle">当前空闲</text>
+  <rect x="337" y="460" width="224" height="81" fill="#f9eaf0" class="box"/>
+  <text x="449" y="492" text-anchor="middle">分配并初始化</text><text x="449" y="523" text-anchor="middle">A 承载实例 X</text>
+  <rect x="639" y="460" width="224" height="81" fill="#e6f4ef" class="box"/>
+  <text x="751" y="492" text-anchor="middle">结束使用并归还</text><text x="751" y="523" text-anchor="middle">A 可再次供分配</text>
+  <path class="arrow" d="M259 501H337"/><path class="arrow" d="M561 501H639"/>
+  <text x="35" y="584" class="s">槽位是那段存储区域；对象是调用者在其中建立的实例，不是另外套一层容器。</text>
+  <text x="35" y="617" class="s">四槽位为缩小示意，不指定页大小 / order / 实际容量；特殊延迟复用协议见正文。</text>
+</svg>

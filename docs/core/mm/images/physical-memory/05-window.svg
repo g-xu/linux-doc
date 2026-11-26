@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="570" viewBox="0 0 920 570" role="img" aria-labelledby="title desc">
+  <title id="title">远隔 RAM bank 与线性窗口裁剪</title><desc id="desc">示意单位U，低bank0到4，高bank24到28，窗口容量16。内核25到27，先保护到27再上移基址11覆盖到27，低bank被删除。总RAM容量小不代表地址跨度能放进窗口。</desc>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5}</style>
+  <rect width="920" height="570" fill="#fff"/><text x="28" y="36" class="h">总 RAM 8U，但两端跨度 28U，不能放进 16U 窗口</text><text x="28" y="70" class="s">U 为假设对齐单位，排除其他分支；镜像 [25U,27U)，不是目标机配置。</text>
+  <text x="35" y="120" class="h">初始 bank 与窗口</text>
+  <rect x="50" y="145" width="112" height="50" fill="#e6f4ef" class="b"/><rect x="722" y="145" width="112" height="50" fill="#e6f4ef" class="b"/><rect x="750" y="145" width="56" height="50" fill="#f9eaf0" class="b"/>
+  <text x="106" y="178" text-anchor="middle">低 bank</text><text x="614" y="178" class="s">高 bank →</text>
+  <rect x="50" y="219" width="448" height="50" fill="#eaf1fb" class="b"/><text x="274" y="252" text-anchor="middle">初始窗口 [0,16U)</text>
+  <text x="50" y="296">0</text><text x="490" y="296">16</text><text x="716" y="296">24</text><text x="800" y="296">27</text><text x="837" y="296">28</text>
+  <text x="35" y="346" class="h">保护镜像：高端到 27U，窗口上移，删除低 bank</text>
+  <rect x="50" y="371" width="112" height="50" fill="#eef1f4" class="b"/><text x="106" y="403" text-anchor="middle" class="s">已舍弃</text>
+  <rect x="722" y="371" width="84" height="50" fill="#e6f4ef" class="b"/><rect x="750" y="371" width="56" height="50" fill="#f9eaf0" class="b"/>
+  <rect x="358" y="445" width="448" height="50" fill="#eaf1fb" class="b"/><text x="582" y="477" text-anchor="middle">调整窗口 [11U,27U)</text>
+  <text x="352" y="522">11</text><text x="716" y="522">24</text><text x="800" y="522">27</text>
+  <text x="28" y="556" class="s">粉色为镜像；先以 _end 保护高端，再按剩余高端与对齐计算基址。</text>
+</svg>

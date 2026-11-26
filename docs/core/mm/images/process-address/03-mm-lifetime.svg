@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="620" viewBox="0 0 940 620" role="img" aria-labelledby="title desc">
+  <title id="title">mm使用引用与对象引用不同</title><desc id="desc">两任务共享mm_users2整体贡献mm_count1。另一个mmgrab使count2。两个任务退出users到0并结束地址空间，count仍1保护对象。额外mmdrop后count到0进入对象回收。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+  <rect width="940" height="620" fill="#fff"/><text x="28" y="36" class="h">mm_users 整体贡献一个 mm_count，对象引用不保住映射</text>
+  <rect x="35" y="83" width="390" height="100" fill="#e6f4ef" class="b"/><text x="57" y="118" class="h">两任务共享</text><text x="57" y="157">mm_users=2，贡献对象引用 1</text>
+  <rect x="515" y="83" width="390" height="100" fill="#eaf1fb" class="b"/><text x="537" y="118" class="h">另一个持有者 mmgrab</text><text x="537" y="157">额外对象引用 1，mm_count=2</text>
+  <path class="ar" d="M230 183V240"/><path class="ar" d="M710 183V240"/>
+  <rect x="35" y="240" width="390" height="133" fill="#e6f4ef" class="b"/><text x="57" y="275" class="h">两次使用引用释放</text><text x="57" y="314">mm_users：2 → 1 → 0</text><text x="57" y="351">最后交接结束 VMA / 映射</text>
+  <rect x="515" y="240" width="390" height="133" fill="#eaf1fb" class="b"/><text x="537" y="275" class="h">使用群体丢掉对象引用</text><text x="537" y="314">mm_count：2 → 1</text><text x="537" y="351">对象存在，不代表地址空间还存在</text>
+  <path class="ar" d="M425 308H515"/><text x="452" y="291" class="s">交接</text>
+  <path class="ar" d="M710 373V424"/>
+  <rect x="515" y="424" width="390" height="113" fill="#fff0e7" class="b"/><text x="537" y="459" class="h">额外持有者 mmdrop</text><text x="537" y="498">mm_count：1 → 0，进入对象回收</text>
+  <text x="35" y="466" class="s">重新使用前需取得有效使用引用，</text><text x="35" y="504" class="s">还需保护具体布局；不能复活已退出 mm。</text>
+  <text x="28" y="584" class="s">仅为稳定阶段示意，省略其他引用和具体延后分支；不把零值当作全部工作瞬时完成。</text>
+</svg>

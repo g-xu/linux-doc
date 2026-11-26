@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" role="img" aria-labelledby="title desc">
+<title id="title">普通文件页迁移交接</title><desc id="desc">普通受支持文件来源：隔离P、锁P/Q并撤除映射。预期引用冻结失败发生在索引提交之前，恢复P映射并归还Q。成功路径才冻结P的2到0、把索引提交到锁定Q、解冻P到1，然后复制内容和标记并恢复映射到Q；该选定路径不在提交后走普通失败回退。缓存查找取引用且重验索引，查到Q仍须等待就绪；迁移fault不额外get源引用。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="960" height="560" fill="#fff"/><text x="28" y="40" class="h">索引先转到Q，不表示Q内容已能无锁读取</text>
+<rect x="40" y="82" width="880" height="65" fill="#eaf1fb" class="b"/><text x="62" y="122">初态：X → P，文件索引i → P；隔离P并准备Q</text>
+<path class="ar" d="M480 147V185"/>
+<rect x="40" y="185" width="880" height="75" fill="#fff0e7" class="b"/><text x="62" y="219">锁P/Q → 撤映射，PTE放迁移项 → 检查预期引用</text><text x="62" y="248" class="s">全部撤映射且引用恰为预期2，才允许冻结并提交索引</text>
+<path class="ar" d="M480 260V281H415V325"/><path class="ar" d="M480 281H725V325"/>
+<text x="63" y="310" class="s">冻结成功：进入不可回退的交接</text><text x="552" y="310" class="s">冻结失败：索引仍指P</text>
+<rect x="40" y="325" width="390" height="145" fill="#e6f4ef" class="b"/><text x="62" y="356">P引用2→0，索引i → 锁定Q</text><text x="62" y="385" class="s">P解冻为1；缓存读者等待Q就绪</text><text x="62" y="416">复制内容/标记，X → Q</text><text x="62" y="450" class="s">Q交付管理，最终put结束旧P持有</text>
+<rect x="530" y="325" width="390" height="145" fill="#f9eaf0" class="b"/><text x="552" y="356">提交前失败：X恢复 → P</text><text x="552" y="390">未交付Q返目的池</text><text x="552" y="423" class="s">源P保持合法，重试或归队</text><text x="552" y="453" class="s">不是索引切到Q后直接释放Q</text>
+<text x="40" y="514">全部撤映射后才搬；迁移fault先登记等待再放PTL，不另get源引用。</text>
+<text x="40" y="546" class="s">选定普通受支持来源，非全部设备/大folio/私有buffer的统一锁和计数模型。</text>
+</svg>

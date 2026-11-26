@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="544" viewBox="0 0 1120 544">
+<title>stock预收费余额和实际folio各自持有组状态</title>
+<desc>独立同CPU非根组G模型，批量收费64页额度。F1绑定后stock余额63、F2消费后62，层次计数仍64；排空stock余额计数到2，F1/F2仍关联G并持CSS，最后对象uncharge计数增量到0。stock是额度非物理页池。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#506574"/></marker></defs>
+<style>text{font-family:Arial,"Microsoft YaHei",sans-serif;font-size:18px;fill:#23343e}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{fill:#f0f6f6;stroke:#7d929f;stroke-width:1.5}.arrow{fill:none;stroke:#506574;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="1120" height="544" fill="white"/>
+<text x="32" y="40" class="h">同一组G的计数增量、CPU stock、已收费对象分开变化</text>
+<rect x="32" y="82" width="240" height="312" rx="4" class="b"/>
+<text x="50" y="116">1. F1成功绑定</text><text x="50" y="158">层次新增计数64</text><text x="50" y="204" class="s">stock.cached=G</text><text x="50" y="238" class="s">stock.nr_pages=63</text><text x="50" y="284" class="s">F1收费关联 → G</text><text x="50" y="324" class="s">stock CSS + F1 CSS</text><text x="50" y="364" class="s">不同持有责任</text>
+<rect x="304" y="82" width="240" height="312" rx="4" class="b"/>
+<text x="322" y="116">2. F2消费stock</text><text x="322" y="158">层次仍64</text><text x="322" y="204" class="s">stock.cached=G</text><text x="322" y="238" class="s">stock.nr_pages=62</text><text x="322" y="284" class="s">F1 / F2分别关联G</text><text x="322" y="324" class="s">stock + 两folio CSS</text><text x="322" y="364" class="s">命中不再加层次额度</text>
+<rect x="576" y="82" width="240" height="312" rx="4" class="b"/>
+<text x="594" y="116">3. 排空stock</text><text x="594" y="158">取消余额62，计数2</text><text x="594" y="204" class="s">stock无本组余额</text><text x="594" y="238" class="s">结束stock CSS持有</text><text x="594" y="284" class="s">F1 / F2仍关联G</text><text x="594" y="324" class="s">两folio CSS仍在</text><text x="594" y="364" class="s">排空不解绑对象</text>
+<rect x="848" y="82" width="240" height="312" rx="4" class="b"/>
+<text x="866" y="116">4. F1/F2释放</text><text x="866" y="158">uncharge完成，增量0</text><text x="866" y="204" class="s">无本例stock余额</text><text x="866" y="238" class="s">无本例folio关联</text><text x="866" y="284" class="s">对象CSS分别结束</text><text x="866" y="324" class="s">G仍可有其他使用者</text><text x="866" y="364" class="s">不等于组对象销毁</text>
+<path d="M272 180H304" class="arrow"/><path d="M544 180H576" class="arrow"/><path d="M816 180H848" class="arrow"/>
+<text x="32" y="446">63 / 62是已预收费但尚未绑定的额度，不是独占的实际空闲页。</text>
+<text x="32" y="498" class="s">忽略并发、其他用量和obj stock；临时get_mem_cgroup_from_mm引用另行配对。</text>
+</svg>

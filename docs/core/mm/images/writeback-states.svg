@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="490" viewBox="0 0 1000 490" role="img" aria-labelledby="t d">
+<title id="t">回写中再次脏化的逻辑状态</title><desc id="d">修改后dirty1writeback0，提交后0和1，再次修改为1和1，本轮完成后仍为1和0。没有再次修改且成功时可为0和0。图省略受锁保护的暂态。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker><style>text{font:20px "Microsoft YaHei",sans-serif;fill:#24323c}.h{font-size:26px;font-weight:bold}.s{font-size:17px}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style></defs>
+<rect width="1000" height="490" fill="white"/><text x="30" y="38" class="h">旧回写完成，不能抹掉期间发生的新修改</text>
+<rect x="30" y="90" width="210" height="100" rx="6" fill="#fff1dc"/><rect x="395" y="90" width="210" height="100" rx="6" fill="#e8f0fa"/><rect x="760" y="90" width="210" height="100" rx="6" fill="#fff1dc"/>
+<text x="135" y="126" text-anchor="middle">dirty=1 / wb=0</text><text x="135" y="159" text-anchor="middle" class="s">修改后</text><text x="500" y="126" text-anchor="middle">dirty=0 / wb=1</text><text x="500" y="159" text-anchor="middle" class="s">本轮准备/提交后</text><text x="865" y="126" text-anchor="middle">dirty=1 / wb=1</text><text x="865" y="159" text-anchor="middle" class="s">期间再次修改</text>
+<path d="M240 140H390" class="e"/><path d="M605 140H755" class="e"/><path d="M865 190V290H505" class="e"/>
+<rect x="30" y="250" width="470" height="100" rx="6" fill="#e2f2ec"/><text x="265" y="290" text-anchor="middle">dirty=1 / wb=0</text><text x="265" y="322" text-anchor="middle" class="s">本轮完成，但新修改仍需后续保存</text>
+<text x="30" y="406" class="s">没有再次修改且本轮成功时可为(0,0)；图是稳定阶段模型，不是标志同时原子变化的承诺。</text>
+<text x="30" y="447" class="s">dirty、XArray tag、PTE脏状态与回写完成由实际协议协调，失败另行处理。</text>
+</svg>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470" role="img" aria-labelledby="title desc">
+  <title id="title">80 字节对象的两种槽位布局</title>
+  <desc id="desc">假设 4096 字节基本页、order 0、最终 16 字节对齐，无额外调试。无 constructor 时步长 80，freepointer 在数据偏移 40。带 constructor 时指针移到偏移 80，加对齐后步长 96。</desc>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#70818c;stroke-width:1.5}</style>
+  <rect width="900" height="470" fill="#fff"/>
+  <text x="30" y="36" class="h">业务数据一样大，不代表槽位步长一样大</text>
+  <text x="30" y="69" class="s">假设：PAGE_SIZE=4096，order=0，object_size=80，最终 align=16</text>
+  <text x="30" y="126" class="h">无 constructor：size=80</text>
+  <rect x="40" y="150" width="560" height="68" fill="#e6f4ef" class="b"/>
+  <text x="168" y="190" text-anchor="middle">数据区</text>
+  <rect x="320" y="150" width="56" height="68" fill="#ffe0c8" class="b"/>
+  <text x="40" y="246" class="s">数据区共 80 字节；已归还时偏移 40 用于 freepointer；已分配时属于调用者数据</text>
+  <text x="650" y="170">51 个槽位</text><text x="650" y="205">尾部 16 字节</text>
+  <text x="30" y="302" class="h">带 constructor：size=96</text>
+  <rect x="40" y="326" width="560" height="68" fill="#e6f4ef" class="b"/>
+  <rect x="600" y="326" width="56" height="68" fill="#ffe0c8" class="b"/>
+  <rect x="656" y="326" width="56" height="68" fill="#eaf1fb" class="b"/>
+  <text x="320" y="366" text-anchor="middle">业务数据区：80 字节</text>
+  <text x="748" y="347">42 个槽位</text><text x="748" y="382">尾部 64 字节</text>
+  <text x="40" y="425" class="s">0</text><text x="588" y="425" class="s">80</text><text x="645" y="425" class="s">88</text><text x="702" y="425" class="s">96</text>
+  <text x="390" y="457" class="s">橙色：freepointer 8 字节；蓝色：对齐填充 8 字节</text>
+</svg>

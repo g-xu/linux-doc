@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="480" viewBox="0 0 1000 480" role="img" aria-labelledby="t d">
+<title id="t">memblock 范围减法与交付资格</title><desc id="d">已接受范围 0 到 15 和 24 到 31，保留 2 到 3 及 26，候选共有 21 页。空洞没有变成可交付内存，实际元数据占用还需排除。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker><style>text{font:20px "Microsoft YaHei",sans-serif;fill:#24323c}.h{font-size:26px;font-weight:bold}.s{font-size:17px}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style></defs>
+<rect width="1000" height="480" fill="white"/><text x="30" y="38" class="h">已接受范围 − 保留与不适用范围 → 候选交付</text>
+<rect x="30" y="80" width="460" height="90" rx="6" fill="#e2f2ec"/><text x="260" y="118" text-anchor="middle">memory：[0,16) 与 [24,32)</text><text x="260" y="150" text-anchor="middle" class="s">合计 24 页；中间 [16,24) 是空洞</text>
+<rect x="530" y="80" width="440" height="90" rx="6" fill="#fff1dc"/><text x="750" y="118" text-anchor="middle">reserved：[2,4)、[26,27)</text><text x="750" y="150" text-anchor="middle" class="s">与 memory 重叠，合计 3 页保留</text>
+<path d="M260 170V232H500V270M750 170V232H500" class="e"/>
+<rect x="30" y="280" width="940" height="102" rx="6" fill="#e8f0fa"/><text x="500" y="320" text-anchor="middle">[0,2) · [4,16) · [24,26) · [27,32)</text><text x="500" y="356" text-anchor="middle">模型候选共 21 页，不包含空洞与保留</text>
+<text x="30" y="431" class="s">模型省略 NOMAP、对齐与初始化元数据占用；不是目标机 managed_pages 的测量。</text>
+</svg>

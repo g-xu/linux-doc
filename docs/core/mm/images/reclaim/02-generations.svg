@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="425" viewBox="0 0 960 425" role="img" aria-labelledby="title desc">
+<title id="title">代推进不等同每次访问即时排序</title><desc id="desc">F和G为文件代10，aging提升F到12，eviction可选G但仍受资格约束。高tier可依反馈推进下一代。文件及can_swap匿名窗口最多4代，转移旧10后复用槽给14；can_swap为假的匿名可保留物理槽内容推进逻辑边界，另行协调重叠。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="960" height="425" fill="#fff"/><text x="28" y="38" class="h">aging生产年轻代，eviction消费老代，反馈决定保护</text>
+<rect x="40" y="100" width="260" height="110" fill="#fff0e7" class="b"/><text x="62" y="137">代10：G仍无新证据</text><text x="62" y="175">F原来也在这里</text>
+<rect x="350" y="100" width="260" height="110" fill="#eef1f4" class="b"/><text x="372" y="137">代11：中间代</text><text x="372" y="175">未提升页相对变老</text>
+<rect x="660" y="100" width="260" height="110" fill="#e6f4ef" class="b"/><text x="682" y="137">代12：当前年轻</text><text x="682" y="175">aging发现F访问</text>
+<path class="ar" d="M170 100V76H790V100"/><text x="375" y="68" class="s">F提升：并非每次CPU访问立即搬链表</text>
+<path class="ar" d="M170 210V253"/>
+<rect x="40" y="253" width="880" height="75" fill="#eaf1fb" class="b"/><text x="62" y="285">eviction选择老G → 仍要检查dirty、锁、映射、引用与可恢复后备</text><text x="62" y="313" class="s">类型/tier与refault反馈决定相对代价，老代不等于允许直接释放</text>
+<text x="40" y="375">文件/can_swap例：窗口10–13满，转移旧10再复用槽给14。</text>
+<text x="40" y="408" class="s">受限匿名可保留槽内容推进逻辑边界并协调重叠；环槽内容≠有效代号。</text>
+</svg>

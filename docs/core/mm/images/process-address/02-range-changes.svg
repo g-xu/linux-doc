@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="650" viewBox="0 0 940 650" role="img" aria-labelledby="title desc">
+  <title id="title">同一文件范围的合并、保护与解除</title><desc id="desc">初始4到12读写，文件偏移100。相邻12到16兼容映射偏移108合并。8到10改只读后三个范围，解除9到11后保留4到8读写、8到9只读、11到16读写，VMA数仍3但虚拟页数12到10。</desc>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5}</style>
+  <rect width="940" height="650" fill="#fff"/><text x="28" y="36" class="h">范围数量、虚拟长度和文件偏移不是同一个量</text><text x="28" y="71" class="s">编号为 B 内虚拟页偏移，不是 PFN；相邻映射全部合并条件成立的简化模型。</text>
+  <text x="35" y="133">初始：1 VMA</text><rect x="210" y="104" width="360" height="64" fill="#e6f4ef" class="b"/><text x="390" y="143" text-anchor="middle">RW，pgoff=100</text>
+  <text x="210" y="195" class="s">4</text><text x="561" y="195" class="s">12</text>
+  <text x="35" y="257">合并：1 VMA</text><rect x="210" y="228" width="540" height="64" fill="#e6f4ef" class="b"/><text x="480" y="267" text-anchor="middle">[4,16) RW，pgoff=100</text>
+  <text x="210" y="318" class="s">4</text><text x="741" y="318" class="s">16</text>
+  <text x="35" y="379">保护：3 VMA</text><rect x="210" y="350" width="180" height="64" fill="#e6f4ef" class="b"/><rect x="390" y="350" width="90" height="64" fill="#fff0e7" class="b"/><rect x="480" y="350" width="270" height="64" fill="#e6f4ef" class="b"/>
+  <text x="300" y="389" text-anchor="middle">RW</text><text x="435" y="389" text-anchor="middle">R</text><text x="615" y="389" text-anchor="middle">RW</text>
+  <text x="210" y="440" class="s">4</text><text x="383" y="440" class="s">8</text><text x="471" y="440" class="s">10</text><text x="741" y="440" class="s">16</text>
+  <text x="35" y="500">解除：3 VMA</text><rect x="210" y="471" width="180" height="64" fill="#e6f4ef" class="b"/><rect x="390" y="471" width="45" height="64" fill="#fff0e7" class="b"/><rect x="435" y="471" width="90" height="64" fill="#eef1f4" class="b"/><rect x="525" y="471" width="225" height="64" fill="#e6f4ef" class="b"/>
+  <text x="300" y="510" text-anchor="middle">RW</text><text x="412" y="510" text-anchor="middle">R</text><text x="480" y="510" text-anchor="middle" class="s">空洞</text><text x="637" y="510" text-anchor="middle">RW</text>
+  <text x="210" y="562" class="s">4</text><text x="383" y="562" class="s">8</text><text x="428" y="562" class="s">9</text><text x="516" y="562" class="s">11</text><text x="741" y="562" class="s">16</text>
+  <text x="28" y="609" class="h">最后起点 pgoff：100、104、107；长度 12 → 10 页。</text>
+  <text x="28" y="640" class="s">Maple Tree 表达边界；对应 PTE、TLB 与后备引用按具体过程维护，不由图中矩形替代。</text>
+</svg>

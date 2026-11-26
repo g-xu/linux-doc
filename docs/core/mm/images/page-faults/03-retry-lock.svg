@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="720" viewBox="0 0 1000 720" role="img" aria-labelledby="title desc">
+  <title id="title">普通arm64缺页返回分叉与重试</title>
+  <desc id="desc">先查VMA并处理缺页，返回后先检查RETRY与待处理信号，再分COMPLETED、普通RETRY和其他结果。普通RETRY设TRIED回查VMA，解锁期间旧VMA可能失效；COMPLETED下层已解锁，其他结果上层解锁。NOWAIT另有保锁合同。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+  <rect width="1000" height="720" fill="#fff"/>
+  <text x="25" y="36" class="h">互斥分派，不把RETRY和COMPLETED串成连续阶段</text>
+  <rect x="170" y="82" width="590" height="75" fill="#eaf1fb" class="b"/>
+  <text x="192" y="113">lock_mm_and_find_vma：取锁，重新查当前范围</text>
+  <text x="192" y="142" class="s">无合法VMA走BADMAP；不使用解锁前的旧VMA</text>
+  <path class="ar" d="M465 157V195"/>
+  <rect x="170" y="195" width="590" height="65" fill="#eef1f4" class="b"/>
+  <text x="192" y="234">handle_mm_fault / 来源处理，返回位带交接合同</text>
+  <path class="ar" d="M465 260V302"/>
+  <rect x="170" y="302" width="590" height="70" fill="#fff0e7" class="b"/>
+  <text x="192" y="330">先检查：RETRY且fault_signal_pending？</text>
+  <text x="192" y="357" class="s">用户pending；内核fatal；helper首先要求RETRY</text>
+  <path class="ar" d="M760 337H800"/>
+  <text x="773" y="319" class="s">是</text>
+  <rect x="800" y="302" width="175" height="100" fill="#f9eaf0" class="b"/>
+  <text x="815" y="334">用户信号出口</text><text x="815" y="362">内核no_context</text><text x="815" y="389" class="s">不走重试回边</text>
+  <path class="ar" d="M465 372V414H230V452"/><path class="ar" d="M465 414H535V452"/><path class="ar" d="M465 414H837V452"/>
+  <text x="481" y="399" class="s">否，依次分派</text>
+  <rect x="90" y="452" width="280" height="112" fill="#e6f4ef" class="b"/>
+  <text x="110" y="483">COMPLETED</text><text x="110" y="516">下层已完成且解锁</text><text x="110" y="548" class="s">上层直接返回，不重复解锁</text>
+  <rect x="395" y="452" width="280" height="112" fill="#eaf1fb" class="b"/>
+  <text x="415" y="483">否则普通RETRY</text><text x="415" y="516">下层已解锁，设TRIED</text><text x="415" y="548" class="s">布局可能改变，回查询入口</text>
+  <rect x="700" y="452" width="275" height="112" fill="#eef1f4" class="b"/>
+  <text x="720" y="483">否则普通结果</text><text x="720" y="516">上层mmap_read_unlock</text><text x="720" y="548" class="s">再完成或分派错误</text>
+  <path class="ar" d="M535 564V612H48V119H170"/>
+  <text x="90" y="599" class="s">重试回边：不沿用旧VMA</text>
+  <text x="25" y="663" class="s">图仅画普通默认arm64入口。NOWAIT锁页失败可RETRY且保锁，由该调用者履行责任。</text>
+  <text x="25" y="698" class="s">VM_FAULT_LOCKED说的是来源页锁，不是mmap布局锁；各类锁不能互相替代。</text>
+</svg>

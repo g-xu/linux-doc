@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="572" viewBox="0 0 1120 572">
+<title>一个缓存页内四块与局部写入</title>
+<desc>仅模型页4096字节块1024字节，文件索引1的F包含四块。写页内128至192先保留块0旧内容，完整复制后块0有效且脏，其余块未就绪时整folio仍未uptodate。放大的块0条带不按比例，分别保留0至128和192至1024的旧字节。</desc>
+<style>text{font-family:Arial,"Microsoft YaHei",sans-serif;font-size:18px;fill:#23343e}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#7a919a;stroke-width:1.5}</style>
+<rect width="1120" height="572" fill="white"/>
+<text x="32" y="42" class="h">F：文件索引1，四个buffer描述同一页内不同块</text>
+<text x="32" y="80">教学假设 S=4096，block=1024，已有文件块；写 S+128 起64字节。</text>
+<rect x="32" y="114" width="240" height="94" rx="4" fill="#e3f3ec" class="b"/><text x="50" y="148">块0：[0,1024)</text><text x="50" y="184" class="s">本次范围在此块内</text>
+<rect x="304" y="114" width="240" height="94" rx="4" fill="#f2f4f6" class="b"/><text x="322" y="148">块1：[1024,2048)</text><text x="322" y="184" class="s">不因本次写自动填充</text>
+<rect x="576" y="114" width="240" height="94" rx="4" fill="#f2f4f6" class="b"/><text x="594" y="148">块2：[2048,3072)</text><text x="594" y="184" class="s">仍可未uptodate</text>
+<rect x="848" y="114" width="240" height="94" rx="4" fill="#f2f4f6" class="b"/><text x="866" y="148">块3：[3072,4096)</text><text x="866" y="184" class="s">仍可未uptodate</text>
+<text x="32" y="252" class="h">放大块0的内容交接（条带不按字节比例）</text>
+<rect x="32" y="280" width="330" height="70" fill="#eaf1f8" class="b"/><text x="50" y="322">[0,128)：保留旧内容</text>
+<rect x="362" y="280" width="340" height="70" fill="#fae6eb" class="b"/><text x="380" y="322">[128,192)：新64字节</text>
+<rect x="702" y="280" width="386" height="70" fill="#eaf1f8" class="b"/><text x="720" y="322">[192,1024)：保留旧内容</text>
+<text x="32" y="396">write_begin：未覆盖整块，先取得旧块数据；完整复制后提交相交块。</text>
+<text x="32" y="438">write_end：块0 uptodate=1、dirty=1；F dirty=1，但F可仍uptodate=0。</text>
+<text x="32" y="480">后续块读取跳过已有效块0，填充其余块；不能覆盖块0的新修改。</text>
+<text x="32" y="534" class="s">整页未uptodate且短复制时，通用write_end可接受0；不承诺把已改内存全部回滚。</text>
+</svg>

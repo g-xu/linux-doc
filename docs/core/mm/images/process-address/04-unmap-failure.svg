@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="420" viewBox="0 0 940 420" role="img" aria-labelledby="title desc">
+  <title id="title">解除范围失败后保留start拆分</title><desc id="desc">三范围4到8读写、8到10只读、10到16读写。解除9到11时start拆分成功，end新VMA分配失败。留下4到8偏移100、8到9偏移104、9到10偏移105、10到16偏移106四个VMA。长度仍12页，尚未执行目标撤映射。</desc>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5}</style>
+  <rect width="940" height="420" fill="#fff"/><text x="28" y="36" class="h">解除 [9,11) 失败：VMA 已拆，但目标还未撤映射</text><text x="28" y="70" class="s">虚拟页偏移模型；选择 start 成功、end 的 vm_area_dup 失败，不是成功分支。</text>
+  <text x="35" y="130">操作前：3 VMA</text><rect x="220" y="102" width="180" height="60" fill="#e6f4ef" class="b"/><rect x="400" y="102" width="90" height="60" fill="#fff0e7" class="b"/><rect x="490" y="102" width="270" height="60" fill="#e6f4ef" class="b"/>
+  <text x="310" y="140" text-anchor="middle">RW</text><text x="445" y="140" text-anchor="middle">R</text><text x="625" y="140" text-anchor="middle">RW</text>
+  <text x="35" y="236">失败后：4 VMA</text><rect x="220" y="208" width="180" height="60" fill="#e6f4ef" class="b"/><rect x="400" y="208" width="45" height="60" fill="#fff0e7" class="b"/><rect x="445" y="208" width="45" height="60" fill="#fff0e7" class="b"/><rect x="490" y="208" width="270" height="60" fill="#e6f4ef" class="b"/>
+  <text x="310" y="246" text-anchor="middle">RW</text><text x="422" y="246" text-anchor="middle">R</text><text x="467" y="246" text-anchor="middle">R</text><text x="625" y="246" text-anchor="middle">RW</text>
+  <text x="220" y="301" class="s">4</text><text x="393" y="301" class="s">8</text><text x="438" y="301" class="s">9</text><text x="481" y="301" class="s">10</text><text x="751" y="301" class="s">16</text>
+  <text x="28" y="354" class="h">起点 pgoff：100、104、105、106；长度仍 12 页。</text>
+  <text x="28" y="393" class="s">没有成功解除 [9,11)；也不保证两个相邻 R 范围在失败出口自动合回。</text>
+</svg>

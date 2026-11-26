@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="500" viewBox="0 0 960 500" role="img" aria-labelledby="title desc">
+<title id="title">pin部分成功与归还时序</title><desc id="desc">页数据访问按pin契约，CPU写也不能因无DMA改用GET；不定期限获取前声明LONGTERM，非计时阈值。请求4只取2时全量调用者发布前只归还前缀；完整发布异步访问后先停止并解除同步，再记脏/unpin。munmap不替代设备停止。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="960" height="500" fill="#fff"/><text x="28" y="40" class="h">未发布的失败清理与已经在途的取消不是同一阶段</text>
+<rect x="40" y="85" width="880" height="70" fill="#eaf1fb" class="b"/><text x="62" y="116">pin请求：内容访问、获取前写权限/COW、期限；检查实际取得量</text><text x="62" y="144" class="s">CPU写也用pin；不定期限另加LONGTERM；包装设置FOLL_PIN，不混GET</text>
+<path class="ar" d="M480 155V188H235V228"/><path class="ar" d="M480 188H725V228"/>
+<rect x="40" y="228" width="390" height="115" fill="#f9eaf0" class="b"/><text x="62" y="263">只得2/4且要求全量</text><text x="62" y="298">发布前unpin前2页并报错</text><text x="62" y="330" class="s">后2数组槽未取得，不触碰</text>
+<rect x="530" y="228" width="390" height="115" fill="#e6f4ef" class="b"/><text x="552" y="263">完整取得并发布异步使用</text><text x="552" y="298">结束访问 / 设备解映射与同步</text><text x="552" y="330" class="s">按实际写入记脏，再unpin</text>
+<text x="40" y="405">错误返回仍需确认是否有已提交访问；munmap不会代替设备停止。</text>
+<text x="40" y="452" class="s">此图是持有责任模型，不是已执行DMA流程；dirty_lock不帮调用者终止设备。</text>
+</svg>

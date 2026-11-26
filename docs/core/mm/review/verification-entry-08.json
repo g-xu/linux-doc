@@ -1,0 +1,104 @@
+{
+  "source": "D:\\temp\\linux_wiki\\Linux-zensical\\draft\\mm_new\\08-page-cache-writeback.md",
+  "sourceSha256": "c72fbd7b9094e1b2c96e2bcdf830d07a6d9c008fee5f6b71f04583f0d7f90a48",
+  "mechanismSha256": "b18af9259fc1bd5f0271912b16407e2e0f5b35dcb93c4394710dbd993f4cdcad",
+  "linkCount": 45,
+  "supportChecks": [
+    {
+      "file": "08-page-cache-writeback.md",
+      "linkCount": 45,
+      "anchorCount": 11
+    },
+    {
+      "file": "review-entry-08.md",
+      "linkCount": 2,
+      "anchorCount": 0
+    },
+    {
+      "file": "index.md",
+      "linkCount": 36,
+      "anchorCount": 0
+    }
+  ],
+  "svgChecks": [
+    {
+      "file": "images/page-cache/00-data-path.svg",
+      "sha256": "4acb4b4f3ee7b3bc60ce79c4ab01af5ef365aea1a89eb0959acc9e85ab37a8e9",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 22
+    },
+    {
+      "file": "images/page-cache/00-basic-cycle.svg",
+      "sha256": "dbaf77440d6e21304114e1dd53b20732ea102e523ae2253bf2bfc73e3aaeca1e",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 30
+    },
+    {
+      "file": "images/page-cache/01-objects.svg",
+      "sha256": "69b54f406b8b0e309fc92ae685de974d088b50033fe680d4f50b0923e6fd433d",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 17
+    },
+    {
+      "file": "images/page-cache/04-block-write.svg",
+      "sha256": "233aa4d2ab6392b3ec97ebe68c9aeac82bed7043d7cad9a963f87cb000b9007e",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 18
+    },
+    {
+      "file": "images/page-cache/02-writeback.svg",
+      "sha256": "61b0b8ec66e3fbb63e8a266e883480d97e3f44015b0a1c8e21db079d761fcd31",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 14
+    },
+    {
+      "file": "images/page-cache/03-throttle.svg",
+      "sha256": "4c9cd09468669b9b078ac6c33d786fd6aca251d4f1eb3a3b3fcab604904633f3",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 9
+    },
+    {
+      "file": "images/page-cache/05-rate-feedback.svg",
+      "sha256": "7ad977968103a752f523c89a0e811aa3eb232bce74040cc2d6e9150fe7e4e281",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 23
+    }
+  ],
+  "previews": [
+    {
+      "width": 1280,
+      "documentWidth": 1280,
+      "viewportWidth": 1280,
+      "brokenImages": 0,
+      "overflowingTables": 0
+    },
+    {
+      "width": 480,
+      "documentWidth": 480,
+      "viewportWidth": 480,
+      "brokenImages": 0,
+      "overflowingTables": 0
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Temporary Markdown preview, not a Zensical build.",
+    "SVG text boxes checked; connector correctness and visual readability need human inspection.",
+    "No kernel, C snippet, I/O or target-machine execution.",
+    "Mechanical checks do not grade teaching quality."
+  ]
+}

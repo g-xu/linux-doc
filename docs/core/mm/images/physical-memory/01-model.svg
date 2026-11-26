@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="590" viewBox="0 0 920 590" role="img" aria-labelledby="title desc">
+  <title id="title">描述入口、元数据后备与数据页</title><desc id="desc">M加24D是PFN24描述符虚拟入口，须页表映射到保存描述符的物理元数据后备。描述符另描述PFN24实际数据页。Node中的Zone是数据页管理归属。虚拟地址计算、后备映射、描述状态初始化和供给资格不同。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+  <rect width="920" height="590" fill="#fff"/><text x="28" y="36" class="h">一条映射关系、一条描述关系：它们不指向同一用途</text>
+  <rect x="35" y="83" width="350" height="130" fill="#eaf1fb" class="b"/>
+  <text x="57" y="116" class="h">描述虚拟入口 M + 24D</text><text x="57" y="151">struct page：所属Node/Zone及状态</text><text x="57" y="190">D为描述符大小，不是PAGE_SIZE</text>
+  <rect x="535" y="83" width="350" height="130" fill="#e6f4ef" class="b"/>
+  <text x="557" y="116" class="h">PFN 24 的物理数据页</text><text x="557" y="151">PA起点 24 × PAGE_SIZE</text><text x="557" y="190">使用者内容，不是描述符副本</text>
+  <path class="ar" d="M385 151H535"/><text x="405" y="133" class="s">描述关系</text>
+  <rect x="35" y="284" width="350" height="130" fill="#fff0e7" class="b"/>
+  <text x="57" y="318" class="h">描述符的物理元数据后备</text><text x="57" y="354">一页可装多个struct page</text><text x="57" y="390">例如从RAM保留取得，位置可不同</text>
+  <rect x="535" y="284" width="350" height="130" fill="#eef1f4" class="b"/>
+  <text x="557" y="318" class="h">pgdat → node_zones[]</text><text x="557" y="354">描述记录nid和zone编号</text><text x="557" y="390">对应Zone维护统计/空闲块</text>
+  <path class="ar" d="M210 213V284"/><text x="226" y="255" class="s">页表映射到存储</text>
+  <path class="ar" d="M710 284V213"/><text x="729" y="255" class="s">管理归属</text>
+  <text x="28" y="469" class="h">地址可算 → 后备/映射建立 → 逐页状态就绪 → 资格允许 → 交付</text>
+  <text x="28" y="512" class="s">section组织描述范围；没有建立后备的section不会因地址公式自动可访问。</text>
+  <text x="28" y="558" class="s">M为vmemmap基址，D=sizeof(struct page)；示意不固定目标页大小/后备位置。</text>
+</svg>

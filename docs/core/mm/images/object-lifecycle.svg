@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="510" viewBox="0 0 1000 510" role="img" aria-labelledby="t d">
+<title id="t">对象槽位的分配和复用</title><desc id="d">四个对象槽位初始空闲，A B 分配后 C D 空闲，归还 A 后三个可复用，B 仍活跃，不能据此归还整 slab。业务初始化与分配器空闲状态不同。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker><style>text{font:20px "Microsoft YaHei",sans-serif;fill:#24323c}.h{font-size:26px;font-weight:bold}.s{font-size:17px}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style></defs>
+<rect width="1000" height="510" fill="white"/><text x="30" y="38" class="h">归还对象 → 槽位可复用，不等于整页可释放</text>
+<text x="30" y="127">初始</text><rect x="200" y="86" width="760" height="70" fill="#e2f2ec"/>
+<text x="295" y="130" text-anchor="middle">A 空</text><text x="485" y="130" text-anchor="middle">B 空</text><text x="675" y="130" text-anchor="middle">C 空</text><text x="865" y="130" text-anchor="middle">D 空</text>
+<path d="M580 156V209" class="e"/>
+<text x="30" y="257">分配 A、B</text><rect x="200" y="216" width="380" height="70" fill="#fff1dc"/><rect x="580" y="216" width="380" height="70" fill="#e2f2ec"/>
+<text x="295" y="260" text-anchor="middle">A 活跃</text><text x="485" y="260" text-anchor="middle">B 活跃</text><text x="675" y="260" text-anchor="middle">C 空</text><text x="865" y="260" text-anchor="middle">D 空</text>
+<path d="M580 286V339" class="e"/>
+<text x="30" y="387">归还 A</text><rect x="200" y="346" width="190" height="70" fill="#e2f2ec"/><rect x="390" y="346" width="190" height="70" fill="#fff1dc"/><rect x="580" y="346" width="380" height="70" fill="#e2f2ec"/>
+<text x="295" y="390" text-anchor="middle">A 可复用</text><text x="485" y="390" text-anchor="middle">B 仍活跃</text><text x="675" y="390" text-anchor="middle">C 空</text><text x="865" y="390" text-anchor="middle">D 空</text>
+<text x="30" y="473" class="s">缩小槽位模型，不固定对象大小；业务寿命、空槽位、空 slab 和空闲页分开判断。</text>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="590" viewBox="0 0 920 590" role="img" aria-labelledby="title desc">
+  <title id="title">四槽位 slab 的双 freelist 状态</title>
+  <desc id="desc">激活后四槽位都在 CPU0 本地链，inuse 为4。分配 A B 后，本地还有 C D，计数仍4。CPU1 归还 A 后，共享链有 A，inuse 降为3，业务只有B。停用把本地 C D 并回共享后 inuse 为1。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#52636c"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.sep{stroke:#dae0e4;stroke-width:1}.ar{stroke:#52636c;stroke-width:2;fill:none;marker-end:url(#a)}</style>
+  <rect width="920" height="590" fill="#fff"/>
+  <text x="28" y="36" class="h">同一 slab S：N = U + L + R</text>
+  <text x="28" y="69" class="s">U：尚未归还；L：本地空槽位；R：共享空槽位。普通稳定模型，非实时快照。</text>
+  <rect x="22" y="95" width="876" height="53" fill="#eef1f4" rx="4"/>
+  <text x="38" y="128">操作后</text><text x="264" y="128">CPU0 本地链</text><text x="466" y="128">S 共享链</text><text x="645" y="128">业务槽位</text><text x="781" y="128">inuse / frozen</text>
+  <text x="38" y="194">激活（概念中间态）</text><text x="264" y="194" fill="#16735a">A → B → C → D</text><text x="466" y="194">空</text><text x="645" y="194">无</text><text x="815" y="194">4 / 1</text>
+  <path class="sep" d="M22 224H898"/>
+  <text x="38" y="274">分配 A、B</text><text x="264" y="274">C → D</text><text x="466" y="274">空</text><text x="645" y="274">A、B</text><text x="815" y="274">4 / 1</text>
+  <path class="sep" d="M22 304H898"/>
+  <rect x="22" y="326" width="876" height="79" fill="#fff3eb" rx="4"/>
+  <text x="38" y="370">CPU1 归还 A</text><text x="264" y="370">C → D</text><text x="466" y="370">A</text><text x="645" y="370">B</text><text x="815" y="370">3 / 1</text>
+  <text x="38" y="459">停用并合并本地链</text><text x="264" y="459">已移走</text><text x="466" y="459">C → D → A</text><text x="645" y="459">B</text><text x="815" y="459">1 / 0</text>
+  <path class="ar" d="M834 403V431"/>
+  <text x="38" y="520" class="h">共享口径：inuse = N - R</text>
+  <text x="38" y="552">CPU 当前阶段：inuse = U + L；停用后 L=0，才恢复为该模型的 U。</text>
+</svg>

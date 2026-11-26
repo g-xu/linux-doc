@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="460" viewBox="0 0 1000 460" role="img" aria-labelledby="t d">
+<title id="t">同样虚拟连续范围的不同所有权</title><desc id="d">vmalloc 自行取得后备页并用 vfree 归还。普通 vmap 借用页，只用 vunmap 撤映射，调用者再归还自己的页；显式 VM_MAP_PUT_PAGES 变体需要另按所有权转移规则。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker><style>text{font:20px "Microsoft YaHei",sans-serif;fill:#24323c}.h{font-size:26px;font-weight:bold}.s{font-size:17px}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style></defs>
+<rect width="1000" height="460" fill="white"/><text x="30" y="38" class="h">范围与映射相似，后备页责任可以不同</text>
+<rect x="30" y="85" width="430" height="100" rx="6" fill="#e8f0fa"/><text x="245" y="124" text-anchor="middle">vmalloc：取得后备与建立映射</text><text x="245" y="157" text-anchor="middle" class="s">分配器管理这些后备页</text>
+<rect x="540" y="85" width="430" height="100" rx="6" fill="#fff1dc"/><text x="755" y="124" text-anchor="middle">普通 vmap：借用已有页</text><text x="755" y="157" text-anchor="middle" class="s">调用者保持页寿命，flags = 0</text>
+<path d="M245 185V258M755 185V258" class="e"/>
+<rect x="30" y="265" width="430" height="100" rx="6" fill="#e2f2ec"/><text x="245" y="304" text-anchor="middle">vfree</text><text x="245" y="337" text-anchor="middle" class="s">撤映射、归还范围与适用后备</text>
+<rect x="540" y="265" width="430" height="100" rx="6" fill="#e2f2ec"/><text x="755" y="304" text-anchor="middle">vunmap → 调用者归还页</text><text x="755" y="337" text-anchor="middle" class="s">撤映射不自动归还借用数据页</text>
+<text x="30" y="419" class="s">VM_MAP_PUT_PAGES 是另一显式转移契约，不将本图普通借用规则套到所有变体。</text>
+</svg>

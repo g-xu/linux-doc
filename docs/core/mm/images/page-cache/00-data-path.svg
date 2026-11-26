@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="640" viewBox="0 0 1040 640" role="img" aria-labelledby="title desc">
+  <title id="title">普通文件缓冲读写的三个数据位置</title>
+  <desc id="desc">文件系统把文件内容填入内核页缓存，read再复制到用户缓冲。write把用户数据复制到缓存并记脏，回写把修改交给文件系统。文件mmap的访问可以映射同一缓存页，不是另一份read缓冲；共享与私有修改另按其协议。数据箭头不表示每次调用都经过全部步骤。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#46525c"/>
+    </marker>
+  </defs>
+  <style>
+    text{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:18px;fill:#243038;letter-spacing:0}
+    .heading{font-size:24px;font-weight:700}.label{font-size:20px;font-weight:700}.small{font-size:16px}
+    .box{stroke:#78828b;stroke-width:1.5}.flow{fill:none;stroke:#46525c;stroke-width:2;marker-end:url(#arrow)}
+  </style>
+  <rect width="1040" height="640" fill="#fff"/>
+  <text x="36" y="46" class="heading">先区分文件存储、内核缓存与用户副本</text>
+  <text x="36" y="84">主例：普通文件的缓冲读写，不使用直接 I/O 或同步写入标志</text>
+  <rect x="40" y="150" width="250" height="215" rx="5" fill="#eef1f4" class="box"/>
+  <text x="62" y="186" class="label">文件的存储位置</text>
+  <text x="62" y="230">文件系统管理内容</text>
+  <text x="62" y="266">提供读取与保存操作</text>
+  <text x="62" y="340" class="small">不是 CPU 硬件缓存</text>
+  <rect x="395" y="150" width="250" height="215" rx="5" fill="#e7f3ed" class="box"/>
+  <text x="417" y="186" class="label">内核页缓存</text>
+  <text x="417" y="230">文件片段的内存内容</text>
+  <text x="417" y="266">索引、有效性与保存责任</text>
+  <text x="417" y="340" class="small">多个打开者可复用</text>
+  <rect x="750" y="150" width="250" height="215" rx="5" fill="#fff4d9" class="box"/>
+  <text x="772" y="186" class="label">应用的用户缓冲</text>
+  <text x="772" y="230">read 的输出副本</text>
+  <text x="772" y="266">write 的输入字节</text>
+  <text x="772" y="340" class="small">改读副本不自动改文件</text>
+  <path d="M290 208 H395" class="flow"/>
+  <text x="312" y="198" class="small">读入</text>
+  <path d="M395 296 H290" class="flow"/>
+  <text x="312" y="286" class="small">回写</text>
+  <path d="M645 208 H750" class="flow"/>
+  <text x="658" y="198" class="small">read 复制</text>
+  <path d="M750 296 H645" class="flow"/>
+  <text x="653" y="286" class="small">write 复制</text>
+  <path d="M520 365 V450" class="flow"/>
+  <text x="540" y="409" class="small">建立文件页的用户映射</text>
+  <rect x="395" y="450" width="605" height="106" rx="5" fill="#edf2fc" class="box"/>
+  <text x="417" y="484" class="label">mmap：另一种访问方式，不是另建一套文件缓存</text>
+  <text x="417" y="520">缺页后可访问映射的缓存页；共享 / 私有写另按协议处理</text>
+  <text x="36" y="601" class="small">箭头表示数据或访问关系；命中缓存时不必重新读入，普通写入也不必当场完成回写。</text>
+</svg>

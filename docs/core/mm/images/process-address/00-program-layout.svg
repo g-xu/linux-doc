@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="760" viewBox="0 0 1100 760" role="img" aria-labelledby="title desc">
+  <title id="title">程序整体内存布局与地址空间管理的主要目的</title>
+  <desc id="desc">一套用户地址空间包含程序代码、静态数据和BSS、堆、文件或匿名映射、用户栈及间隔。用途不与VMA一一对应。地址空间管理为这些范围统一维护位置与边界、访问权限、内容来源与共享语义、使用生命周期。图不固定实际地址、比例或权限，不表示物理RAM布局；硬件保护与实际访问还需页表和缺页机制协作。</desc>
+  <style>
+    text{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:18px;fill:#243038;letter-spacing:0}
+    .heading{font-size:24px;font-weight:700}.label{font-size:20px;font-weight:700}.small{font-size:16px}
+    .range{stroke:#78828b;stroke-width:1.4}.rule{stroke:#78828b;stroke-width:1.4}
+  </style>
+  <rect width="1100" height="760" fill="#fff"/>
+  <text x="30" y="43" class="heading">一套程序布局，维护位置、权限、来源与生命周期</text>
+  <text x="30" y="81">程序给出地址和操作；内核需要能解释该地址应当怎样使用</text>
+  <text x="45" y="118" class="small">用户布局示意：较高地址方向在上</text>
+  <text x="500" y="118" class="small">同一地址空间需要维护的四类规则</text>
+  <rect x="45" y="135" width="340" height="70" fill="#e8effa" class="range"/>
+  <text x="65" y="165" class="label">用户栈（线程可各有栈）</text>
+  <text x="65" y="193" class="small">调用帧、局部数据等</text>
+  <rect x="45" y="205" width="340" height="35" fill="#eef1f4" class="range"/>
+  <text x="65" y="229" class="small">未映射间隔 / 省略区间</text>
+  <rect x="45" y="240" width="340" height="90" fill="#fff1d1" class="range"/>
+  <text x="65" y="273" class="label">文件 / 匿名映射</text>
+  <text x="65" y="305" class="small">共享库、数据文件、匿名存储等</text>
+  <rect x="45" y="330" width="340" height="35" fill="#eef1f4" class="range"/>
+  <text x="65" y="354" class="small">未映射间隔 / 省略区间</text>
+  <rect x="45" y="365" width="340" height="70" fill="#dcefe3" class="range"/>
+  <text x="65" y="395" class="label">堆</text>
+  <text x="65" y="423" class="small">动态对象也可使用其他匿名映射</text>
+  <rect x="45" y="435" width="340" height="80" fill="#f8e3e8" class="range"/>
+  <text x="65" y="468" class="label">静态数据 / BSS</text>
+  <text x="65" y="501" class="small">已初始化 / 零初始化静态存储</text>
+  <rect x="45" y="515" width="340" height="85" fill="#e8effa" class="range"/>
+  <text x="65" y="551" class="label">程序代码</text>
+  <text x="65" y="583" class="small">装载形成范围，按实际权限执行</text>
+  <text x="45" y="632" class="small">较低地址方向；位置与高度不按比例</text>
+  <rect x="500" y="135" width="550" height="104" rx="5" fill="#edf2fa" class="rule"/>
+  <text x="520" y="169" class="label">1. 在哪里：位置与边界</text>
+  <text x="520" y="204">范围起止、空洞、新范围建立和调整的位置</text>
+  <rect x="500" y="257" width="550" height="104" rx="5" fill="#e7f3ed" class="rule"/>
+  <text x="520" y="291" class="label">2. 怎样访问：权限规则</text>
+  <text x="520" y="326">允许的访问与变更；与当前硬件保护协同</text>
+  <rect x="500" y="379" width="550" height="104" rx="5" fill="#fff2d5" class="rule"/>
+  <text x="520" y="413" class="label">3. 内容从何而来：来源与共享</text>
+  <text x="520" y="448">文件位置或匿名来源；共享与私有修改去向</text>
+  <rect x="500" y="501" width="550" height="104" rx="5" fill="#f8e9ee" class="rule"/>
+  <text x="520" y="535" class="label">4. 谁使用，何时结束：生命周期</text>
+  <text x="520" y="570">线程共享、复制、程序替换、解除与退出</text>
+  <text x="30" y="681" class="small">用途不与 VMA 一一对应；同一用途可有多个范围，图不是实际 Maple Tree 节点或物理 RAM 布局。</text>
+  <text x="30" y="716" class="small">这里只画用户部分，不固定实际地址和权限；页表/MMU及缺页机制协作完成转换、访问保护和内容准备。</text>
+</svg>

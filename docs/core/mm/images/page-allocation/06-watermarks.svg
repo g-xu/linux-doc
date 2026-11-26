@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
+  <title id="title">水位数量判断与实际取页的区别</title>
+  <desc id="desc">简化场景 order 为 2，mark 为 80，区域保留为 16，不含特殊资格和额外扣除。空闲量 100 扣除 3 后为 97，大于 96；99 扣除后为 96，不通过。数量通过还需高阶块存在并在保护下取得。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.n{stroke:#bdcbd3;stroke-width:1.5;rx:6}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1100" height="680" fill="#fff"/>
+  <text x="35" y="38" class="h">有空闲量，不代表当前请求可以直接取得页块</text>
+  <text x="35" y="84">有限假设：order = 2，mark = 80，lowmem_reserve = 16</text>
+  <text x="35" y="119" class="s">没有特殊保留资格、额外 CMA 等扣除；使用一般检查。基本页数量，不是字节数。</text>
+  <rect x="35" y="165" width="470" height="165" class="n" fill="#e2f2ec"/>
+  <text x="270" y="206" text-anchor="middle">输入统计空闲量 = 100</text>
+  <text x="270" y="248" text-anchor="middle">扣除 2² - 1：100 - 3 = 97</text>
+  <text x="270" y="291" text-anchor="middle">97 &gt; 80 + 16，数量通过</text>
+  <rect x="595" y="165" width="470" height="165" class="n" fill="#f8edf0"/>
+  <text x="830" y="206" text-anchor="middle">输入统计空闲量 = 99</text>
+  <text x="830" y="248" text-anchor="middle">扣除 2² - 1：99 - 3 = 96</text>
+  <text x="830" y="291" text-anchor="middle">96 ≤ 80 + 16，数量不通过</text>
+  <line x1="35" y1="380" x2="1065" y2="380" stroke="#d7dfe4"/>
+  <text x="35" y="421" class="h">高阶请求仍要连接另外两项判断</text>
+  <rect x="35" y="460" width="290" height="100" class="n" fill="#e2f2ec"/>
+  <text x="180" y="497" text-anchor="middle">数量与适用水位</text>
+  <text x="180" y="532" text-anchor="middle" class="s">能否在保留要求下继续取页</text>
+  <path d="M325 510H393" class="e"/>
+  <rect x="398" y="460" width="300" height="100" class="n" fill="#e8f0fa"/>
+  <text x="548" y="497" text-anchor="middle">高阶允许列表</text>
+  <text x="548" y="532" text-anchor="middle" class="s">是否有适用 order 或更大块</text>
+  <path d="M698 510H770" class="e"/>
+  <rect x="775" y="460" width="290" height="100" class="n" fill="#fff1dc"/>
+  <text x="920" y="497" text-anchor="middle">保护下实际取页</text>
+  <text x="920" y="532" text-anchor="middle" class="s">仍可能面对并发资源变化</text>
+  <text x="35" y="614" class="s">实际源码还有快速检查、保留资格、不可用空闲量和水位提升等分支，不由上式全部覆盖。</text>
+  <text x="35" y="650" class="s">Zone 水位与 PCP high 不同；lowmem_reserve 也不是事先独立切出的物理地址池。</text>
+</svg>

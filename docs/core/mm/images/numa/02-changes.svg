@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="440" viewBox="0 0 960 440" role="img" aria-labelledby="title desc">
+<title id="title">mbind的阶段与部分失败</title><desc id="desc">早期参数和STRICT检查失败可未安装新策略；范围策略安装后迁移两页成功一页失败，带STRICT可报EIO但新策略和两页新位置保留。未成功源归队，错误不等全事务回滚。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="960" height="440" fill="#fff"/><text x="28" y="40" class="h">错误发生在哪一步，决定已改变哪些策略和页位置</text>
+<rect x="40" y="85" width="880" height="65" fill="#eef1f4" class="b"/><text x="62" y="125">初查 / 候选收集与STRICT检查 → 范围安装新策略 → 请求迁移</text>
+<path class="ar" d="M480 150V186H235V230"/><path class="ar" d="M480 186H725V230"/>
+<rect x="40" y="230" width="390" height="100" fill="#f9eaf0" class="b"/><text x="62" y="265">早期失败：尚未安装策略</text><text x="62" y="300">参数/权限或STRICT前查</text>
+<rect x="530" y="230" width="390" height="100" fill="#fff0e7" class="b"/><text x="552" y="265">安装后迁移：2成功 / 1失败</text><text x="552" y="300">可EIO，但新策略/位置保留</text>
+<text x="40" y="379">剩余隔离候选归队；查询策略与实际节点，不把失败当全部没改变。</text>
+<text x="40" y="417" class="s">未带STRICT的移动不足可返回成功；安装中后段失败又有已改范围残留。</text>
+</svg>

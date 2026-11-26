@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="648" viewBox="0 0 1120 648">
+<title>cpupid先更新，迁移过滤使用旧记录</title>
+<desc>仅非RT普通采样，排除tiering/早期放宽。P驻N1旧CPU1/PID42记录0x12a。CPU0首次fault先写0x02a、用旧节点拒绝移动，再恢复可访问PTE。后续扫描重新布置探测后CPU0访问才产生下一次采样；期间无其他记录覆盖，得到旧0x02a。策略可允许不保证实际移动；记录非页位置/独占证明。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#506574"/></marker></defs>
+<style>text{font-family:Arial,"Microsoft YaHei",sans-serif;font-size:18px;fill:#23343e}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{fill:#f0f6f6;stroke:#7d929f;stroke-width:1.5}.arrow{fill:none;stroke:#506574;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="1120" height="648" fill="white"/>
+<text x="32" y="40" class="h">非RT普通过滤：记录变化不等于P实际位置变化</text>
+<text x="32" y="84">P驻N1；CPU0/N0、CPU1/N1、PID=42；已有preferred且scan_seq&gt;4。</text>
+<text x="32" y="126" class="s">初始记录0x12a = CPU1 + PID低8位42；新0x02a = CPU0 + 42，不是PFN。</text>
+<rect x="32" y="172" width="300" height="112" rx="4" class="b"/><text x="50" y="206">第一次CPU0采样</text><text x="50" y="242">xchg写入0x02a</text><text x="50" y="274" class="s">同时取得旧0x12a供判断</text>
+<rect x="422" y="172" width="290" height="112" rx="4" class="b"/><text x="440" y="206">旧节点N1 ≠ 目的N0</text><text x="440" y="242">返回false，不迁移</text><text x="440" y="274" class="s">PID相同也不绕过先前过滤</text>
+<rect x="802" y="172" width="286" height="112" rx="4" class="b"/><text x="820" y="206">本轮结束</text><text x="820" y="242">P仍在N1，PTE恢复</text><text x="820" y="274" class="s">记录0x02a；再load不必fault</text>
+<path d="M332 226H422" class="arrow"/><path d="M712 226H802" class="arrow"/>
+<path d="M946 284V330H182V380" class="arrow"/>
+<text x="365" y="320" class="s">后续扫描再设探测、CPU0访问；期间无其他记录覆盖</text>
+<rect x="32" y="380" width="300" height="112" rx="4" class="b"/><text x="50" y="414">第二次xchg</text><text x="50" y="450">写0x02a，旧也是0x02a</text><text x="50" y="482" class="s">记录仍是采样关联</text>
+<rect x="422" y="380" width="290" height="112" rx="4" class="b"/><text x="440" y="414">旧节点N0 = 目的N0</text><text x="440" y="450">PID线索匹配，可允许</text><text x="440" y="482" class="s">不是AnonExclusive证明</text>
+<rect x="802" y="380" width="286" height="112" rx="4" class="b"/><text x="820" y="414">真正迁移P → Q</text><text x="820" y="450">还需目的、锁和引用资格</text><text x="820" y="482" class="s">失败则P可仍在N1</text>
+<path d="M332 434H422" class="arrow"/><path d="M712 434H802" class="arrow"/>
+<text x="32" y="554">cpupid保存截断CPU/PID线索，不是所有访问日志、页owner或已完成迁移的位置。</text>
+<text x="32" y="602" class="s">本图不适用于RT=y；tiering、早期/未设置记录与共享组反馈另按条件判断。</text>
+</svg>

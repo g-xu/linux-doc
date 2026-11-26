@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="970" viewBox="0 0 1080 970" role="img" aria-labelledby="title desc">
+  <title id="title">压力响应、不同资源的回收及规整</title>
+  <desc id="desc">分配请求根据标志、order 和位置约束选择重试、回收、规整或失败。回收可丢弃满足条件的干净文件缓存、保存脏数据或交换匿名数据；不可解除的使用关系阻止操作。规整示例保持四个空闲页但集中空闲位置。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.n{stroke:#b9c8d0;stroke-width:1.5;rx:6}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}.d{fill:none;stroke:#8d6674;stroke-width:2;stroke-dasharray:7 5;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1080" height="970" fill="#fff"/>
+  <text x="35" y="37" class="h">先辨别约束，再选择响应；不是固定流水线</text>
+  <rect x="35" y="70" width="260" height="85" class="n" fill="#f2f6f8"/>
+  <text x="165" y="104" text-anchor="middle">请求无法快速满足</text>
+  <text x="165" y="135" text-anchor="middle" class="s">或资源控制引入压力</text>
+  <path d="M295 112H380" class="e"/>
+  <rect x="385" y="70" width="650" height="85" class="n" fill="#fff1dc"/>
+  <text x="710" y="104" text-anchor="middle">GFP / order / 允许位置 / memcg / 执行上下文</text>
+  <text x="710" y="135" text-anchor="middle" class="s">决定能做什么、应尝试多大力度，以及错误的作用范围</text>
+  <path d="M515 155V210H185V251" class="e"/>
+  <path d="M920 155V251" class="e"/>
+  <rect x="35" y="256" width="300" height="91" class="n" fill="#e2f2ec"/>
+  <text x="185" y="292" text-anchor="middle">回收：释放可再用资源</text>
+  <text x="185" y="324" text-anchor="middle" class="s">后台 kswapd / 允许的直接回收</text>
+  <rect x="385" y="256" width="300" height="91" class="n" fill="#e8f0fa"/>
+  <text x="535" y="292" text-anchor="middle">规整：改善连续空闲空间</text>
+  <text x="535" y="324" text-anchor="middle" class="s">迁移可移动数据，不增加空闲总量</text>
+  <path d="M710 155V188H535V251" class="e"/>
+  <rect x="735" y="256" width="300" height="91" class="n" fill="#f8edf0"/>
+  <text x="885" y="292" text-anchor="middle">重试 / 返回失败 / OOM</text>
+  <text x="885" y="324" text-anchor="middle" class="s">OOM 仅适用于符合条件的情况</text>
+  <path d="M185 347V392H535V347" class="d"/>
+  <text x="222" y="385" class="s">可在适用分配路径中协作</text>
+  <line x1="35" y1="427" x2="1035" y2="427" stroke="#d7dfe4"/>
+  <text x="35" y="469" class="h">回收候选不同，保存与解除关系的工作也不同</text>
+  <rect x="35" y="496" width="300" height="65" class="n" fill="#e2f2ec"/>
+  <text x="185" y="535" text-anchor="middle">普通干净文件缓存</text>
+  <path d="M335 529H430" class="e"/>
+  <text x="450" y="522">检查使用关系 → 解除适用映射与缓存持有</text>
+  <text x="450" y="549" class="s">数据可重新读取，满足条件后释放</text>
+  <rect x="35" y="577" width="300" height="65" class="n" fill="#fff1dc"/>
+  <text x="185" y="616" text-anchor="middle">脏文件 / 匿名数据</text>
+  <path d="M335 610H430" class="e"/>
+  <text x="450" y="603">需要保留修改 → 回写 / 交换等后备处理</text>
+  <text x="450" y="630" class="s">按允许操作、数据状态与资源决定，不保证立即释放</text>
+  <rect x="35" y="658" width="300" height="65" class="n" fill="#f8edf0"/>
+  <text x="185" y="697" text-anchor="middle">不能解除的使用关系</text>
+  <path d="M335 691H430" class="e"/>
+  <text x="450" y="685">保留 / 等待 / 跳过</text>
+  <text x="450" y="712" class="s">不能用“访问少”覆盖 pin、寿命或操作上下文约束</text>
+  <line x1="35" y1="750" x2="1035" y2="750" stroke="#d7dfe4"/>
+  <text x="35" y="792" class="h">规整示意：空闲数量相同，连续性改变</text>
+  <text x="35" y="834">前</text>
+  <rect x="95" y="807" width="50" height="46" fill="#e2f2ec" stroke="#9cbcac"/><text x="120" y="837" text-anchor="middle" class="s">空</text>
+  <rect x="145" y="807" width="50" height="46" fill="#e8f0fa" stroke="#9bb5d3"/><text x="170" y="837" text-anchor="middle" class="s">A</text>
+  <rect x="195" y="807" width="50" height="46" fill="#e2f2ec" stroke="#9cbcac"/><text x="220" y="837" text-anchor="middle" class="s">空</text>
+  <rect x="245" y="807" width="50" height="46" fill="#e8f0fa" stroke="#9bb5d3"/><text x="270" y="837" text-anchor="middle" class="s">B</text>
+  <rect x="295" y="807" width="50" height="46" fill="#e2f2ec" stroke="#9cbcac"/><text x="320" y="837" text-anchor="middle" class="s">空</text>
+  <rect x="345" y="807" width="50" height="46" fill="#e8f0fa" stroke="#9bb5d3"/><text x="370" y="837" text-anchor="middle" class="s">C</text>
+  <rect x="395" y="807" width="50" height="46" fill="#e2f2ec" stroke="#9cbcac"/><text x="420" y="837" text-anchor="middle" class="s">空</text>
+  <rect x="445" y="807" width="50" height="46" fill="#e8f0fa" stroke="#9bb5d3"/><text x="470" y="837" text-anchor="middle" class="s">D</text>
+  <path d="M514 830H567" class="e"/>
+  <text x="535" y="890" text-anchor="middle" class="s">可移动时</text>
+  <text x="585" y="834">后</text>
+  <rect x="635" y="807" width="50" height="46" fill="#e8f0fa" stroke="#9bb5d3"/><text x="660" y="837" text-anchor="middle" class="s">A</text>
+  <rect x="685" y="807" width="50" height="46" fill="#e8f0fa" stroke="#9bb5d3"/><text x="710" y="837" text-anchor="middle" class="s">B</text>
+  <rect x="735" y="807" width="50" height="46" fill="#e8f0fa" stroke="#9bb5d3"/><text x="760" y="837" text-anchor="middle" class="s">C</text>
+  <rect x="785" y="807" width="50" height="46" fill="#e8f0fa" stroke="#9bb5d3"/><text x="810" y="837" text-anchor="middle" class="s">D</text>
+  <rect x="835" y="807" width="200" height="46" fill="#e2f2ec" stroke="#9cbcac"/>
+  <text x="935" y="837" text-anchor="middle" class="s">4 个连续空闲页</text>
+  <text x="35" y="938" class="s">本例不画固定迁移方向。不可移动页、目的资源及并发状态可能阻碍规整成功。</text>
+</svg>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="650" viewBox="0 0 1040 650" role="img" aria-labelledby="title desc">
+  <title id="title">同一文件片段的最小读写周期</title>
+  <desc id="desc">文件长4S，目标为S加128起64字节，位于索引1。假设无并发、截断、错误、同步写入标志或后续修改。首次读取填充缓存v0，第二次读取复用它，缓冲写入改变片段形成整页内容v1并记脏，后续成功回写完成本轮保存责任。版本记号是教学记号，不是内核字段或存储快照。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#46525c"/>
+    </marker>
+  </defs>
+  <style>
+    text{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:18px;fill:#243038;letter-spacing:0}
+    .heading{font-size:24px;font-weight:700}.label{font-size:20px;font-weight:700}.small{font-size:16px}
+    .box{stroke:#78828b;stroke-width:1.5}.flow{fill:none;stroke:#46525c;stroke-width:2;marker-end:url(#arrow)}
+  </style>
+  <rect width="1040" height="650" fill="#fff"/>
+  <text x="36" y="46" class="heading">先走通一次正常周期，再加入竞争与错误</text>
+  <text x="36" y="82">同一文件片段：偏移 S+128 起 64 字节；缓存内容版本记为 v0 / v1</text>
+  <text x="44" y="127" class="label">程序操作</text>
+  <text x="360" y="127" class="label">内核页缓存</text>
+  <text x="715" y="127" class="label">文件存储与数据传递</text>
+  <rect x="36" y="150" width="285" height="85" rx="5" fill="#edf2fc" class="box"/>
+  <text x="54" y="183">1. A 首次 read</text>
+  <text x="54" y="215" class="small">获得 64 字节的用户副本</text>
+  <rect x="352" y="150" width="315" height="85" rx="5" fill="#e7f3ed" class="box"/>
+  <text x="370" y="183">原先没有，填充后含 v0</text>
+  <text x="370" y="215" class="small">索引 1；内容可交付</text>
+  <rect x="702" y="150" width="302" height="85" rx="5" fill="#eef1f4" class="box"/>
+  <text x="720" y="183">文件系统取得内容 v0</text>
+  <text x="720" y="215" class="small">缓存 → A 的用户副本</text>
+  <rect x="36" y="272" width="285" height="85" rx="5" fill="#edf2fc" class="box"/>
+  <text x="54" y="305">2. B 再次 read</text>
+  <text x="54" y="337" class="small">B 获得自己的 64 字节副本</text>
+  <rect x="352" y="272" width="315" height="85" rx="5" fill="#e7f3ed" class="box"/>
+  <text x="370" y="305">假设仍有效，复用同一 v0</text>
+  <text x="370" y="337" class="small">不按进程另建文件缓存</text>
+  <rect x="702" y="272" width="302" height="85" rx="5" fill="#eef1f4" class="box"/>
+  <text x="720" y="305">不必重复读取这段存储</text>
+  <text x="720" y="337" class="small">缓存 → B 的用户副本</text>
+  <rect x="36" y="394" width="285" height="85" rx="5" fill="#fff4d9" class="box"/>
+  <text x="54" y="427">3. A 普通缓冲 write</text>
+  <text x="54" y="459" class="small">64 字节被接受；不要求同步写</text>
+  <rect x="352" y="394" width="315" height="85" rx="5" fill="#fff4d9" class="box"/>
+  <text x="370" y="427">目标字节改变，内容变为 v1</text>
+  <text x="370" y="459" class="small">记脏：这份修改仍需保存</text>
+  <rect x="702" y="394" width="302" height="85" rx="5" fill="#eef1f4" class="box"/>
+  <text x="720" y="427">存储此时仍可能是旧内容</text>
+  <text x="720" y="459" class="small">A 的输入 → 缓存</text>
+  <rect x="36" y="516" width="285" height="85" rx="5" fill="#edf2fc" class="box"/>
+  <text x="54" y="549">4. 后续成功回写</text>
+  <text x="54" y="581" class="small">本例没有再次修改或错误</text>
+  <rect x="352" y="516" width="315" height="85" rx="5" fill="#e7f3ed" class="box"/>
+  <text x="370" y="549">提交并结束本轮保存责任</text>
+  <text x="370" y="581" class="small">内容可继续留在缓存</text>
+  <rect x="702" y="516" width="302" height="85" rx="5" fill="#eef1f4" class="box"/>
+  <text x="720" y="549">文件系统处理存储写入</text>
+  <text x="720" y="581" class="small">用户已有的读副本不自动更新</text>
+  <path d="M178 235 V272" class="flow"/>
+  <path d="M178 357 V394" class="flow"/>
+  <path d="M178 479 V516" class="flow"/>
+  <text x="36" y="633" class="small">纵向箭头是场景推进；v0/v1 不是内核版本字段；回写完成标志本身不是设备持久化证明。</text>
+</svg>

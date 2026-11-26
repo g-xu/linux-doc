@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="760" viewBox="0 0 960 760" role="img" aria-labelledby="title desc">
+  <title id="title">后备替换与同后备写保护的不同协议</title><desc id="desc">普通COW先准备Q重检旧PTE，匹配时清旧并失效、建立新关系和Q映射，再减旧rmap引用；不匹配放弃Q。同后备写保护遇硬件dirty更新时CAS失败重读，将硬件dirty转存软件标记，PFN不变，后续TLB由调用链配合。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+  <rect width="960" height="760" fill="#fff"/><text x="28" y="36" class="h">改变后备 与 合法标志更新：不能只凭“改PTE”选协议</text>
+  <text x="35" y="77" class="h">普通COW：P → Q</text><text x="535" y="77" class="h">同后备：原子写保护</text>
+  <rect x="35" y="100" width="400" height="88" fill="#eaf1fb" class="b"/><text x="57" y="133">准备Q与数据，旧PTE仍指P</text><text x="57" y="171" class="s">适用分配/收费失败先清理，不先公开Q</text>
+  <rect x="525" y="100" width="400" height="88" fill="#fff0e7" class="b"/><text x="547" y="133">软件读到干净、可按协议写的项</text><text x="547" y="171">WRITE=1，RDONLY=1，DIRTY=0</text>
+  <path class="ar" d="M235 188V230"/><path class="ar" d="M725 188V230"/>
+  <rect x="35" y="230" width="400" height="88" fill="#eaf1fb" class="b"/><text x="57" y="263">锁下重检orig_pte</text><text x="57" y="301" class="s">不匹配：放弃本轮Q；匹配才向下继续</text>
+  <rect x="525" y="230" width="400" height="88" fill="#fff0e7" class="b"/><text x="547" y="263">适用硬件DBM清RDONLY，已写</text><text x="547" y="301">软件旧预期CAS失败，重新读取</text>
+  <path class="ar" d="M235 318V360"/><path class="ar" d="M725 318V360"/>
+  <rect x="35" y="360" width="400" height="88" fill="#e6f4ef" class="b"/><text x="57" y="393">清旧项 + 相应TLB失效/通知</text><text x="57" y="431">先结束旧转换，不先有效覆盖成Q</text>
+  <rect x="525" y="360" width="400" height="88" fill="#fff0e7" class="b"/><text x="547" y="393">原子写保护，保存软件dirty事实</text><text x="547" y="431">WRITE=0，RDONLY=1，DIRTY=1</text>
+  <path class="ar" d="M235 448V490"/><path class="ar" d="M725 448V490"/>
+  <rect x="35" y="490" width="400" height="88" fill="#e6f4ef" class="b"/><text x="57" y="523">新匿名关系，安装PTE → Q</text><text x="57" y="561">完成适用架构/缓存协议</text>
+  <rect x="525" y="490" width="400" height="88" fill="#fff0e7" class="b"/><text x="547" y="523">输出PFN不变</text><text x="547" y="561">不是任意地址或粒度替换接口</text>
+  <path class="ar" d="M235 578V620"/><path class="ar" d="M725 578V620"/>
+  <rect x="35" y="620" width="400" height="88" fill="#eaf1fb" class="b"/><text x="57" y="653">结束旧rmap和相应引用</text><text x="57" y="691">其他持有者仍可保住P</text>
+  <rect x="525" y="620" width="400" height="88" fill="#fff0e7" class="b"/><text x="547" y="653">高层仍配合适用TLB与使用协议</text><text x="547" y="691">原子助手不代替整个调用链</text>
+  <text x="28" y="744" class="s">模型排除特殊unshare/设备/大页；硬件dirty竞争仅在实际能力和配置允许时推演。</text>
+</svg>

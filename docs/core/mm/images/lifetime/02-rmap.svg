@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="485" viewBox="0 0 960 485" role="img" aria-labelledby="title desc">
+<title id="title">rmap候选与真实PTE</title><desc id="desc">S等于PAGE_SIZE。P的文件索引5通过i_mmap找到从偏移4和5开始的两个VMA，算候选XA加S及XB，然后查真实PTE。一个映射P可处理，另一个无项或已COW到Q不可当P映射。匿名另经anon_vma链找候选。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="960" height="485" fill="#fff"/><text x="28" y="40" class="h">找范围只是候选定位，不能跳过页表真实检查</text>
+<rect x="40" y="85" width="880" height="70" fill="#e6f4ef" class="b"/><text x="62" y="116">文件P，索引5 → mapping.i_mmap相交范围</text><text x="62" y="144" class="s">i_pages索引内容；i_mmap索引VMA，不是同一张表</text>
+<path class="ar" d="M480 155V193H235V230"/><path class="ar" d="M480 193H725V230"/>
+<rect x="40" y="230" width="390" height="85" fill="#eaf1fb" class="b"/><text x="62" y="263">A从偏移4开始：候选XA + S</text><text x="62" y="298" class="s">真实PTE → P：再做适用动作</text>
+<rect x="530" y="230" width="390" height="85" fill="#fff0e7" class="b"/><text x="552" y="263">B从偏移5开始：候选XB</text><text x="552" y="298" class="s">无PTE或已Q：不是当前P映射</text>
+<text x="40" y="373">folio/来源关系保护负责定位寿命；PTL下核项负责当前映射。</text>
+<text x="40" y="416">匿名页经anon_vma/chain找候选，仍须核PTE，不存全VA列表。</text>
+<text x="40" y="461" class="s">S=PAGE_SIZE；try_lock或观察未完成不等无映射，大folio使用实际相交范围。</text>
+</svg>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="600" viewBox="0 0 1100 600">
+  <title>回收中两类内容的恢复来源</title>
+  <desc>普通干净文件缓存可从文件重读，普通必须保留的匿名页需要有效交换保存。示意选定成功路径，缓存移除和最终释放还需寿命协议。</desc>
+  <defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9" fill="#566977"/></marker></defs>
+  <rect width="1100" height="600" fill="#fff"/>
+  <g font-family="Microsoft YaHei, sans-serif" fill="#243745">
+    <text x="36" y="46" font-size="25" font-weight="700">让出驻留资源，但必须保留可恢复的内容</text>
+    <text x="36" y="80" font-size="17">范围可以仍合法；旧数据页最终退出后，后续访问可取得新的驻留页</text>
+    <text x="36" y="132" font-size="20" font-weight="700">干净文件缓存：来源文件已经能提供这份内容</text>
+    <rect x="36" y="155" width="250" height="112" rx="5" fill="#e4f2eb" stroke="#8c9daa"/>
+    <rect x="400" y="155" width="300" height="112" rx="5" fill="#eaf0f9" stroke="#8c9daa"/>
+    <rect x="814" y="155" width="250" height="112" rx="5" fill="#fff2d5" stroke="#8c9daa"/>
+    <text x="54" y="191" font-size="20" font-weight="700">RAM中缓存F</text>
+    <text x="54" y="227" font-size="17">较冷 / 干净 / 无其他持有</text>
+    <text x="418" y="191" font-size="20" font-weight="700">撤缓存并安全释放</text>
+    <text x="418" y="227" font-size="17">文件仍在，不新增交换副本</text>
+    <text x="832" y="191" font-size="20" font-weight="700">后续再从文件取得</text>
+    <text x="832" y="227" font-size="17">新驻留后备不必仍是F</text>
+    <text x="36" y="333" font-size="20" font-weight="700">普通需保留匿名内容：不能靠原文件重读恢复</text>
+    <rect x="36" y="356" width="250" height="112" rx="5" fill="#eaf0f9" stroke="#8c9daa"/>
+    <rect x="400" y="356" width="300" height="112" rx="5" fill="#f8e7ed" stroke="#8c9daa"/>
+    <rect x="814" y="356" width="250" height="112" rx="5" fill="#fff2d5" stroke="#8c9daa"/>
+    <text x="54" y="392" font-size="20" font-weight="700">RAM中私有页P</text>
+    <text x="54" y="428" font-size="17">内容必须保留，不能直接丢</text>
+    <text x="418" y="392" font-size="20" font-weight="700">建立有效交换恢复路径</text>
+    <text x="418" y="428" font-size="17">撤映射 / 保存 / 安全释放RAM</text>
+    <text x="832" y="392" font-size="20" font-weight="700">后续按交换项恢复</text>
+    <text x="832" y="428" font-size="17">确认内容，再建立当前映射</text>
+    <text x="36" y="523" font-size="18">两行均需资格、索引、引用与同步协议；有恢复定位不等于保存已成功。</text>
+    <text x="36" y="558" font-size="17">最终释放才增加适用供给；冷热扫描、交换PTE建立、写出完成都不单独证明RAM已归还。</text>
+  </g>
+  <g fill="none" stroke="#566977" stroke-width="2" marker-end="url(#a)">
+    <path d="M286 211 H388"/><path d="M700 211 H802"/>
+    <path d="M286 412 H388"/><path d="M700 412 H802"/>
+  </g>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="790" viewBox="0 0 1100 790" role="img" aria-labelledby="title desc">
+  <title id="title">独占页块的归还与空闲组织</title>
+  <desc id="desc">独占页块结束全部使用后按首页和原 order 归还。符合资格且 PCP 可用时先局部暂存，否则直接进入 Buddy。PCP 达到策略条件后批量回流；Buddy 验证伙伴并合并。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.n{stroke:#bdcbd3;stroke-width:1.5;rx:6}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1100" height="790" fill="#fff"/>
+  <text x="35" y="38" class="h">独占块归还：结束使用、保存配对，再处理局部与共享组织</text>
+  <rect x="35" y="82" width="1030" height="92" class="n" fill="#e8f0fa"/>
+  <text x="550" y="116" text-anchor="middle">最后使用已结束，首 page 与原 order 配对</text>
+  <text x="550" y="149" text-anchor="middle" class="s">__free_pages() 处理相应引用和归还；此图选择可真正归还的独占情况</text>
+  <path d="M550 174V232" class="e"/>
+  <rect x="35" y="237" width="1030" height="92" class="n" fill="#fff1dc"/>
+  <text x="550" y="271" text-anchor="middle">free_the_page() / 对应准备与资格检查</text>
+  <text x="550" y="305" text-anchor="middle" class="s">order、特殊类型和 PCP 保护获取决定走哪条归还路径</text>
+  <path d="M290 329V421" class="e"/>
+  <path d="M815 329V577" class="e"/>
+  <text x="311" y="376" class="s">适用且可操作 PCP</text>
+  <text x="835" y="376" class="s">不适用 / 特殊分支 / 保护失败</text>
+  <rect x="35" y="426" width="510" height="100" class="n" fill="#e8f0fa"/>
+  <text x="290" y="463" text-anchor="middle">PCP 暂存</text>
+  <text x="290" y="498" text-anchor="middle" class="s">加入对应列表，按基本页更新 count</text>
+  <path d="M290 526V577" class="e"/>
+  <text x="311" y="559" class="s">达到策略条件 / 被排空</text>
+  <rect x="35" y="582" width="1030" height="108" class="n" fill="#e2f2ec"/>
+  <text x="550" y="620" text-anchor="middle">Buddy：验证伙伴 → 移除旧块 → 逐阶合并 → 登记新块</text>
+  <text x="550" y="655" text-anchor="middle" class="s">必须满足同阶、同 Zone 和适用分类边界；不能直接合并任意相邻块</text>
+  <text x="35" y="740" class="s">非复合高阶块与复合页共享引用契约不同；不能将一次 put_page() 当作任意高阶块释放。</text>
+  <text x="35" y="772" class="s">页进入 PCP 不等于已在 Buddy 合并。此图不覆盖其他使用者仍持有引用的全部分支。</text>
+</svg>

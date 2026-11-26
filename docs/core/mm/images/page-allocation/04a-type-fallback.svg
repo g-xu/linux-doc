@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="800" viewBox="0 0 1120 800" role="img" aria-labelledby="title desc">
+  <title id="title">普通类型回退与整 pageblock 分类变化</title>
+  <desc id="desc">请求 UNMOVABLE order-1，本类为空。缩小模型中 RECLAIMABLE 只有 order-1 的 24 到 25，MOVABLE 有 order-3 的 8 到 15。回退从大阶向下，先选后者，更新整个 pageblock 和块列表为 UNMOVABLE，再拆分交付。较小 RECLAIMABLE 块不变。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}.branch{fill:none;stroke:#52616c;stroke-width:2}.n{stroke:#bdcbd3;stroke-width:1.5;rx:6}</style>
+  </defs>
+  <rect width="1120" height="800" fill="#fff"/>
+  <text x="35" y="38" class="h">回退先比较阶数，再看当前阶的类型顺序</text>
+  <text x="35" y="81" class="s">请求 UNMOVABLE order-1，本类型空。缩小模型 pageblock_order = 3，非目标机配置。</text>
+  <text x="35" y="130">初始候选（其他更大块为空）</text>
+  <text x="675" y="130">选择与分类更新</text>
+  <rect x="35" y="180" width="395" height="94" class="n" fill="#fff1dc"/>
+  <text x="232" y="216" text-anchor="middle">RECLAIMABLE order-1</text>
+  <text x="232" y="250" text-anchor="middle" class="s">小块 [24, 26)</text>
+  <path d="M430 227H670" class="e"/>
+  <text x="550" y="211" text-anchor="middle" class="s">本例未选，保持不变</text>
+  <rect x="675" y="180" width="410" height="94" class="n" fill="#fff1dc"/>
+  <text x="880" y="216" text-anchor="middle">RECLAIMABLE order-1</text>
+  <text x="880" y="250" text-anchor="middle" class="s">仍为 [24, 26)</text>
+  <rect x="35" y="320" width="395" height="100" class="n" fill="#e8f0fa"/>
+  <text x="232" y="357" text-anchor="middle">MOVABLE order-3：[8, 16)</text>
+  <text x="232" y="392" text-anchor="middle" class="s">对应 pageblock 标记为 MOVABLE</text>
+  <path d="M430 370H670" class="e"/>
+  <text x="550" y="350" text-anchor="middle" class="s">先找到此阶，接管整块</text>
+  <rect x="675" y="320" width="410" height="100" class="n" fill="#e2f2ec"/>
+  <text x="880" y="357" text-anchor="middle">[8, 16) 转入 UNMOVABLE 列表</text>
+  <text x="880" y="392" text-anchor="middle" class="s">pageblock 标记同时改为 UNMOVABLE</text>
+  <path d="M880 420V478H560V505" class="branch"/>
+  <path d="M560 505H185V530" class="e"/>
+  <path d="M560 505V530" class="e"/>
+  <path d="M560 505H935V530" class="e"/>
+  <text x="35" y="492">回到本类型查找，再按 order-1 拆分</text>
+  <rect x="35" y="535" width="300" height="106" class="n" fill="#e2f2ec"/>
+  <rect x="410" y="535" width="300" height="106" class="n" fill="#e2f2ec"/>
+  <rect x="785" y="535" width="300" height="106" class="n" fill="#e2f2ec"/>
+  <text x="185" y="573" text-anchor="middle">[8, 10) 交付</text>
+  <text x="185" y="609" text-anchor="middle" class="s">请求用途：UNMOVABLE</text>
+  <text x="560" y="573" text-anchor="middle">[10, 12) 空闲</text>
+  <text x="560" y="609" text-anchor="middle" class="s">UNMOVABLE order-1</text>
+  <text x="935" y="573" text-anchor="middle">[12, 16) 空闲</text>
+  <text x="935" y="609" text-anchor="middle" class="s">UNMOVABLE order-2</text>
+  <text x="35" y="696" class="s">只演示 Buddy 普通回退；排除 PCP、水位、CMA、HIGHATOMIC、隔离、NOFRAGMENT 和并发。</text>
+  <text x="35" y="733" class="s">空闲块列表与 pageblock 标记是两种状态；小候选回退可能只改列表，不改区域标记。</text>
+  <text x="35" y="771" class="s">MOVABLE 请求在 can_steal = false 等条件下可改找较小块，详见正文。</text>
+</svg>

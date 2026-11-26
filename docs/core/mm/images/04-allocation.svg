@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="720" viewBox="0 0 1040 720" role="img" aria-labelledby="title desc">
+  <title id="title">内核分配体系与连续性</title>
+  <desc id="desc">对象缓存和 vmalloc 在需要时向页分配器请求页。对象使用同一页内槽位，虚拟连续空间可映射到不连续物理页，而指定 order 的页块具有物理连续性。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.n{stroke:#b9c8d0;stroke-width:1.5;rx:6}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1040" height="720" fill="#fff"/>
+  <text x="35" y="37" class="h">先明确需求，再选分配体系</text>
+  <rect x="35" y="72" width="280" height="93" class="n" fill="#fff1dc"/>
+  <text x="175" y="108" text-anchor="middle">小对象 / 专用对象缓存</text>
+  <text x="175" y="140" text-anchor="middle" class="s">kmalloc / kmem_cache_alloc</text>
+  <rect x="380" y="72" width="280" height="93" class="n" fill="#e8f0fa"/>
+  <text x="520" y="108" text-anchor="middle">较大虚拟连续空间</text>
+  <text x="520" y="140" text-anchor="middle" class="s">vmalloc / 相关接口</text>
+  <rect x="725" y="72" width="280" height="93" class="n" fill="#e2f2ec"/>
+  <text x="865" y="108" text-anchor="middle">指定 order 的物理页块</text>
+  <text x="865" y="140" text-anchor="middle" class="s">alloc_pages</text>
+  <path d="M175 165V240" class="e"/>
+  <text x="192" y="211" class="s">缓存需扩展时</text>
+  <path d="M520 165V240" class="e"/>
+  <text x="537" y="211" class="s">申请后备页与页表</text>
+  <path d="M865 165V240" class="e"/>
+  <rect x="35" y="245" width="970" height="94" class="n" fill="#e2f2ec"/>
+  <text x="520" y="281" text-anchor="middle">页供给：允许的 Node / Zone → PCP 与 Buddy</text>
+  <text x="520" y="314" text-anchor="middle" class="s">请求受 GFP、order、位置和执行上下文约束；无法快速满足时按条件进入慢路径</text>
+  <line x1="35" y1="379" x2="1005" y2="379" stroke="#d7dfe4"/>
+  <text x="35" y="419" class="h">连续性与对象粒度</text>
+  <text x="35" y="461">slab 页内的对象槽位</text>
+  <rect x="35" y="486" width="280" height="63" fill="#fff1dc" stroke="#c7b595"/>
+  <line x1="105" y1="486" x2="105" y2="549" stroke="#c7b595"/>
+  <line x1="175" y1="486" x2="175" y2="549" stroke="#c7b595"/>
+  <line x1="245" y1="486" x2="245" y2="549" stroke="#c7b595"/>
+  <text x="70" y="524" text-anchor="middle">A</text>
+  <text x="140" y="524" text-anchor="middle">空</text>
+  <text x="210" y="524" text-anchor="middle">B</text>
+  <text x="280" y="524" text-anchor="middle">空</text>
+  <text x="35" y="590" class="s">归还对象 → 槽位可复用</text>
+  <text x="35" y="621" class="s">不等于整页立即归还 Buddy</text>
+  <text x="380" y="461">vmalloc：虚拟连续</text>
+  <rect x="380" y="486" width="84" height="51" fill="#e8f0fa" stroke="#98b5d7"/>
+  <rect x="464" y="486" width="84" height="51" fill="#e8f0fa" stroke="#98b5d7"/>
+  <rect x="548" y="486" width="84" height="51" fill="#e8f0fa" stroke="#98b5d7"/>
+  <text x="422" y="518" text-anchor="middle" class="s">VA 0</text>
+  <text x="506" y="518" text-anchor="middle" class="s">VA 1</text>
+  <text x="590" y="518" text-anchor="middle" class="s">VA 2</text>
+  <path d="M422 540V577" class="e"/>
+  <path d="M506 540V577" class="e"/>
+  <path d="M590 540V577" class="e"/>
+  <rect x="380" y="582" width="78" height="51" fill="#e2f2ec" stroke="#8fb5a5"/>
+  <rect x="472" y="582" width="78" height="51" fill="#e2f2ec" stroke="#8fb5a5"/>
+  <rect x="564" y="582" width="78" height="51" fill="#e2f2ec" stroke="#8fb5a5"/>
+  <text x="419" y="614" text-anchor="middle" class="s">PFN 4</text>
+  <text x="511" y="614" text-anchor="middle" class="s">PFN 19</text>
+  <text x="603" y="614" text-anchor="middle" class="s">PFN 8</text>
+  <text x="725" y="461">页块：物理连续</text>
+  <rect x="725" y="486" width="280" height="63" fill="#e2f2ec" stroke="#8fb5a5"/>
+  <line x1="795" y1="486" x2="795" y2="549" stroke="#8fb5a5"/>
+  <line x1="865" y1="486" x2="865" y2="549" stroke="#8fb5a5"/>
+  <line x1="935" y1="486" x2="935" y2="549" stroke="#8fb5a5"/>
+  <text x="760" y="524" text-anchor="middle" class="s">PFN 8</text>
+  <text x="830" y="524" text-anchor="middle" class="s">9</text>
+  <text x="900" y="524" text-anchor="middle" class="s">10</text>
+  <text x="970" y="524" text-anchor="middle" class="s">11</text>
+  <text x="725" y="590" class="s">order = 2 → 4 个连续基本页</text>
+  <text x="725" y="621" class="s">页大小依配置，不固定为 4 KiB</text>
+  <text x="35" y="690" class="s">kvmalloc 可能采用虚拟连续、物理不连续的后备；DMA 需求需使用适用的设备接口与契约。</text>
+</svg>

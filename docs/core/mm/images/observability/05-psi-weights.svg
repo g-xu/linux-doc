@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="688" viewBox="0 0 1120 688">
+<title>一次PSI聚合期的局部停顿时间按NONIDLE加权</title>
+<desc>独立单次聚合1秒模型：CPU0 NONIDLE1000ms、MEM_SOME100ms，CPU1 NONIDLE200ms且SOME200ms，后800ms无该组任务。忽略时钟粒度加权约116.67ms，单期11.67%不是avg10。局部SOME看M大于0，FULL还看R等于MR或该组当前执行者memstall覆盖，正文有A/B切换推演。NONIDLE包含停顿，每期重算权重。</desc>
+<style>text{font-family:Arial,"Microsoft YaHei",sans-serif;font-size:18px;fill:#23343e}.h{font-size:23px;font-weight:700}.s{font-size:16px}.axis{stroke:#8ba0ac;stroke-width:1}.b{fill:#f0f6f6;stroke:#7d929f;stroke-width:1.5}</style>
+<rect width="1120" height="688" fill="white"/>
+<text x="32" y="40" class="h">独立1秒聚合模型：先有CPU状态桶，再按NONIDLE时长加权</text>
+<rect x="32" y="70" width="18" height="18" fill="#9ecfb9"/><text x="60" y="86" class="s">NONIDLE非停顿</text><rect x="284" y="70" width="18" height="18" fill="#dd91a7"/><text x="312" y="86" class="s">MEM_SOME（也在NONIDLE内）</text><rect x="674" y="70" width="18" height="18" fill="#e4e9ed"/><text x="702" y="86" class="s">无该组相关非空闲任务</text>
+<text x="240" y="128" class="s">0ms</text><text x="400" y="128" class="s">200ms</text><text x="998" y="128" class="s">1000ms</text>
+<path d="M240 140H1040" class="axis"/>
+<text x="32" y="174">CPU0</text><rect x="240" y="154" width="800" height="28" fill="#9ecfb9"/><rect x="320" y="154" width="80" height="28" fill="#dd91a7"/>
+<text x="240" y="212" class="s">NONIDLE=1000ms；MEM_SOME=100ms</text>
+<text x="32" y="264">CPU1</text><rect x="240" y="244" width="800" height="28" fill="#e4e9ed"/><rect x="240" y="244" width="160" height="28" fill="#dd91a7"/>
+<text x="240" y="302" class="s">NONIDLE=200ms；MEM_SOME=200ms，不把停顿当完全无任务</text>
+<rect x="32" y="348" width="1056" height="142" rx="4" class="b"/>
+<text x="50" y="382">忽略时钟粒度，权重比1000:200</text>
+<text x="50" y="422">(100 × 1000 + 200 × 200) / (1000 + 200) ≈ 116.67ms</text>
+<text x="50" y="462">这一单期相对1秒约11.67%；不是100+200ms，也不是avg10的直接值</text>
+<text x="32" y="540">输入是局部状态时间delta，不是先计算每CPU停顿百分比；每次聚合重新计算权重。</text>
+<text x="32" y="590" class="s">任意长窗口不能先合并CPU桶再只套一次公式；实际total还累计各期，趋势另做衰减。</text>
+<text x="32" y="638" class="s">局部SOME看M&gt;0；FULL还看R=MR，或该组当前执行者memstall的覆盖，详见正文。</text>
+</svg>

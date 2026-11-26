@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="620" viewBox="0 0 1100 620">
+  <title>MGLRU普通反馈选择的条件变化</title>
+  <desc>固定两类型最旧代相同、swappiness100、比较基数1000、匿名tier0refault100，文件tier0反馈80选文件、160选匿名；文件tier2反馈160降80让阈值从1变2。</desc>
+  <defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9" fill="#566977"/></marker></defs>
+  <rect width="1100" height="620" fill="#fff"/>
+  <g font-family="Microsoft YaHei, sans-serif" fill="#243745">
+    <text x="36" y="45" font-size="25" font-weight="700">先选类型，再从低到高确定可扫描tier</text>
+    <text x="36" y="81" font-size="17">普通反馈模型：两类min_seq相同，s=100，T均1000，匿名tier0的R=100</text>
+    <text x="36" y="127" font-size="20" font-weight="700">① 只改变文件tier0的refault反馈</text>
+    <rect x="36" y="149" width="465" height="124" rx="5" fill="#eaf0f9" stroke="#8c9daa"/>
+    <rect x="589" y="149" width="475" height="124" rx="5" fill="#f8e7ed" stroke="#8c9daa"/>
+    <text x="56" y="185" font-size="20" font-weight="700">R=80：85120 ≤ 101000</text>
+    <text x="56" y="222" font-size="18">文件反馈相对较低 → 首选文件</text>
+    <text x="56" y="252" font-size="17">两侧增益100；样本均不走少样本旁路</text>
+    <text x="609" y="185" font-size="20" font-weight="700">R=160：170240 &gt; 101000</text>
+    <text x="609" y="222" font-size="18">文件反馈较高 → 首选匿名</text>
+    <text x="609" y="252" font-size="17">不是文件永久免淘汰，也不保证匿名释放</text>
+    <text x="36" y="331" font-size="20" font-weight="700">② 固定首选文件，只改变tier2反馈；遇首次失败停止</text>
+    <rect x="36" y="356" width="465" height="136" rx="5" fill="#fff2d5" stroke="#8c9daa"/>
+    <rect x="589" y="356" width="475" height="136" rx="5" fill="#e4f2eb" stroke="#8c9daa"/>
+    <text x="56" y="393" font-size="20" font-weight="700">tier1/2/3：R=80 / 160 / 160</text>
+    <text x="56" y="431" font-size="18">tier1通过，tier2失败 → tier_idx=1</text>
+    <text x="56" y="464" font-size="17">tier2的J因此受保护，仍检查其他状态</text>
+    <text x="609" y="393" font-size="20" font-weight="700">tier1/2/3：R=80 / 80 / 160</text>
+    <text x="609" y="431" font-size="18">tier1/2通过，tier3失败 → tier_idx=2</text>
+    <text x="609" y="464" font-size="17">J不再仅因tier保护；扫描仍不等于释放</text>
+    <text x="36" y="547" font-size="18">R/T含历史与当前refault、淘汰及适用保护基数；不是每次访存的精确计数。</text>
+    <text x="36" y="582" font-size="17">明显选择分支、代窗口和无扫描后换类型另有规则；图不代表全部MGLRU条件。</text>
+  </g>
+  <g fill="none" stroke="#566977" stroke-width="2" marker-end="url(#a)">
+    <path d="M501 211 H577"/><path d="M501 424 H577"/>
+  </g>
+</svg>

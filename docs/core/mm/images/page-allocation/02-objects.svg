@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700" role="img" aria-labelledby="title desc">
+  <title id="title">Zone 内的空闲列表、PCP 与请求上下文</title>
+  <desc id="desc">Buddy 的 free_area 按阶组织，每阶有多个迁移类型列表，块头记录空闲关系。PCP 按 CPU 缓存部分块。alloc_context 记录单次请求而不是持有所有资源。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.n{stroke:#bdcbd3;stroke-width:1.5;rx:6}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1100" height="700" fill="#fff"/>
+  <text x="35" y="38" class="h">候选范围、空闲块分类、局部缓存分别描述不同状态</text>
+  <rect x="35" y="80" width="715" height="414" class="n" fill="#f3f7f9"/>
+  <text x="58" y="119">struct zone：一个管理边界</text>
+  <text x="58" y="157" class="s">free_area[order] → free_list[migratetype]</text>
+  <text x="58" y="198" class="s">阶数</text>
+  <text x="272" y="198" text-anchor="middle" class="s">UNMOVABLE</text>
+  <text x="449" y="198" text-anchor="middle" class="s">MOVABLE</text>
+  <text x="630" y="198" text-anchor="middle" class="s">RECLAIMABLE</text>
+  <text x="58" y="254">order 0</text>
+  <text x="58" y="334">order 1</text>
+  <text x="58" y="414">order 2</text>
+  <rect x="186" y="218" width="166" height="55" rx="5" fill="#fff1dc"/>
+  <rect x="366" y="218" width="166" height="55" rx="5" fill="#e2f2ec"/>
+  <rect x="546" y="218" width="166" height="55" rx="5" fill="#e8f0fa"/>
+  <rect x="186" y="298" width="166" height="55" rx="5" fill="#fff1dc"/>
+  <rect x="366" y="298" width="166" height="55" rx="5" fill="#e2f2ec"/>
+  <rect x="546" y="298" width="166" height="55" rx="5" fill="#e8f0fa"/>
+  <rect x="186" y="378" width="166" height="55" rx="5" fill="#fff1dc"/>
+  <rect x="366" y="378" width="166" height="55" rx="5" fill="#e2f2ec"/>
+  <rect x="546" y="378" width="166" height="55" rx="5" fill="#e8f0fa"/>
+  <text x="269" y="253" text-anchor="middle" class="s">块头 → 块头</text>
+  <text x="449" y="253" text-anchor="middle" class="s">块头 → 块头</text>
+  <text x="629" y="253" text-anchor="middle" class="s">空 / 若干块</text>
+  <text x="269" y="333" text-anchor="middle" class="s">空 / 若干块</text>
+  <text x="449" y="333" text-anchor="middle" class="s">块头 → 块头</text>
+  <text x="629" y="333" text-anchor="middle" class="s">空 / 若干块</text>
+  <text x="269" y="413" text-anchor="middle" class="s">空 / 若干块</text>
+  <text x="449" y="413" text-anchor="middle" class="s">块头 → 块头</text>
+  <text x="629" y="413" text-anchor="middle" class="s">空 / 若干块</text>
+  <text x="58" y="470" class="s">每阶 nr_free 统计块数；特殊类别与更高阶省略</text>
+  <rect x="805" y="80" width="260" height="188" class="n" fill="#e2f2ec"/>
+  <text x="935" y="120" text-anchor="middle">CPU 0 的 PCP</text>
+  <text x="935" y="160" text-anchor="middle" class="s">lists：阶数与类型</text>
+  <text x="935" y="195" text-anchor="middle" class="s">count：基本页数</text>
+  <text x="935" y="230" text-anchor="middle" class="s">high / batch：策略参数</text>
+  <rect x="805" y="306" width="260" height="188" class="n" fill="#e2f2ec"/>
+  <text x="935" y="346" text-anchor="middle">CPU 1 的 PCP</text>
+  <text x="935" y="386" text-anchor="middle" class="s">同一 Zone 的另一缓存</text>
+  <text x="935" y="421" text-anchor="middle" class="s">不是第二份 RAM</text>
+  <text x="935" y="456" text-anchor="middle" class="s">同一块不重复挂入 Buddy</text>
+  <rect x="35" y="545" width="475" height="105" class="n" fill="#e8f0fa"/>
+  <text x="272" y="583" text-anchor="middle">alloc_context：单次请求</text>
+  <text x="272" y="618" text-anchor="middle" class="s">zonelist / nodemask / 最高 Zone / 类型</text>
+  <rect x="580" y="545" width="485" height="105" class="n" fill="#fff1dc"/>
+  <text x="822" y="583" text-anchor="middle">空闲块头 struct page</text>
+  <text x="822" y="618" text-anchor="middle" class="s">Buddy 标记、order、链表关系配合管理</text>
+  <path d="M272 545V499" class="e"/>
+  <path d="M822 545V517H630V499" class="e"/>
+  <text x="35" y="682" class="s">示意不描述所有字段、真实列表内容或页状态；已分配页的字段不能当作历史阶数查询。</text>
+</svg>

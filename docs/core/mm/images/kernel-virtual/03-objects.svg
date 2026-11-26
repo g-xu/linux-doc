@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="680" viewBox="0 0 920 680" role="img" aria-labelledby="title desc">
+  <title id="title">虚拟范围和映射对象的职责</title>
+  <desc id="desc">vmap_area记录保留范围并关联vm_struct。vm_struct保存地址、大小、属性及适用所有权的页数组。页数组是页指针，页表记录实际转换。普通借用vmap不保存调用者数组，使用其值建立页表。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+  <rect width="920" height="680" fill="#fff"/>
+  <text x="28" y="36" class="h">三类记录：区间、后备来源、CPU 转换</text>
+  <rect x="35" y="74" width="340" height="143" fill="#eaf1fb" class="b"/>
+  <text x="57" y="107" class="h">vmap_area</text><text x="57" y="142">va_start / va_end：保留范围</text><text x="57" y="178">树 / 链：free、busy、purge</text><text x="57" y="204" class="s">半开区间；不是数据存储</text>
+  <rect x="530" y="74" width="355" height="176" fill="#eef1f4" class="b"/>
+  <text x="552" y="107" class="h">vm_struct</text><text x="552" y="142">addr=V，普通 size=4P</text><text x="552" y="178">flags：映射属性与清理方式</text><text x="552" y="214">pages / nr_pages：适用后备记录</text>
+  <path class="ar" d="M375 145H530"/><text x="405" y="129" class="s">vm 关联</text>
+  <rect x="530" y="317" width="355" height="108" fill="#fff0e7" class="b"/>
+  <text x="552" y="351" class="h">页指针数组（不是页内容）</text><text x="552" y="390">pages[0..2] = P4、P19、P8</text>
+  <path class="ar" d="M708 250V317"/><text x="728" y="288" class="s">适用路径保存</text>
+  <rect x="35" y="317" width="340" height="180" fill="#e6f4ef" class="b"/>
+  <text x="57" y="351" class="h">内核页表</text><text x="57" y="389">V       → P4</text><text x="57" y="423">V+P   → P19</text><text x="57" y="457">V+2P → P8</text><text x="57" y="483" class="s">CPU 使用转换关系，不查页数组</text>
+  <path class="ar" d="M530 386H375"/><text x="403" y="370" class="s">用于建立映射</text>
+  <text x="35" y="550" class="h">保存数组的关系：vmalloc / 成功转移所有权 vmap</text>
+  <text x="35" y="588">普通借用 vmap 不保存数组，也不自动增加页引用。</text>
+  <text x="35" y="625" class="s">映射已建立后修改原数组，不会自动改变页表；范围记录也不提供业务寿命保证。</text>
+  <text x="35" y="658" class="s">这里的 vm_struct / vmap_area 不是用户地址空间的 vm_area_struct。</text>
+</svg>

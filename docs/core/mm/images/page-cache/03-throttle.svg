@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+<title id="title">后台回写与前台限速</title><desc id="desc">计算后假设阈值400和1000得freerun700，限速dirty为待写加在途，后台阈值判断排除在途。600可在其他域满足时自由运行，850受反馈限速。实时任务阈值另调，适用memcg域需组回写支持，图非调参结果。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="960" height="420" fill="#fff"/><text x="28" y="40" class="h">背景触发与生产者限速是两个决策</text>
+<rect x="50" y="110" width="460" height="65" fill="#e6f4ef"/><rect x="510" y="110" width="350" height="65" fill="#fff0e7"/>
+<path class="ar" d="M50 187H915"/>
+<path d="M290 100V199M510 100V199M860 100V199" stroke="#475569" fill="none"/>
+<text x="230" y="229">背景400</text><text x="449" y="229">freerun700</text><text x="800" y="229">thresh1000</text>
+<text x="78" y="148">600：满足各适用域时自由运行</text><text x="542" y="148">850：位置与带宽反馈</text>
+<text x="50" y="285">限速dirty包含待写与在途；后台阈值判断排除在途回写。</text>
+<text x="50" y="327">实际hard limit有平滑，strictlimit wb及适用组回写域可更早限制。</text>
+<text x="50" y="382" class="s">数字是计算后假设阈值；实时任务另有阈值调整，不是RT补丁让所有任务统一调整。</text>
+</svg>

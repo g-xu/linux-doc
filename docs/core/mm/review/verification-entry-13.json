@@ -1,0 +1,93 @@
+{
+  "source": "D:\\temp\\linux_wiki\\Linux-zensical\\draft\\mm_new\\13-numa-policy.md",
+  "sourceSha256": "0d4e9ed8228ce5187ad5c4b3cbdd101a51fe9628a29b77ed9bd24f29a9e8d873",
+  "mechanismSha256": "d3e8494a8d4ccd394aaa6a461c239eb0acf3e52a6d2aaf070f3122919513eac6",
+  "linkCount": 29,
+  "supportChecks": [
+    {
+      "file": "13-numa-policy.md",
+      "linkCount": 29,
+      "anchorCount": 8
+    },
+    {
+      "file": "review-entry-13.md",
+      "linkCount": 3,
+      "anchorCount": 0
+    },
+    {
+      "file": "index.md",
+      "linkCount": 38,
+      "anchorCount": 0
+    },
+    {
+      "file": "entry-revision-mm-series.md",
+      "linkCount": 12,
+      "anchorCount": 0
+    }
+  ],
+  "svgChecks": [
+    {
+      "file": "images/numa/00-local-remote.svg",
+      "sha256": "d0758e6e779587b6ebaf8b5939a0a2790a9df02e6ffba129b1c7dcc9aaafa1b0",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 12
+    },
+    {
+      "file": "images/numa/01-selection.svg",
+      "sha256": "8b7e6139c79ed1a9dddb7605e77f69a8d862ab896c2bee7456c64f7a5c086854",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 11
+    },
+    {
+      "file": "images/numa/02-changes.svg",
+      "sha256": "ce504e91f5048e72a18dabbcc54272d95b18ad65ba416b6d90ec283a93db82e1",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 8
+    },
+    {
+      "file": "images/numa/03-balancing.svg",
+      "sha256": "94c60fca414be9f0bfb620b00dec458ce2f0c1a41f31ef6c5af4d37fc677bcfd",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 8
+    },
+    {
+      "file": "images/numa/04-cpupid-history.svg",
+      "sha256": "82b5632c319549e105eaef0953c536c0e10274ededaff65c8328cdaf48efcb9e",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 24
+    }
+  ],
+  "previews": [
+    {
+      "width": 1280,
+      "documentWidth": 1280,
+      "viewportWidth": 1280,
+      "brokenImages": 0,
+      "overflowingTables": 0
+    },
+    {
+      "width": 480,
+      "documentWidth": 480,
+      "viewportWidth": 480,
+      "brokenImages": 0,
+      "overflowingTables": 0
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Temporary Markdown preview, not a Zensical build.",
+    "SVG text boxes checked; connector correctness and visual readability need human inspection.",
+    "No kernel, C snippet, I/O or target-machine execution.",
+    "Mechanical checks do not grade teaching quality."
+  ]
+}

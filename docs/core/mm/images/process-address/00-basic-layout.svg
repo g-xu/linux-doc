@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="640" viewBox="0 0 1040 640" role="img" aria-labelledby="title desc">
+  <title id="title">虚拟范围、当前页表转换与真实后备</title>
+  <desc id="desc">P为基本页大小，B为合法对齐用户窗口基址，数字是虚拟页偏移而非PFN。窗口中4到12为私有读写文件映射，起点对应文件页100，两侧空洞。假设读取B加5P已完成缺页处理，当前转换连接到文件页101的内存后备F。范围连续不代表物理连续或全部驻留；范围语义、转换和内容是不同层。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#46545e"/>
+    </marker>
+  </defs>
+  <style>
+    text{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:18px;fill:#243038;letter-spacing:0}
+    .heading{font-size:24px;font-weight:700}.label{font-size:20px;font-weight:700}.small{font-size:16px}
+    .box{stroke:#78828b;stroke-width:1.5}.flow{fill:none;stroke:#46545e;stroke-width:2;marker-end:url(#arrow)}
+  </style>
+  <rect width="1040" height="640" fill="#fff"/>
+  <text x="30" y="43" class="heading">虚拟范围、当前转换和内容后备，不是三份用户数据</text>
+  <text x="30" y="81">只放大合法用户窗口；P 为基本页大小，B 为虚拟基址，数字不是 PFN</text>
+  <text x="90" y="130" class="label">用户虚拟布局</text>
+  <g class="box">
+    <rect x="90" y="160" width="180" height="65" fill="#eef1f4"/>
+    <rect x="270" y="160" width="360" height="65" fill="#dcefe5"/>
+    <rect x="630" y="160" width="360" height="65" fill="#eef1f4"/>
+    <rect x="315" y="160" width="45" height="65" fill="#bddfcb"/>
+  </g>
+  <text x="147" y="199">空洞</text>
+  <text x="402" y="199">文件私有：读写</text>
+  <text x="779" y="199">空洞</text>
+  <text x="89" y="253" class="small">B</text>
+  <text x="247" y="253" class="small">B+4P</text>
+  <text x="603" y="253" class="small">B+12P</text>
+  <text x="934" y="253" class="small">B+20P</text>
+  <path d="M338 225 V297 H40 V424 H65" class="flow"/>
+  <text x="365" y="280" class="small">深绿色只标本次读取页 B+5P，不表示独立权限</text>
+  <text x="65" y="330">本次读取已完成缺页处理；来源偏移 100 + (5 - 4) = 文件页 101</text>
+  <rect x="65" y="358" width="440" height="132" rx="5" fill="#e8effb" class="box"/>
+  <text x="87" y="392" class="label">当前页表转换</text>
+  <text x="87" y="431">把相应用户地址连接到后备 F</text>
+  <text x="87" y="466" class="small">可写范围也不等于当前转换必定可写</text>
+  <path d="M505 424 H600" class="flow"/>
+  <text x="527" y="409" class="small">映射</text>
+  <rect x="600" y="358" width="400" height="132" rx="5" fill="#fff2d3" class="box"/>
+  <text x="622" y="392" class="label">实际内容：文件缓存页 F</text>
+  <text x="622" y="431">承载文件页 101 的数据</text>
+  <text x="622" y="466" class="small">物理位置未指定，可被其他映射共享</text>
+  <text x="30" y="540">这里只画一个已完成的转换，不推导其余地址都已驻留或物理连续。</text>
+  <text x="30" y="583" class="small">范围规则由地址空间管理；当前转换由页表维护；数据与后备寿命由相应机制管理。</text>
+  <text x="30" y="614" class="small">本图为一次只读访问快照，不是私有写后的结果，也不指定实际 arm64 地址布局。</text>
+</svg>

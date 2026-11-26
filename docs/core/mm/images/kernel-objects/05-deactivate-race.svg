@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="745" viewBox="0 0 920 745" role="img" aria-labelledby="title desc">
+  <title id="title">停用与远程释放的状态竞争</title>
+  <desc id="desc">CPU0 已移走当前关系，本地有 C D，读取共享 A 与 inuse3。CPU1 先归还B，提交 B A 与 inuse2。CPU0旧比较交换失败，重新读共享状态，将本地合并后提交 C D B A、inuse0、frozen0，再依留存条件决定去向。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#70818c;stroke-width:1.5;rx:6}.ar{stroke:#475569;stroke-width:2;fill:none;marker-end:url(#a)}.lane{stroke:#a3b0b8;stroke-dasharray:5 5}</style>
+  <rect width="920" height="745" fill="#fff"/>
+  <text x="28" y="36" class="h">旧状态不能覆盖新归还：失败后重读、重接、重算</text>
+  <text x="28" y="71" class="s">初始：CPU0 已移走当前关系，本地 C→D；共享 A；inuse=3；frozen=1</text>
+  <rect x="35" y="99" width="370" height="58" fill="#e6f4ef" class="b"/><text x="220" y="134" text-anchor="middle">CPU0：deactivate_slab()</text>
+  <rect x="535" y="99" width="350" height="58" fill="#fff0e7" class="b"/><text x="710" y="134" text-anchor="middle">CPU1：归还 B</text>
+  <path class="lane" d="M220 157V689M710 157V689"/>
+  <rect x="40" y="186" width="355" height="80" fill="#e6f4ef" class="b"/>
+  <text x="58" y="217">读取共享 A、inuse=3</text><text x="58" y="248">准备合并 C→D→A，计数 3-2=1</text>
+  <rect x="535" y="283" width="350" height="83" fill="#fff0e7" class="b"/>
+  <text x="553" y="315">先成功提交共享 B→A</text><text x="553" y="347">inuse=2，frozen=1</text>
+  <path class="ar" d="M535 325H430V302H395"/>
+  <text x="426" y="389" class="s">共享状态已改变</text>
+  <rect x="40" y="389" width="355" height="80" fill="#f9eaf0" class="b"/>
+  <text x="58" y="420">旧期望 A、3 的 CAS 失败</text><text x="58" y="451">未解除 frozen，未提交旧合并结果</text>
+  <path class="ar" d="M220 469V499"/>
+  <rect x="40" y="499" width="490" height="111" fill="#eaf1fb" class="b"/>
+  <text x="58" y="531">重读共享 B→A、inuse=2</text>
+  <text x="58" y="564">重新接 D→B；计算 2-2=0</text><text x="58" y="596">成功提交 C→D→B→A，inuse=0，frozen=0</text>
+  <path class="ar" d="M220 610V640"/>
+  <rect x="40" y="640" width="490" height="63" fill="#eef1f4" class="b"/>
+  <text x="58" y="678">依据节点留存条件：保留空 slab 或释放后备</text>
+  <text x="554" y="541" class="s">比较交换验证两部分：</text><text x="554" y="576" class="h">freelist + counters</text>
+  <text x="554" y="615" class="s">节点入链还需 list_lock 协调</text>
+  <text x="28" y="735" class="s">健康普通模型；这里只推演 CPU1 先提交的顺序，反向顺序也需重新验证 frozen。</text>
+</svg>

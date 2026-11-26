@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="388" viewBox="0 0 640 388" role="img" aria-labelledby="title">
+  <title id="title">从同一个文件缓存页交付缓冲读和映射读</title>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#425363"/></marker></defs>
+  <rect width="640" height="388" rx="8" fill="#f7fafb"/>
+  <g stroke-width="1.5">
+    <rect x="130" y="22" width="380" height="50" rx="6" fill="#e9f2fa" stroke="#537699"/>
+    <rect x="130" y="122" width="380" height="62" rx="6" fill="#edf5ed" stroke="#508164"/>
+    <rect x="18" y="260" width="288" height="89" rx="6" fill="#fff0dc" stroke="#a5763e"/>
+    <rect x="334" y="260" width="288" height="89" rx="6" fill="#e9f2fa" stroke="#537699"/>
+  </g>
+  <g fill="none" stroke="#425363" stroke-width="2" marker-end="url(#a)">
+    <path d="M320 76V118"/><path d="M162 188V256"/><path d="M478 256V188"/>
+  </g>
+  <g text-anchor="middle" font-family="Microsoft YaHei, sans-serif" fill="#1d2d3b">
+    <g font-size="22" font-weight="bold">
+      <text x="320" y="54">文件后备：同一个偏移 S+128</text>
+      <text x="320" y="148">页缓存 F：索引 1</text>
+      <text x="162" y="288">read 的用户缓冲区</text>
+      <text x="478" y="288">mmap 的用户虚拟地址</text>
+    </g>
+    <g font-size="18">
+      <text x="417" y="102">未就绪时填充</text>
+      <text x="320" y="173">目标片段是 F 内的 64 字节</text>
+      <text x="219" y="226">复制字节</text><text x="405" y="226">PTE 指向 F</text>
+      <text x="162" y="321">持有独立副本</text><text x="478" y="321">CPU 经映射读取 F</text>
+      <text x="320" y="375">左箭头表示拷贝，右箭头表示映射关系</text>
+    </g>
+  </g>
+</svg>

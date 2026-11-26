@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="700" viewBox="0 0 1040 700" role="img" aria-labelledby="title desc">
+  <title id="title">缓冲文件访问与文件映射的页缓存协作</title>
+  <desc id="desc">缓冲 read 从缓存复制到用户缓冲，mmap 缺页建立指向缓存页的映射。address_space 按文件偏移组织缓存；未就绪数据通过文件系统和 I/O 填充，修改数据经回写送往存储。私有写入走 COW。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.n{stroke:#b9c8d0;stroke-width:1.5;rx:6}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}.b{fill:none;stroke:#52616c;stroke-width:2;marker-start:url(#a);marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1040" height="700" fill="#fff"/>
+  <text x="35" y="37" class="h">同一缓存来源，不同用户访问方式</text>
+  <rect x="35" y="72" width="390" height="92" class="n" fill="#e8f0fa"/>
+  <text x="230" y="108" text-anchor="middle">缓冲 read / write</text>
+  <text x="230" y="140" text-anchor="middle" class="s">用户缓冲与页缓存之间复制数据</text>
+  <rect x="615" y="72" width="390" height="92" class="n" fill="#e8f0fa"/>
+  <text x="810" y="108" text-anchor="middle">文件 mmap</text>
+  <text x="810" y="140" text-anchor="middle" class="s">VMA 保存来源，页表暴露缓存数据</text>
+  <path d="M230 164V270" class="b"/>
+  <text x="249" y="208" class="s">read：复制到用户缓冲</text>
+  <text x="249" y="236" class="s">write：修改缓存</text>
+  <path d="M810 164V270" class="b"/>
+  <text x="829" y="208" class="s">缺页取得数据并建映射</text>
+  <text x="829" y="236" class="s">共享写入可修改缓存</text>
+  <rect x="35" y="275" width="970" height="122" class="n" fill="#e2f2ec"/>
+  <text x="520" y="313" text-anchor="middle">文件页缓存：address_space → i_pages / XArray → folio</text>
+  <text x="520" y="347" text-anchor="middle" class="s">以文件位置组织数据；可被多个进程利用；可以没有用户映射但仍驻留</text>
+  <text x="520" y="375" text-anchor="middle" class="s">数据状态：未就绪 / 干净 / 脏 / 回写中，与是否存在用户映射分别管理</text>
+  <path d="M230 504V397" class="e"/>
+  <text x="249" y="450" class="s">缺失时填充 / 预读</text>
+  <path d="M810 397V504" class="e"/>
+  <text x="829" y="450" class="s">适用脏数据回写</text>
+  <rect x="35" y="509" width="970" height="105" class="n" fill="#fff1dc"/>
+  <text x="520" y="548" text-anchor="middle">文件系统操作 + 存储 I/O</text>
+  <text x="520" y="584" text-anchor="middle" class="s">定位文件数据、提交传输、处理就绪及错误；持久化还受文件系统和存储语义约束</text>
+  <text x="35" y="654" class="s">MAP_PRIVATE 写入可转为匿名 COW 页，不作为共享写直接修改文件缓存。</text>
+  <text x="35" y="683" class="s">只展示常规页缓存路径；直接 I/O、DAX、tmpfs 和特殊映射需分别理解。</text>
+</svg>

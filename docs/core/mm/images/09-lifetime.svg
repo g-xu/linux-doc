@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="640" viewBox="0 0 1040 640" role="img" aria-labelledby="title desc">
+  <title id="title">文件缓存页的映射、引用与反向映射</title>
+  <desc id="desc">同一文件缓存页可被两个进程映射，并被缓存和内核使用者持有。进程 A 解除映射后，其他关系仍存在。反向映射从选定页定位相关 VMA 和页表，而释放必须处理所有有关的使用关系。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.n{stroke:#b9c8d0;stroke-width:1.5;rx:6}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}.d{fill:none;stroke:#976576;stroke-width:2;stroke-dasharray:7 5;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1040" height="640" fill="#fff"/>
+  <text x="35" y="37" class="h">删除一个映射，不等于所有使用者都已退出</text>
+  <rect x="35" y="78" width="230" height="82" class="n" fill="#e8f0fa"/>
+  <text x="150" y="112" text-anchor="middle">进程 A：VMA / PTE</text>
+  <text x="150" y="143" text-anchor="middle" class="s">用户映射关系</text>
+  <rect x="35" y="248" width="230" height="82" class="n" fill="#e8f0fa"/>
+  <text x="150" y="282" text-anchor="middle">进程 B：VMA / PTE</text>
+  <text x="150" y="313" text-anchor="middle" class="s">用户映射关系</text>
+  <rect x="415" y="164" width="220" height="117" class="n" fill="#e2f2ec"/>
+  <text x="525" y="205" text-anchor="middle">同一文件缓存页</text>
+  <text x="525" y="240" text-anchor="middle" class="s">引用 / 映射 / 数据状态</text>
+  <path d="M265 119H334V194H415" class="e"/>
+  <path d="M265 289H334V251H415" class="e"/>
+  <rect x="775" y="78" width="230" height="82" class="n" fill="#fff1dc"/>
+  <text x="890" y="112" text-anchor="middle">address_space 缓存</text>
+  <text x="890" y="143" text-anchor="middle" class="s">文件位置索引与持有</text>
+  <rect x="775" y="248" width="230" height="82" class="n" fill="#f2f6f8"/>
+  <text x="890" y="282" text-anchor="middle">其他内核使用者</text>
+  <text x="890" y="313" text-anchor="middle" class="s">临时引用 / 适用的 pin</text>
+  <path d="M775 119H704V194H635" class="e"/>
+  <path d="M775 289H704V251H635" class="e"/>
+  <path d="M525 281V376H150V330" class="d"/>
+  <text x="550" y="368" class="s">rmap：定位相关 VMA，再检查真实页表</text>
+  <line x1="35" y1="413" x2="1005" y2="413" stroke="#d7dfe4"/>
+  <rect x="35" y="451" width="250" height="88" class="n" fill="#f8edf0"/>
+  <text x="160" y="486" text-anchor="middle">A 执行 munmap</text>
+  <text x="160" y="517" text-anchor="middle" class="s">撤销自己的适用映射</text>
+  <path d="M285 495H365" class="e"/>
+  <rect x="370" y="451" width="635" height="88" class="n" fill="#e2f2ec"/>
+  <text x="687" y="486" text-anchor="middle">B 的映射、缓存持有或其他使用仍可能存在</text>
+  <text x="687" y="517" text-anchor="middle" class="s">不能仅因 A 无法再访问，就把该物理页交给其他数据使用</text>
+  <text x="35" y="583" class="s">关系示意，不是精确计数公式；引用保护寿命，锁保护状态，两者不能互相替代。</text>
+  <text x="35" y="614" class="s">mlock 的驻留要求与设备 pin 的位置 / 使用约束不同；释放和迁移应按具体契约判断。</text>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="475" viewBox="0 0 960 475" role="img" aria-labelledby="title desc">
+<title id="title">高阶失败的容量和资格判断</title><desc id="desc">order4请求仅允许N0目标zone，Buddy有32个order0和4个order1共40页但没有order4以上块，不能据全局空闲保证成功。之后分别查类型水位、回收规整进展与组收费，假设需要相关路径证据确认。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="960" height="475" fill="#fff"/><text x="28" y="40" class="h">order-4需16页连续块，40页总量不证明存在合格块</text>
+<rect x="40" y="85" width="880" height="75" fill="#eef1f4" class="b"/><text x="62" y="116">固定模型：只允许N0目标zone；order0块32、order1块4、高阶全0</text><text x="62" y="148" class="s">Buddy表示40基本页；全局其他节点空闲不能越过本请求范围</text>
+<path class="ar" d="M480 160V197H180V237"/><path class="ar" d="M480 197V237"/><path class="ar" d="M480 197H780V237"/>
+<rect x="40" y="237" width="280" height="95" fill="#e6f4ef" class="b"/><text x="62" y="271">同zone类型 / 水位 / 保留</text><text x="62" y="309" class="s">有块也不一定有资格</text>
+<rect x="340" y="237" width="280" height="95" fill="#eaf1fb" class="b"/><text x="362" y="271">回收 / 规整区间事件</text><text x="362" y="309" class="s">进展不等拿到连续块</text>
+<rect x="640" y="237" width="280" height="95" fill="#fff0e7" class="b"/><text x="662" y="271">组收费 / 祖先额度</text><text x="662" y="309" class="s">物理块存在也可失败</text>
+<text x="40" y="395">需要order/GFP/节点/调用路径与同窗口证据，不能从一个总量归因。</text>
+<text x="40" y="448" class="s">这是分析模型，未执行分配/回收/规整；页大小取实际配置，MemAvailable只是估计。</text>
+</svg>

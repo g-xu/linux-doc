@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="650" viewBox="0 0 940 650" role="img" aria-labelledby="title desc">
+  <title id="title">TLBI后仍需软件walker退出</title><desc id="desc">软件walker在IRQ关闭期间已取下级表T指针。修改方断父项并记录freed_tables，做相应非叶子失效；TLBI不撤回软件C指针。正常批次RCU等待，批次分配失败同步IPI使IRQ关闭walker先退出，再释放单表。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+  <rect width="940" height="650" fill="#fff"/><text x="28" y="36" class="h">硬件转换失效，不自动撤销软件已取得的表指针</text>
+  <rect x="35" y="86" width="390" height="100" fill="#eaf1fb" class="b"/><text x="57" y="121" class="h">Fast GUP walker</text><text x="57" y="160">IRQ关闭，读父项获得T指针</text>
+  <rect x="515" y="86" width="390" height="100" fill="#fff0e7" class="b"/><text x="537" y="121" class="h">修改 / 回收方</text><text x="537" y="160">断开父项到T，记录freed_tables</text>
+  <path class="ar" d="M230 186V236"/><path class="ar" d="M710 186V236"/>
+  <rect x="35" y="236" width="390" height="100" fill="#eaf1fb" class="b"/><text x="57" y="271">T仍在软件变量中</text><text x="57" y="310">可能继续读表，不重新取父项</text>
+  <rect x="515" y="236" width="390" height="100" fill="#fff0e7" class="b"/><text x="537" y="271">相应非叶子 / 行走缓存失效</text><text x="537" y="310">TLBI完成不能直接复用T</text>
+  <path class="ar" d="M230 336V386"/><path class="ar" d="M710 336V386"/>
+  <rect x="35" y="386" width="390" height="100" fill="#e6f4ef" class="b"/><text x="57" y="421">walker退出，恢复IRQ</text><text x="57" y="460">相应保护区结束</text>
+  <rect x="515" y="386" width="390" height="100" fill="#e6f4ef" class="b"/><text x="537" y="421">正常批次RCU / 失败同步IPI</text><text x="537" y="460">确认相应已有walker已退出</text>
+  <path class="ar" d="M425 438H515"/><text x="452" y="419" class="s">配合</text>
+  <path class="ar" d="M710 486V538"/>
+  <rect x="515" y="538" width="390" height="65" fill="#eef1f4" class="b"/><text x="537" y="578">最后释放T，不是先free再等待</text>
+  <text x="28" y="629" class="s">IPI回退不是RCU宽限期；本图是普通表移除模型，不泛化所有fullmm退出。</text>
+</svg>

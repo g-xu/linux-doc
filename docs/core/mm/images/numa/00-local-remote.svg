@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="430" viewBox="0 0 960 430" role="img" aria-labelledby="title desc">
+<title id="title">两节点模型的本地与远端内存访问</title>
+<desc id="desc">任务在N0的CPU执行，读取N0后备为本地路径，读取N1后备为远端路径。箭头表示访问而非迁移。既有页的位置由实际后备决定，策略用于适用新分配，改变任务执行节点不自动移动旧页。两节点是教学模型，不指定目标拓扑、距离或延迟。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="960" height="430" fill="#fff"/>
+<text x="28" y="40" class="h">CPU执行位置与后备位置共同决定访问路径</text>
+<rect x="40" y="95" width="230" height="95" class="b" fill="#eaf1fb"/><text x="62" y="133">N0的CPU</text><text x="62" y="171" class="s">任务在这里执行</text>
+<rect x="385" y="95" width="220" height="95" class="b" fill="#e6f4ef"/><text x="407" y="133">N0的RAM</text><text x="407" y="171" class="s">本地后备</text>
+<rect x="695" y="95" width="220" height="95" class="b" fill="#fff0e7"/><text x="717" y="133">N1的RAM</text><text x="717" y="171" class="s">远端后备</text>
+<path class="ar" d="M270 142H385"/><text x="294" y="124" class="s">本地访问</text>
+<path class="ar" d="M155 190V275H805V190"/><text x="385" y="257" class="s">跨节点访问：这里不表示搬页</text>
+<text x="40" y="330">同一VA当前映射哪个后备，数据就来自该后备位置。</text>
+<text x="40" y="369">改策略作用于适用分配；任务换节点，不自动把已有数据一起搬走。</text>
+<text x="40" y="410" class="s">逻辑两节点模型；不固定芯片、距离、时延或Node与插槽的对应。</text>
+</svg>

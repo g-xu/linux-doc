@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="680" viewBox="0 0 1040 680" role="img" aria-labelledby="title desc">
+  <title id="title">物理位置与内存控制组记账是两个维度</title>
+  <desc id="desc">memcg A 和 B 的示例页都可以位于 Node 0 或 Node 1。同一物理节点容纳多个组，一个组可以使用多个节点。memory.high 引入组内节流与回收压力，memory.max 在不能降低使用时可能导致组内 OOM。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.n{stroke:#b9c8d0;stroke-width:1.5;rx:6}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1040" height="680" fill="#fff"/>
+  <text x="35" y="37" class="h">“位于哪里”与“消耗算给谁”分别管理</text>
+  <text x="35" y="90">物理位置</text>
+  <text x="460" y="90" text-anchor="middle">Node 0</text>
+  <text x="820" y="90" text-anchor="middle">Node 1</text>
+  <text x="35" y="178">memcg A</text>
+  <text x="35" y="278">memcg B</text>
+  <rect x="280" y="113" width="340" height="201" class="n" fill="#f2f6f8"/>
+  <rect x="660" y="113" width="340" height="201" class="n" fill="#f2f6f8"/>
+  <rect x="315" y="139" width="90" height="59" rx="5" fill="#e8f0fa" stroke="#9fb7d3"/>
+  <rect x="425" y="139" width="90" height="59" rx="5" fill="#e8f0fa" stroke="#9fb7d3"/>
+  <rect x="695" y="139" width="90" height="59" rx="5" fill="#e8f0fa" stroke="#9fb7d3"/>
+  <text x="360" y="176" text-anchor="middle">A 页</text>
+  <text x="470" y="176" text-anchor="middle">A 页</text>
+  <text x="740" y="176" text-anchor="middle">A 页</text>
+  <rect x="315" y="239" width="90" height="59" rx="5" fill="#fff1dc" stroke="#cbb797"/>
+  <rect x="695" y="239" width="90" height="59" rx="5" fill="#fff1dc" stroke="#cbb797"/>
+  <rect x="805" y="239" width="90" height="59" rx="5" fill="#fff1dc" stroke="#cbb797"/>
+  <text x="360" y="276" text-anchor="middle">B 页</text>
+  <text x="740" y="276" text-anchor="middle">B 页</text>
+  <text x="850" y="276" text-anchor="middle">B 页</text>
+  <text x="35" y="357" class="s">页标签表示本例的记账归属；不是物理地址预分区，也不表示共享页按映射者重复记账。</text>
+  <line x1="35" y1="388" x2="1000" y2="388" stroke="#d7dfe4"/>
+  <text x="35" y="429" class="h">以组 A 为例：控制作用于组内使用与压力</text>
+  <rect x="35" y="462" width="235" height="99" class="n" fill="#e8f0fa"/>
+  <text x="152" y="498" text-anchor="middle">A 的内存消耗增长</text>
+  <text x="152" y="530" text-anchor="middle" class="s">按有关对象与操作记账</text>
+  <path d="M270 512H353" class="e"/>
+  <rect x="358" y="451" width="310" height="65" class="n" fill="#fff1dc"/>
+  <text x="513" y="478" text-anchor="middle">超过 memory.high</text>
+  <text x="513" y="501" text-anchor="middle" class="s">节流与回收压力，本身不杀任务</text>
+  <rect x="358" y="540" width="310" height="65" class="n" fill="#f8edf0"/>
+  <text x="513" y="567" text-anchor="middle">触及 memory.max 限制</text>
+  <text x="513" y="590" text-anchor="middle" class="s">无法降低时可能组内 OOM</text>
+  <path d="M312 512V572H353" class="e"/>
+  <path d="M668 483H748" class="e"/>
+  <path d="M668 572H748" class="e"/>
+  <rect x="753" y="451" width="247" height="154" class="n" fill="#e2f2ec"/>
+  <text x="876" y="487" text-anchor="middle">限制不等于机器耗尽</text>
+  <text x="876" y="524" text-anchor="middle" class="s">其他组可能仍有资源</text>
+  <text x="876" y="556" text-anchor="middle" class="s">物理节点也可能仍有空闲</text>
+  <text x="876" y="588" text-anchor="middle" class="s">具体失败依请求和配置</text>
+  <text x="35" y="652" class="s">overcommit 管虚拟承诺策略；驻留量管当前 RAM 占用；memcg 管资源记账与控制。</text>
+</svg>

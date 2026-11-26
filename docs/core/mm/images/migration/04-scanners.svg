@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="600" viewBox="0 0 1120 600">
+<title>规整双扫描取得源与目的，不等于游标持有所有页</title>
+<desc>同一zone源与目的扫描经资格筛选和实际隔离得到migratepages和freepages。GFP、unevictable开关及非完整SYNC的异步隔离约束可先排除源；入池后迁移仍重查。compaction_alloc取目的、失败free回池，退出putback源和release目的。游标搜索不是固定逐页交换。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#506574"/></marker></defs>
+<style>text{font-family:Arial,"Microsoft YaHei",sans-serif;font-size:18px;fill:#23343e}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{fill:#f1f6f6;stroke:#7d929f;stroke-width:1.5}.arrow{fill:none;stroke:#506574;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="1120" height="600" fill="white"/>
+<text x="32" y="40" class="h">同一zone：搜索位置与已隔离资源是两层状态</text>
+<rect x="32" y="76" width="1056" height="90" rx="4" class="b"/>
+<text x="50" y="108">低PFN：源候选区</text><text x="822" y="108">高PFN：空闲目的区</text>
+<path d="M70 140 H468" class="arrow"/><path d="M1050 140 H652" class="arrow"/>
+<text x="165" y="129" class="s">migrate_pfn推进</text><text x="763" y="129" class="s">free_pfn搜索</text>
+<path d="M208 166 V248" class="arrow"/><text x="50" y="214" class="s">实际隔离源</text>
+<path d="M912 166 V248" class="arrow"/><text x="924" y="214" class="s">实际隔离空闲</text>
+<rect x="32" y="248" width="340" height="112" rx="4" class="b"/>
+<text x="50" y="284">cc.migratepages</text><text x="50" y="320">A / B：源隔离持有</text><text x="50" y="346" class="s">未成功者最后putback</text>
+<rect x="750" y="248" width="338" height="112" rx="4" class="b"/>
+<text x="768" y="284">cc.freepages</text><text x="768" y="320">Q0 / Q1：已隔离目的池</text><text x="768" y="346" class="s">列表成员对应nr_freepages</text>
+<rect x="432" y="248" width="258" height="112" rx="4" class="b"/>
+<text x="450" y="284">migrate_pages</text><text x="450" y="320">逐对象unmap / move</text><text x="450" y="346" class="s">不同时切换整批</text>
+<path d="M372 306 H432" class="arrow"/>
+<path d="M750 306 H690" class="arrow"/>
+<text x="702" y="284" class="s">取Q</text>
+<path d="M560 360 V406 H914 V360" class="arrow"/>
+<text x="639" y="396" class="s">未交付Q由compaction_free回池</text>
+<text x="32" y="460">源先筛GFP/unevictable/异步隔离资格；入池后再查迁移执行条件。</text>
+<text x="32" y="502">退出release_freepages归还未用目的；无捕获页时分配器再查合格块。</text>
+<text x="32" y="556" class="s">游标按pageblock、skip提示、缓存PFN和快速搜索变化，图不代表固定逐页搬移顺序。</text>
+</svg>

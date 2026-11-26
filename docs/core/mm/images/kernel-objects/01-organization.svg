@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="740" viewBox="0 0 920 740" role="img" aria-labelledby="title desc">
+  <title id="title">SLUB 的对象、后备与供给管理</title>
+  <desc id="desc">cache 保存 CPU 和节点组织。CPU0 当前 slab 内有本地空槽位、共享空槽位和已交付对象。CPU1 归还对象到所属 slab 的共享链，后备页来自页分配器。</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.small{font-size:16px}.box{stroke:#70818c;stroke-width:1.5;rx:6}.link{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#arrow)}</style>
+  <rect width="920" height="740" fill="#fff"/>
+  <text x="30" y="38" class="h">一个 cache，多组供给关系，同一份对象后备</text>
+  <rect x="290" y="66" width="340" height="72" fill="#eef1f4" class="box"/>
+  <text x="460" y="97" text-anchor="middle">kmem_cache</text><text x="460" y="123" text-anchor="middle" class="small">布局、flags、CPU / Node 组织</text>
+  <path class="link" d="M330 138V180H200V202"/><path class="link" d="M590 138V180H735V202"/>
+  <text x="206" y="170" class="small">每 CPU 管理</text><text x="644" y="170" class="small">每节点管理</text>
+  <rect x="35" y="202" width="350" height="130" fill="#e6f4ef" class="box"/>
+  <text x="60" y="233" class="h">CPU0：kmem_cache_cpu</text>
+  <text x="60" y="268">当前 slab S；本地 freelist；tid</text><text x="60" y="302" class="small">可选 CPU partial：待激活 slab 链</text>
+  <rect x="535" y="202" width="350" height="130" fill="#eaf1fb" class="box"/>
+  <text x="560" y="233" class="h">Node：kmem_cache_node</text>
+  <text x="560" y="268">partial 列表；nr_partial；list_lock</text><text x="560" y="302" class="small">当前 CPU slab 不在普通节点 partial</text>
+  <path class="link" d="M535 274H385"/><text x="397" y="255" class="small">partial 接管供给</text>
+  <path class="link" d="M200 332V384"/><text x="218" y="365" class="small">管理当前供给</text>
+  <rect x="35" y="384" width="620" height="215" fill="#f8fafb" class="box"/>
+  <text x="60" y="419" class="h">slab S：后备页中的槽位 + slab 描述</text>
+  <rect x="60" y="446" width="178" height="108" fill="#e6f4ef" class="box"/>
+  <text x="149" y="477" text-anchor="middle">CPU0 本地链</text><text x="149" y="519" text-anchor="middle" class="h">C → D</text>
+  <rect x="253" y="446" width="178" height="108" fill="#fff0e7" class="box"/>
+  <text x="342" y="477" text-anchor="middle">S 的共享链</text><text x="342" y="519" text-anchor="middle" class="h">A</text>
+  <rect x="446" y="446" width="178" height="108" fill="#f9eaf0" class="box"/>
+  <text x="535" y="477" text-anchor="middle">已交付槽位</text><text x="535" y="519" text-anchor="middle" class="h">B</text>
+  <text x="60" y="589" class="small">四槽位示意：objects=4，inuse=3，frozen=1</text>
+  <rect x="707" y="418" width="178" height="98" fill="#fff0e7" class="box"/>
+  <text x="796" y="450" text-anchor="middle">CPU1 使用完 A</text><text x="796" y="486" text-anchor="middle">归还所属 slab</text>
+  <path class="link" d="M707 466H677V562H342V554"/>
+  <rect x="185" y="650" width="335" height="60" fill="#eef1f4" class="box"/>
+  <text x="352" y="687" text-anchor="middle">页分配器：提供 / 接收后备页块</text>
+  <path class="link" d="M352 650V599"/>
+  <text x="368" y="628" class="small">后备供给；满足条件后整块归还</text>
+</svg>

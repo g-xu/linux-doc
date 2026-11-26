@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="824" viewBox="0 0 1120 824" role="img" aria-labelledby="title desc">
+<title id="title">OOM有无新受害者及共享mm连带终止</title><desc id="desc">代表结果分支：已有未跳过的OOM受害者可中止选择并返回true提示重试而不新kill；memcg没有可杀候选返回false，普通非特权charge最终ENOMEM，真实全局无候选可panic。有候选按域尺度评分，候选与组杀扩展守域/保护例外，但共享同mm的其他用户线程组可连带终止。退出/reap/用量下降/再申请不同。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="1120" height="824" fill="#fff"/><text x="32" y="40" class="h">代表选择结果：不是每次OOM都新增受害者</text>
+<rect x="32" y="80" width="1056" height="80" fill="#eaf1fb" class="b"/><text x="50" y="112">全局 / 实际超限组 / 适用节点约束：确定候选域和评分尺度</text><text x="50" y="146" class="s">候选和oom.group扩展不任意越域；不等于共享mm的终止隔离</text>
+<path class="ar" d="M560 160V220"/>
+<rect x="330" y="220" width="460" height="100" fill="#f0f4f6" class="b"/><text x="350" y="254">已有受害者进展 / 当前可评分候选</text><text x="350" y="290" class="s">代表分支，不穷举所有早期许可和特权</text>
+<path class="ar" d="M420 320V370H182V420"/><path class="ar" d="M560 320V420"/><path class="ar" d="M700 320V370H938V420"/>
+<text x="62" y="354" class="s">已有未跳过的受害者</text><text x="570" y="382" class="s">可选</text><text x="832" y="354" class="s">memcg无候选</text>
+<rect x="32" y="420" width="300" height="112" fill="#e6f4ef" class="b"/><text x="50" y="452">中止本次新选择</text><text x="50" y="486" class="s">true提示可继续，charge重试</text><text x="50" y="516" class="s">不是已释放量，不新增kill</text>
+<rect x="410" y="420" width="300" height="112" fill="#f8eee8" class="b"/><text x="428" y="452">评分 / 选victim / 组杀</text><text x="428" y="486" class="s">候选与组杀按域和保护例外</text><text x="428" y="516" class="s">实际评分尺度不是RSS总和</text>
+<rect x="788" y="420" width="300" height="112" fill="#f9eaf0" class="b"/><text x="806" y="452">false：无新进展</text><text x="806" y="486" class="s">普通非特权charge：ENOMEM</text><text x="806" y="516" class="s">清理本轮准备资源</text>
+<text x="788" y="574" class="s">真实全局无候选可panic，</text><text x="788" y="604" class="s">不套组内收费失败出口。</text>
+<path class="ar" d="M560 532V612"/>
+<rect x="410" y="612" width="300" height="136" fill="#f9eaf0" class="b"/><text x="428" y="644">SIGKILL / 退出 / reap</text><text x="428" y="680" class="s">共享mm的其他用户线程组</text><text x="428" y="712" class="s">可连带终止，包括域外/保护者</text>
+<text x="32" y="792" class="s">终止、reap、用量下降、原申请成功分开观察；pin/缓存持有不因kill自动结束。</text>
+</svg>

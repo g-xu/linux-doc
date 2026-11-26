@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="624" viewBox="0 0 1120 624">
+<title>有效保护按已使用需求分摊父预算</title>
+<desc>回收根R，父T已计算有效保护100，两个孙组同一种min或low各配置80，关闭recursiveprot。A/B使用80/80时需求160超父预算，各有效50；只改B使用20时需求100，各有效80/20。回收根改T另走直接子组规则，图不适用。预算不是物理页预留。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#506574"/></marker></defs>
+<style>text{font-family:Arial,"Microsoft YaHei",sans-serif;font-size:18px;fill:#23343e}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{fill:#f0f6f6;stroke:#7d929f;stroke-width:1.5}.arrow{fill:none;stroke:#506574;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="1120" height="624" fill="white"/>
+<text x="32" y="40" class="h">同一回收根R与T预算100，只改变B实际使用</text>
+<text x="32" y="82">min / low分别计算；本图选同一种保护，关闭额外递归保护分配。</text>
+<rect x="150" y="118" width="310" height="82" rx="4" class="b"/><text x="170" y="151">T：有效父预算100</text><text x="170" y="182" class="s">子已用保护需求80+80=160</text>
+<rect x="660" y="118" width="310" height="82" rx="4" class="b"/><text x="680" y="151">T：仍有效预算100</text><text x="680" y="182" class="s">子已用保护需求80+20=100</text>
+<path d="M230 200V246H148V288" class="arrow"/><path d="M390 200V246H410V288" class="arrow"/>
+<path d="M740 200V246H710V288" class="arrow"/><path d="M890 200V246H970V288" class="arrow"/>
+<rect x="32" y="288" width="232" height="112" rx="4" class="b"/><text x="50" y="322">A：配置80，用80</text><text x="50" y="358">Pi=80 → effective50</text><text x="50" y="388" class="s">80×100/160</text>
+<rect x="296" y="288" width="232" height="112" rx="4" class="b"/><text x="314" y="322">B：配置80，用80</text><text x="314" y="358">Pi=80 → effective50</text><text x="314" y="388" class="s">80×100/160</text>
+<rect x="594" y="288" width="232" height="112" rx="4" class="b"/><text x="612" y="322">A：配置80，用80</text><text x="612" y="358">Pi=80 → effective80</text><text x="612" y="388" class="s">需求未超过父预算</text>
+<rect x="858" y="288" width="230" height="112" rx="4" class="b"/><text x="876" y="322">B：配置80，用20</text><text x="876" y="358">Pi=20 → effective20</text><text x="876" y="388" class="s">未用60不挤兄弟份额</text>
+<text x="32" y="452">Pi=min(使用量,配置值)；需求超父预算才按已用需求比例缩减。</text>
+<text x="32" y="496">改回收根T时A/B是直接子组，不能继续按图中祖先预算分摊。</text>
+<text x="32" y="546" class="s">数字为稳定页单位模型；保护不是预分配PFN或独占物理页池。</text>
+<text x="32" y="588" class="s">传统LRU超保护后仍缩减扫描；low重试改用min，最终释放还要验证候选。</text>
+</svg>

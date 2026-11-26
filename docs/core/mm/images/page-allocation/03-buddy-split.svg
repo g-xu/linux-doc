@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="810" viewBox="0 0 1100 810" role="img" aria-labelledby="title desc">
+  <title id="title">伙伴关系与 Buddy 拆分</title>
+  <desc id="desc">四个 order-1 块的伙伴分别属于两个父块。初始 PFN 8 到 15 的 order-3 块拆分，余下 12 到 15 的 order-2 块和 10 到 11 的 order-1 块，向调用者交付 8 到 9。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}.group{fill:none;stroke:#52616c;stroke-width:2}</style>
+  </defs>
+  <rect width="1100" height="810" fill="#fff"/>
+  <text x="35" y="38" class="h">同阶相邻不一定是伙伴；伙伴要属于同一父块</text>
+  <rect x="145" y="90" width="200" height="64" fill="#e8f0fa" stroke="#9bb5d0"/>
+  <rect x="345" y="90" width="200" height="64" fill="#e8f0fa" stroke="#9bb5d0"/>
+  <rect x="545" y="90" width="200" height="64" fill="#fff1dc" stroke="#c8b391"/>
+  <rect x="745" y="90" width="200" height="64" fill="#fff1dc" stroke="#c8b391"/>
+  <text x="245" y="130" text-anchor="middle">[8, 10)</text>
+  <text x="445" y="130" text-anchor="middle">[10, 12)</text>
+  <text x="645" y="130" text-anchor="middle">[12, 14)</text>
+  <text x="845" y="130" text-anchor="middle">[14, 16)</text>
+  <path d="M145 170V187H545V170M545 170V208H945V170" class="group"/>
+  <text x="345" y="217" text-anchor="middle" class="s">共同父块 [8, 12)</text>
+  <text x="745" y="238" text-anchor="middle" class="s">共同父块 [12, 16)</text>
+  <text x="35" y="275" class="s">中间两块相邻但非伙伴；例如 10 XOR 2 = 8，而不是 12。</text>
+  <line x1="35" y1="300" x2="1065" y2="300" stroke="#d7dfe4"/>
+  <text x="35" y="344" class="h">请求 order-1：从较大块逐阶拆分</text>
+  <text x="35" y="404">初始</text>
+  <rect x="145" y="370" width="800" height="64" fill="#e2f2ec" stroke="#8eb7a4"/>
+  <text x="545" y="410" text-anchor="middle">order-3：[8, 16) 空闲</text>
+  <path d="M345 434V481" class="e"/>
+  <path d="M745 434V481" class="e"/>
+  <rect x="145" y="486" width="400" height="64" fill="#e8f0fa" stroke="#9bb5d0"/>
+  <rect x="545" y="486" width="400" height="64" fill="#e2f2ec" stroke="#8eb7a4"/>
+  <text x="345" y="526" text-anchor="middle">[8, 12) 继续拆</text>
+  <text x="745" y="526" text-anchor="middle">[12, 16) → order-2 列表</text>
+  <path d="M245 550V597" class="e"/>
+  <path d="M445 550V597" class="e"/>
+  <path d="M745 550V597" class="e"/>
+  <rect x="145" y="602" width="200" height="64" fill="#fff1dc" stroke="#c8b391"/>
+  <rect x="345" y="602" width="200" height="64" fill="#e2f2ec" stroke="#8eb7a4"/>
+  <rect x="545" y="602" width="400" height="64" fill="#e2f2ec" stroke="#8eb7a4"/>
+  <text x="245" y="642" text-anchor="middle">[8, 10) 交付</text>
+  <text x="445" y="642" text-anchor="middle">[10, 12) 空闲</text>
+  <text x="745" y="642" text-anchor="middle">[12, 16) 空闲</text>
+  <text x="445" y="705" text-anchor="middle" class="s">order-1：1 块 / 2 页</text>
+  <text x="745" y="705" text-anchor="middle" class="s">order-2：1 块 / 4 页</text>
+  <text x="35" y="757" class="s">交付 2 页，剩余 6 页；空闲块数为 2，不是 6。省略 PCP、水位、特殊分类和并发。</text>
+  <text x="35" y="789" class="s">[start, end) 不含 end；图不固定基本页字节数，物理地址由 PFN 与目标页大小确定。</text>
+</svg>

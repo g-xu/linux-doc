@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="430" viewBox="0 0 1000 430" role="img" aria-labelledby="t d">
+<title id="t">固定区域十次抽样的阳性计数模型</title><desc id="d">同一聚合窗口内十次检查，第1、4、8次阳性，nr_accesses为3，不代表三个页或三次实际load/store。聚合输出后清本窗计数，区域变化会改变比较口径。</desc>
+<style>text{font:20px "Microsoft YaHei",sans-serif;fill:#24323c}.h{font-size:26px;font-weight:bold}.s{font-size:17px}</style>
+<rect width="1000" height="430" fill="white"/><text x="30" y="38" class="h">固定范围的一窗10次检查，3次阳性</text>
+<rect x="30" y="100" width="94" height="70" fill="#e2f2ec"/><rect x="124" y="100" width="188" height="70" fill="#f2f6f8"/><rect x="312" y="100" width="94" height="70" fill="#e2f2ec"/><rect x="406" y="100" width="282" height="70" fill="#f2f6f8"/><rect x="688" y="100" width="94" height="70" fill="#e2f2ec"/><rect x="782" y="100" width="188" height="70" fill="#f2f6f8"/>
+<text x="77" y="144" text-anchor="middle">1 阳</text><text x="171" y="144" text-anchor="middle">2</text><text x="265" y="144" text-anchor="middle">3</text><text x="359" y="144" text-anchor="middle">4 阳</text><text x="453" y="144" text-anchor="middle">5</text><text x="547" y="144" text-anchor="middle">6</text><text x="641" y="144" text-anchor="middle">7</text><text x="735" y="144" text-anchor="middle">8 阳</text><text x="829" y="144" text-anchor="middle">9</text><text x="923" y="144" text-anchor="middle">10</text>
+<rect x="30" y="235" width="940" height="92" rx="6" fill="#e8f0fa"/><text x="500" y="274" text-anchor="middle">nr_accesses = 3 → 聚合结果输出 → 本窗计数清零</text><text x="500" y="306" text-anchor="middle" class="s">不是3次实际指令访问，也不是3页；此图不是目标机测量</text>
+<text x="30" y="382" class="s">范围变化、合并/拆分、窗口与采样间隔会影响解释；DAMOS动作统计是另一种结果。</text>
+</svg>

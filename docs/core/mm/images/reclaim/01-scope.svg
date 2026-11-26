@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="500" viewBox="0 0 960 500" role="img" aria-labelledby="title desc">
+<title id="title">回收范围与处理资格</title><desc id="desc">后台、直接或组内入口建立范围和scan_control，从节点及组的lruvec隔离候选，观察价值与操作资格。干净文件、脏文件、匿名及pin各有分支，成功释放或合法归队。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+<style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="960" height="500" fill="#fff"/><text x="28" y="38" class="h">扫描对象还不是空闲页：范围、价值与资格逐层约束</text>
+<rect x="40" y="80" width="880" height="70" fill="#eaf1fb" class="b"/><text x="62" y="111">kswapd / 分配者直接回收 / memcg回收</text><text x="62" y="139" class="s">建立scan_control：节点/组、GFP/order、允许动作、目标与统计</text>
+<path class="ar" d="M480 150V188"/>
+<rect x="40" y="188" width="880" height="70" fill="#eef1f4" class="b"/><text x="62" y="219">lruvec选候选 → 隔离持有 → 冷热观察与可操作性重检</text><text x="62" y="248" class="s">unevictable、锁竞争、额外引用或不允许FS/I/O会限制处理</text>
+<path class="ar" d="M480 258V285H140V310"/><path class="ar" d="M480 285H365V310"/><path class="ar" d="M480 285H590V310"/><path class="ar" d="M480 285H815V310"/>
+<rect x="40" y="310" width="200" height="90" fill="#e6f4ef" class="b"/><text x="60" y="344">A：干净文件</text><text x="60" y="377" class="s">解关系后可重读</text>
+<rect x="265" y="310" width="200" height="90" fill="#fff0e7" class="b"/><text x="285" y="344">B：脏文件</text><text x="285" y="377" class="s">保存或暂留</text>
+<rect x="490" y="310" width="200" height="90" fill="#eaf1fb" class="b"/><text x="510" y="344">C：匿名</text><text x="510" y="377" class="s">需适用恢复后备</text>
+<rect x="715" y="310" width="200" height="90" fill="#f9eaf0" class="b"/><text x="735" y="344">D：仍被pin</text><text x="735" y="377" class="s">冷不等于可丢弃</text>
+<text x="40" y="452">成功对象归还供给；保留/失败对象归队，隔离持有不能丢失。</text>
+<text x="40" y="483" class="s">释放总量、允许位置与连续order仍是不同判断，分配器必须重新申请。</text>
+</svg>

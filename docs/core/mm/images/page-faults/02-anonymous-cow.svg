@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="610" viewBox="0 0 940 610" role="img" aria-labelledby="title desc">
+  <title id="title">同一匿名页读写与fork COW</title><desc id="desc">普通私有可写VMA，空项读建立特殊零页Z项；之后写走do_wp_page及wp_page_copy的零PFN分支取得零初始化P，没有普通旧页复制/临时持有。直接写空项则另走do_anonymous_page。普通无pin fork父子共享P，子写复制Q，父仍P；私有后备0到1到1到2。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+  <rect width="940" height="610" fill="#fff"/><text x="28" y="36" class="h">VMA可写，PTE可暂时写保护：捕获合法私有写</text><text x="28" y="71" class="s">基本页、零页允许、无pin/KSM/特殊fork；V为同一个合法页地址。</text>
+  <rect x="35" y="109" width="870" height="72" fill="#eef1f4" class="b"/><text x="57" y="139">首次读：V → 共享零页Z</text><text x="57" y="167" class="s">没有为本次创建私有数据页，不表示页表等没有开销</text>
+  <path class="ar" d="M470 181V220"/>
+  <rect x="35" y="220" width="870" height="72" fill="#e6f4ef" class="b"/><text x="57" y="251">写零页项：do_wp_page → wp_page_copy 的零PFN分支 → P</text><text x="57" y="278" class="s">零初始化、收费/重检/安装；不复制普通旧页，不能修改Z</text>
+  <path class="ar" d="M470 292V311H230V331"/><path class="ar" d="M470 311H710V331"/>
+  <rect x="35" y="331" width="390" height="85" fill="#eaf1fb" class="b"/><text x="57" y="366">fork后父mm：V → P，只读PTE</text><text x="57" y="398" class="s">VMA写语义仍允许</text>
+  <rect x="515" y="331" width="390" height="85" fill="#eaf1fb" class="b"/><text x="537" y="366">fork后子mm：V → P，只读PTE</text><text x="537" y="398" class="s">仍共用一页P，不是两份数据</text>
+  <path class="ar" d="M710 416V460"/><path class="ar" d="M230 416V460"/>
+  <rect x="35" y="460" width="390" height="83" fill="#eaf1fb" class="b"/><text x="57" y="493">父保持P及原内容</text><text x="57" y="526" class="s">子私有写不改变父数据</text>
+  <rect x="515" y="460" width="390" height="83" fill="#fff0e7" class="b"/><text x="537" y="493">子写需要隔离：V → 新Q</text><text x="537" y="526" class="s">P/Q共2数据页；独占复用另见正文</text>
+  <text x="28" y="586" class="s">表格只数模型私有匿名后备，不是RSS求和或目标机物理统计；配置变化要重判。</text>
+</svg>

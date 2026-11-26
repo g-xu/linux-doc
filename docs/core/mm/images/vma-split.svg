@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="410" viewBox="0 0 1000 410" role="img" aria-labelledby="t d">
+<title id="t">三页范围的局部权限变化</title><desc id="d">原三页范围读写，改中间页只读后形成RW R RW三段语义。真实VMA数量还受相邻兼容范围等条件影响。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker><style>text{font:20px "Microsoft YaHei",sans-serif;fill:#24323c}.h{font-size:26px;font-weight:bold}.s{font-size:17px}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style></defs>
+<rect width="1000" height="410" fill="white"/><text x="30" y="38" class="h">局部权限改变，需要表达不同范围语义</text>
+<rect x="30" y="82" width="940" height="70" fill="#e8f0fa"/><text x="500" y="126" text-anchor="middle">[A,A+3S)：读写 RW</text>
+<path d="M500 152V225" class="e"/><text x="520" y="193" class="s">只将中间页改为只读</text>
+<rect x="30" y="232" width="313" height="72" fill="#e8f0fa"/><rect x="343" y="232" width="314" height="72" fill="#fff1dc"/><rect x="657" y="232" width="313" height="72" fill="#e8f0fa"/>
+<text x="187" y="276" text-anchor="middle">[A,A+S)：RW</text><text x="500" y="276" text-anchor="middle">[A+S,A+2S)：R</text><text x="814" y="276" text-anchor="middle">[A+2S,A+3S)：RW</text>
+<text x="30" y="355" class="s">S为目标基本页大小；三段语义不承诺真实布局恰好增加两个VMA，合并还要满足兼容条件。</text>
+</svg>

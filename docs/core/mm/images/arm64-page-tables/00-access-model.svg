@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700">
+  <title>arm64虚拟访问的三类过程</title>
+  <desc>分别表示适用TLB命中、硬件页表遍历和不能完成访问后的内核处理，三行不是每次访问必须顺序经历的阶段。</desc>
+  <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9" fill="#536674"/></marker></defs>
+  <rect width="1100" height="700" fill="#fff"/>
+  <g font-family="Microsoft YaHei, sans-serif" fill="#213442">
+    <text x="36" y="48" font-size="25" font-weight="700">程序给出虚拟地址；硬件使用当前转换，必要时由软件接管</text>
+    <text x="36" y="82" font-size="17">普通第一阶段RAM映射示意；地址、上下文和额外硬件控制按实际条件</text>
+    <text x="36" y="124" font-size="19" font-weight="700">① 有适用转换缓存，且访问条件满足</text>
+    <rect x="36" y="145" width="250" height="94" rx="5" fill="#eaf0f9" stroke="#8c9daa"/>
+    <rect x="410" y="145" width="310" height="94" rx="5" fill="#e4f2eb" stroke="#8c9daa"/>
+    <rect x="844" y="145" width="220" height="94" rx="5" fill="#fff2d5" stroke="#8c9daa"/>
+    <text x="54" y="178" font-size="20" font-weight="700">CPU发出请求</text>
+    <text x="54" y="213" font-size="17">V + 读 / 写 / 取指</text>
+    <text x="430" y="178" font-size="20" font-weight="700">使用适用TLB结果</text>
+    <text x="430" y="213" font-size="17">后备位置、权限、属性</text>
+    <text x="864" y="178" font-size="20" font-weight="700">完成后备访问</text>
+    <text x="864" y="213" font-size="17">业务内容不在TLB里</text>
+    <text x="36" y="286" font-size="19" font-weight="700">② 未命中，但内存中的页表可提供合法转换</text>
+    <rect x="36" y="308" width="250" height="94" rx="5" fill="#eaf0f9" stroke="#8c9daa"/>
+    <rect x="410" y="308" width="310" height="94" rx="5" fill="#e4f2eb" stroke="#8c9daa"/>
+    <rect x="844" y="308" width="220" height="94" rx="5" fill="#fff2d5" stroke="#8c9daa"/>
+    <text x="54" y="341" font-size="20" font-weight="700">CPU发出请求</text>
+    <text x="54" y="376" font-size="17">尚无适用缓存结果</text>
+    <text x="430" y="341" font-size="20" font-weight="700">MMU从根遍历页表</text>
+    <text x="430" y="376" font-size="17">解释描述符，取得转换</text>
+    <text x="864" y="341" font-size="20" font-weight="700">继续正常访问</text>
+    <text x="864" y="376" font-size="17">可缓存后续转换结果</text>
+    <text x="36" y="450" font-size="19" font-weight="700">③ 当前转换或访问条件不能完成请求，产生相应异常</text>
+    <rect x="36" y="472" width="250" height="100" rx="5" fill="#f8e7ed" stroke="#8c9daa"/>
+    <rect x="410" y="472" width="310" height="100" rx="5" fill="#eaf0f9" stroke="#8c9daa"/>
+    <rect x="844" y="472" width="220" height="100" rx="5" fill="#fff2d5" stroke="#8c9daa"/>
+    <text x="54" y="507" font-size="20" font-weight="700">不能按当前状态访问</text>
+    <text x="54" y="543" font-size="17">不等于仅仅缺物理页</text>
+    <text x="430" y="507" font-size="20" font-weight="700">适用内核处理</text>
+    <text x="430" y="543" font-size="17">核对VMA、来源与资源</text>
+    <text x="864" y="507" font-size="20" font-weight="700">更新或错误处理</text>
+    <text x="864" y="543" font-size="17">恢复后重新尝试访问</text>
+    <text x="36" y="624" font-size="18">上两行不要求软件查VMA或进入缺页；内核修改页表后还需处理适用旧转换。</text>
+    <text x="36" y="658" font-size="17">页表是内存记录，MMU是翻译/控制机制，TLB是转换缓存；图不表示具体微架构时序。</text>
+  </g>
+  <g fill="none" stroke="#536674" stroke-width="2" marker-end="url(#arrow)">
+    <path d="M286 192 H398"/><path d="M720 192 H832"/>
+    <path d="M286 355 H398"/><path d="M720 355 H832"/>
+    <path d="M286 522 H398"/><path d="M720 522 H832"/>
+  </g>
+</svg>

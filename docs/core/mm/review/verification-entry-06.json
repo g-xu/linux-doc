@@ -1,0 +1,109 @@
+{
+  "source": "D:\\temp\\linux_wiki\\Linux-zensical\\draft\\mm_new\\06-arm64-page-tables.md",
+  "sourceSha256": "3793d1e73d3ec4c8bc0e1e8b872ab84ec238644e0a80b92268523c603e4797f0",
+  "mechanismSha256": "e359ceffb6169fa6c1b7699af6f4968e42622935fb60faa76fc02f8e27a4eb60",
+  "linkCount": 50,
+  "supportChecks": [
+    {
+      "file": "06-arm64-page-tables.md",
+      "linkCount": 50,
+      "anchorCount": 14
+    },
+    {
+      "file": "review-entry-06.md",
+      "linkCount": 4,
+      "anchorCount": 0
+    },
+    {
+      "file": "index.md",
+      "linkCount": 38,
+      "anchorCount": 0
+    },
+    {
+      "file": "entry-revision-mm-series.md",
+      "linkCount": 12,
+      "anchorCount": 0
+    }
+  ],
+  "svgChecks": [
+    {
+      "file": "images/arm64-page-tables/00-access-model.svg",
+      "sha256": "1cc3e32ebf628857277611aea789d3f47fe8b3759d42ec39cbeddb4f923c6de3",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 25
+    },
+    {
+      "file": "images/arm64-page-tables/01-walk.svg",
+      "sha256": "23156f625b2088883013838d10613781f196991c803391dad4dfa2ee5df525c0",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 26
+    },
+    {
+      "file": "images/arm64-page-tables/02-states.svg",
+      "sha256": "7943bbbf5769102f111f2b8513219f36122b905feb651bdb0a6c0e4cdffae5ac",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 22
+    },
+    {
+      "file": "images/arm64-page-tables/06-descriptor-sync.svg",
+      "sha256": "a59d334c918e0a857bdf8849579505056156123b219b02e3b452cc268bdd7aa2",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 28
+    },
+    {
+      "file": "images/arm64-page-tables/03-update.svg",
+      "sha256": "cfa58b300dc5d98e01041440b53a381b2c988f2eaa8c46598533f9ced7052bc6",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 24
+    },
+    {
+      "file": "images/arm64-page-tables/04-asid-rollover.svg",
+      "sha256": "9427dae031899c677d6e8ac5191e8ce37fc78e4246ed8f420c0d9b7544957ccd",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 15
+    },
+    {
+      "file": "images/arm64-page-tables/05-table-lifetime.svg",
+      "sha256": "53173cd376fbcc68746002681d706caa282a7ac5c03dc885a9862ea00f18baaa",
+      "xmlErrors": 0,
+      "outside": [],
+      "overlaps": [],
+      "textCount": 16
+    }
+  ],
+  "previews": [
+    {
+      "width": 1280,
+      "documentWidth": 1280,
+      "viewportWidth": 1280,
+      "brokenImages": 0,
+      "overflowingTables": 0
+    },
+    {
+      "width": 480,
+      "documentWidth": 480,
+      "viewportWidth": 480,
+      "brokenImages": 0,
+      "overflowingTables": 0
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Temporary Markdown preview, not a Zensical build.",
+    "SVG text boxes checked; connector correctness and visual readability need human inspection.",
+    "No kernel, C snippet, I/O or target-machine execution.",
+    "Mechanical checks do not grade teaching quality."
+  ]
+}

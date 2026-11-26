@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="830" viewBox="0 0 1040 830" role="img" aria-labelledby="title desc">
+  <title id="title">首次匿名写入与写时复制</title>
+  <desc id="desc">首次写入普通私有匿名基本页路径从 CPU 异常进入 VMA 检查，分配、记账并安装映射。COW 示例中父子仍共享只读页时，子进程写入后获得新页；独占页可能复用而不用复制。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.n{stroke:#b9c8d0;stroke-width:1.5;rx:6}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}.life{stroke:#becbd3;stroke-width:1.5;stroke-dasharray:6 5}</style>
+  </defs>
+  <rect width="1040" height="830" fill="#fff"/>
+  <text x="35" y="37" class="h">普通私有匿名映射：首次写入尚未建立映射的基本页</text>
+  <rect x="35" y="66" width="175" height="55" class="n" fill="#f2f6f8"/>
+  <rect x="255" y="66" width="200" height="55" class="n" fill="#e8f0fa"/>
+  <rect x="500" y="66" width="235" height="55" class="n" fill="#e2f2ec"/>
+  <rect x="780" y="66" width="225" height="55" class="n" fill="#fff1dc"/>
+  <text x="122" y="101" text-anchor="middle">进程 / CPU</text>
+  <text x="355" y="101" text-anchor="middle">arm64 / 通用缺页</text>
+  <text x="617" y="101" text-anchor="middle">页分配 / memcg</text>
+  <text x="892" y="101" text-anchor="middle">页表与匿名关系</text>
+  <line x1="122" y1="127" x2="122" y2="421" class="life"/>
+  <line x1="355" y1="127" x2="355" y2="174" class="life"/>
+  <line x1="355" y1="237" x2="355" y2="421" class="life"/>
+  <line x1="617" y1="127" x2="617" y2="303" class="life"/>
+  <line x1="617" y1="360" x2="617" y2="397" class="life"/>
+  <line x1="892" y1="127" x2="892" y2="421" class="life"/>
+  <path d="M122 163H355" class="e"/>
+  <text x="151" y="149" class="s">1. 写入 → 异常</text>
+  <rect x="279" y="179" width="152" height="58" rx="5" fill="#e8f0fa"/>
+  <text x="355" y="200" text-anchor="middle" class="s">2. 查 VMA</text>
+  <text x="355" y="228" text-anchor="middle" class="s">检查访问权限</text>
+  <path d="M355 264H617" class="e"/>
+  <text x="379" y="252" class="s">3. 取页 / 清零 / 记账</text>
+  <path d="M617 300H355" class="e"/>
+  <text x="405" y="326" class="s">成功后继续，失败则清理 / 返回</text>
+  <path d="M355 362H892" class="e"/>
+  <text x="401" y="350" class="s">4. 建立匿名关系；保护下重检并安装映射</text>
+  <path d="M892 397H122" class="e"/>
+  <text x="379" y="420" class="s">5. 成功返回，重新执行访问</text>
+  <line x1="35" y1="450" x2="1005" y2="450" stroke="#d7dfe4"/>
+  <text x="35" y="491" class="h">COW：允许写的私有 VMA，暂时使用只读共享映射</text>
+  <text x="35" y="532">写入前：父子仍共享匿名页</text>
+  <text x="595" y="532">子进程写入后：本例需复制</text>
+  <rect x="35" y="554" width="165" height="61" class="n" fill="#e8f0fa"/>
+  <rect x="35" y="667" width="165" height="61" class="n" fill="#e8f0fa"/>
+  <text x="117" y="579" text-anchor="middle" class="s">父进程 PTE</text>
+  <text x="117" y="603" text-anchor="middle" class="s">只读</text>
+  <text x="117" y="692" text-anchor="middle" class="s">子进程 PTE</text>
+  <text x="117" y="716" text-anchor="middle" class="s">只读</text>
+  <rect x="292" y="609" width="180" height="64" class="n" fill="#e2f2ec"/>
+  <text x="382" y="649" text-anchor="middle">原匿名页 P</text>
+  <path d="M200 584H243V626H292" class="e"/>
+  <path d="M200 697H243V655H292" class="e"/>
+  <path d="M483 641H573" class="e"/>
+  <text x="525" y="610" text-anchor="middle" class="s">写保护缺页</text>
+  <rect x="595" y="554" width="175" height="61" class="n" fill="#e8f0fa"/>
+  <rect x="595" y="667" width="175" height="61" class="n" fill="#fff1dc"/>
+  <text x="682" y="579" text-anchor="middle" class="s">父进程 PTE</text>
+  <text x="682" y="603" text-anchor="middle" class="s">保留原映射</text>
+  <text x="682" y="692" text-anchor="middle" class="s">子进程 PTE</text>
+  <text x="682" y="716" text-anchor="middle" class="s">指向新页，可写</text>
+  <rect x="850" y="554" width="155" height="61" class="n" fill="#e2f2ec"/>
+  <rect x="850" y="667" width="155" height="61" class="n" fill="#fff1dc"/>
+  <text x="927" y="592" text-anchor="middle">原页 P</text>
+  <text x="927" y="705" text-anchor="middle">新页 Q</text>
+  <path d="M770 584H850" class="e"/>
+  <path d="M770 697H850" class="e"/>
+  <text x="35" y="778" class="s">此图选择需要复制的共享情况；若页满足独占复用条件，写保护处理可能直接恢复写权限。</text>
+  <text x="35" y="810" class="s">不覆盖所有缺页分支、并发重试与体系结构维护细节；匿名首次读取可在条件允许时使用零页。</text>
+</svg>

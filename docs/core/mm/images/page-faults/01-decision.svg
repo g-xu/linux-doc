@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="635" viewBox="0 0 940 635" role="img" aria-labelledby="title desc">
+  <title id="title">普通缺页的访问、来源与状态决策</title><desc id="desc">先确认上下文和VMA访问合法，再按PTE与来源选择：匿名空项读零页或写私有页，文件来源fault，软件非present状态恢复，present写保护区分复用私有COW共享写等。不表示全部异常都分配新页。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+  <rect width="940" height="635" fill="#fff"/><text x="28" y="36" class="h">先问允许什么，再问当前状态和内容来源</text>
+  <rect x="35" y="83" width="495" height="76" fill="#eaf1fb" class="b"/><text x="57" y="114">普通恢复上下文、合法mm / VMA？</text><text x="57" y="144" class="s">访问类型与语义允许，布局保护按实际入口</text>
+  <rect x="665" y="83" width="240" height="76" fill="#f9eaf0" class="b"/><text x="785" y="114" text-anchor="middle">不允许 / 来源错误</text><text x="785" y="144" text-anchor="middle" class="s">不靠分配页绕过权限</text>
+  <path class="ar" d="M530 121H665"/><text x="585" y="105" class="s">否</text>
+  <path class="ar" d="M282 159V205"/>
+  <rect x="35" y="205" width="870" height="70" fill="#eef1f4" class="b"/><text x="57" y="246">按当前PTE、VMA来源与访问选择；不是TLB miss必然进入这里</text>
+  <path class="ar" d="M470 275V309H170V342"/><path class="ar" d="M470 309V342"/><path class="ar" d="M470 309H770V342"/>
+  <rect x="35" y="342" width="270" height="121" fill="#e6f4ef" class="b"/><text x="57" y="375" class="h">匿名私有、空项</text><text x="57" y="411">读：允许时映射零页</text><text x="57" y="444">写：取得私有页/收费</text>
+  <rect x="335" y="342" width="270" height="121" fill="#fff0e7" class="b"/><text x="357" y="375" class="h">来源 / 软件状态</text><text x="357" y="411">文件：fault/缓存协作</text><text x="357" y="444">swap等：恢复对应后备</text>
+  <rect x="635" y="342" width="270" height="121" fill="#eaf1fb" class="b"/><text x="657" y="375" class="h">present写保护</text><text x="657" y="411">独占复用 / 私有COW</text><text x="657" y="444">共享写或其他保护</text>
+  <text x="28" y="522" class="h">共同约束：准备资源、保持寿命、锁下重检、安装或清理。</text>
+  <text x="28" y="563" class="s">错误、重试、完成和页锁返回位有不同责任；不把非零返回全部当错误。</text>
+  <text x="28" y="610" class="s">RT=y排除自动NUMA平衡/THP；hugetlb、用户代理、设备和标签异常分别判断。</text>
+</svg>

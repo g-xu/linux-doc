@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="650" viewBox="0 0 1120 650">
+<title>位置倍率和写带宽反馈共同限制生产者</title>
+<desc>完成份额决定wb额度，wb_dirty相对平衡位置修正域倍率；选较紧者乘R成为任务速率。固定最终倍率0.5和R800，任务400；生产1600、完成100形成候选25。更新需比较位置与旧/新估计、任务速率；旧估计900时R800可保持不变，不能以低候选承诺下降。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#506574"/></marker></defs>
+<style>text{font-family:Arial,"Microsoft YaHei",sans-serif;font-size:18px;fill:#23343e}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{fill:#f0f6f5;stroke:#7a919a;stroke-width:1.5}.arrow{fill:none;stroke:#506574;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="1120" height="650" fill="white"/>
+<text x="32" y="40" class="h">两条控制：当前位置倍率 × 持续修正的基础速率</text>
+<rect x="32" y="76" width="300" height="106" rx="4" class="b"/><text x="50" y="108">全局 / 适用memcg域</text><text x="50" y="142">dirty、阈值、wb份额</text><text x="50" y="170" class="s">完成份额；本wb位置修正</text>
+<rect x="422" y="76" width="290" height="106" rx="4" class="b"/><text x="440" y="108">选择较紧pos_ratio</text><text x="440" y="142">本次倍率假设0.5</text><text x="440" y="170" class="s">不是所有路径固定0.5</text>
+<rect x="802" y="76" width="286" height="106" rx="4" class="b"/><text x="820" y="108">任务速率 = R × 倍率</text><text x="820" y="142">800 × 0.5 = 400页/s</text><text x="820" y="170" class="s">定点计算有截断</text>
+<path d="M332 130 H422" class="arrow"/><path d="M712 130 H802" class="arrow"/>
+<path d="M946 182 V248" class="arrow"/>
+<rect x="802" y="248" width="286" height="112" rx="4" class="b"/><text x="820" y="282">本轮生产40页</text><text x="820" y="314">预算100ms，已过60ms</text><text x="820" y="346" class="s">暂停约40ms，再受边界限制</text>
+<rect x="32" y="248" width="300" height="112" rx="4" class="b"/><text x="50" y="282">生产 / 写出完成统计</text><text x="50" y="314">1600 / 100 页/s</text><text x="50" y="346" class="s">累计差和时间估计，不是峰值</text>
+<rect x="422" y="248" width="290" height="112" rx="4" class="b"/><text x="440" y="282">平衡目标估计</text><text x="440" y="314">401 × 100 / 1601 = 25</text><text x="440" y="346" class="s">加1及防零；非立即赋值</text>
+<path d="M332 306 H422" class="arrow"/>
+<rect x="422" y="422" width="290" height="92" rx="4" class="b"/><text x="440" y="454">位置 / 旧估计 / 新目标门控</text><text x="440" y="488" class="s">旧估计900：本轮R可保持800</text>
+<path d="M566 360 V422" class="arrow"/>
+<path d="M712 468 H760 V216 H830 V182" class="arrow"/>
+<text x="32" y="562">倍率决定本轮压力，反馈使生产速度跟上完成能力；后台提交仍要独立推进。</text>
+<text x="32" y="604" class="s">数字是分离假设模型；strictlimit、组域、定点、防零、暂停边界与信号按本地实现。</text>
+</svg>

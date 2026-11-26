@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="850" viewBox="0 0 1100 850" role="img" aria-labelledby="title desc">
+  <title id="title">页分配首次尝试的主要阶段</title>
+  <desc id="desc">请求检查与作用域处理后建立候选上下文，遍历 Zone 并进入 PCP 或 Buddy，取得页后准备状态并处理适用收费。越界、候选不足和收费失败有不同的退出或后备路径。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.n{stroke:#bdcbd3;stroke-width:1.5;rx:6}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1100" height="850" fill="#fff"/>
+  <text x="35" y="38" class="h">首次尝试展开：每一层都有自己的判断</text>
+  <rect x="35" y="78" width="620" height="94" class="n" fill="#e8f0fa"/>
+  <text x="345" y="114" text-anchor="middle">公开包装 → __alloc_pages()</text>
+  <text x="345" y="148" text-anchor="middle" class="s">检查 order；应用允许 GFP 与任务作用域</text>
+  <path d="M655 125H790" class="e"/>
+  <text x="682" y="110" class="s">越界等</text>
+  <rect x="795" y="78" width="270" height="94" class="n" fill="#f8edf0"/>
+  <text x="930" y="114" text-anchor="middle">检查失败</text>
+  <text x="930" y="148" text-anchor="middle" class="s">不是先执行全部慢路径</text>
+  <path d="M345 172V219" class="e"/>
+  <rect x="35" y="224" width="620" height="94" class="n" fill="#e8f0fa"/>
+  <text x="345" y="260" text-anchor="middle">prepare_alloc_pages()</text>
+  <text x="345" y="294" text-anchor="middle" class="s">zonelist / 最高 Zone / 掩码 / 首选位置 / 类型</text>
+  <path d="M345 318V365" class="e"/>
+  <rect x="35" y="370" width="620" height="94" class="n" fill="#e2f2ec"/>
+  <text x="345" y="406" text-anchor="middle">get_page_from_freelist() 遍历候选</text>
+  <text x="345" y="440" text-anchor="middle" class="s">位置与水位等检查；可跳过 Zone 继续搜索</text>
+  <path d="M655 417H790" class="e"/>
+  <text x="675" y="401" class="s">均无法满足</text>
+  <rect x="795" y="370" width="270" height="94" class="n" fill="#fff1dc"/>
+  <text x="930" y="406" text-anchor="middle">慢路径接手</text>
+  <text x="930" y="440" text-anchor="middle" class="s">按允许条件调整策略</text>
+  <path d="M345 464V511" class="e"/>
+  <rect x="35" y="516" width="620" height="94" class="n" fill="#e2f2ec"/>
+  <text x="345" y="552" text-anchor="middle">rmqueue() → PCP / Buddy</text>
+  <text x="345" y="586" text-anchor="middle" class="s">保护下取得符合条件的块，准备交付状态</text>
+  <path d="M655 563H723V486H650V464" class="e"/>
+  <text x="795" y="555">未取得块</text>
+  <text x="795" y="589" class="s">返回候选尝试，可能继续搜索</text>
+  <path d="M345 610V657" class="e"/>
+  <rect x="35" y="662" width="620" height="108" class="n" fill="#e8f0fa"/>
+  <text x="345" y="700" text-anchor="middle">适用附加处理 → API 成功交付</text>
+  <text x="345" y="735" text-anchor="middle" class="s">准备/清零与适用记账；取得页不等于收费已成功</text>
+  <path d="M655 716H790" class="e"/>
+  <text x="675" y="700" class="s">收费失败</text>
+  <rect x="795" y="662" width="270" height="108" class="n" fill="#f8edf0"/>
+  <text x="930" y="700" text-anchor="middle">归还已取得页</text>
+  <text x="930" y="735" text-anchor="middle" class="s">返回 NULL，不交付半成品</text>
+  <text x="35" y="820" class="s">此图按决策层展开，并非完整调用栈；页准备有一部分发生在取页实现内部。</text>
+</svg>

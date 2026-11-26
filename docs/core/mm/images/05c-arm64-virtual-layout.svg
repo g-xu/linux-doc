@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="850" height="920" viewBox="0 0 850 920" role="img" aria-labelledby="title desc">
+  <title id="title">arm64 虚拟地址空间布局</title>
+  <desc id="desc">高地址在上，低地址在下。上半为内核虚拟空间，下半为一个 AArch64 进程的用户虚拟空间，中间为不可翻译的地址空洞。图右边逐行标明各区域用途；大小和用户区相对位置均为示意。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 8 8" markerWidth="7" markerHeight="7" refX="7" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8Z" fill="#425661"/>
+    </marker>
+    <pattern id="gap" width="8" height="8" patternUnits="userSpaceOnUse">
+      <rect width="8" height="8" fill="#f5f7f8"/>
+      <path d="M0 8L8 0" stroke="#dbe2e5"/>
+    </pattern>
+    <path id="leader" d="M393 0H417"/>
+    <style>
+      text{font:20px "Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#22323a}
+      .title{font-size:29px;font-weight:700}
+      .small{font-size:16px;fill:#465963}
+      .group{font-weight:700}
+      .code{font:14px Consolas,monospace;fill:#465963}
+      .label{text-anchor:middle;font-weight:600}
+      .muted{font-size:17px;font-weight:400;fill:#465963}
+      .row{stroke:#9aafb9;stroke-width:1}
+      .guide{fill:none;stroke:#899ba5;stroke-width:1.2}
+      .axis{fill:none;stroke:#425661;stroke-width:1.6;marker-end:url(#arrow)}
+    </style>
+  </defs>
+
+  <rect width="850" height="920" fill="#fff"/>
+  <text x="28" y="40" class="title">arm64 虚拟地址空间布局</text>
+  <text x="28" y="69" class="small">Linux 6.1.158｜未标记地址｜不按比例</text>
+
+  <text x="18" y="108" class="small">高地址</text>
+  <path d="M42 856V125" class="axis"/>
+  <text x="18" y="883" class="small">低地址</text>
+  <text x="275" y="107" class="group" text-anchor="middle">主要区域</text>
+  <text x="431" y="107" class="group">区域用途</text>
+
+  <rect x="48" y="115" width="784" height="376" rx="7" fill="#eef5fa" stroke="#9eb6c8" stroke-width="1.4"/>
+  <text x="101" y="294" class="group" text-anchor="middle">内核空间</text>
+  <text x="101" y="318" class="small" text-anchor="middle">内核态</text>
+  <text x="101" y="341" class="code" text-anchor="middle">TTBR1_EL1</text>
+
+  <g transform="translate(0 122)">
+    <rect x="157" width="236" height="32" class="row" fill="url(#gap)"/>
+    <text x="275" y="22" class="label muted">其余高地址段</text>
+    <use href="#leader" y="16" class="guide"/>
+    <text x="431" y="22" class="small">含保留区，本图不展开</text>
+  </g>
+  <g transform="translate(0 154)">
+    <rect x="157" width="236" height="43" class="row" fill="#e1f0e8"/>
+    <text x="275" y="28" class="label">vmemmap</text>
+    <use href="#leader" y="22" class="guide"/>
+    <text x="431" y="28">存放物理页的 struct page 描述符</text>
+  </g>
+  <g transform="translate(0 197)">
+    <rect x="157" width="236" height="43" class="row" fill="#fff0dd"/>
+    <text x="275" y="28" class="label">PCI I/O 窗口</text>
+    <use href="#leader" y="22" class="guide"/>
+    <text x="431" y="28">访问 PCI I/O 端口，而非普通 MMIO</text>
+  </g>
+  <g transform="translate(0 240)">
+    <rect x="157" width="236" height="43" class="row" fill="#f0e9f1"/>
+    <text x="275" y="28" class="label">fixmap</text>
+    <use href="#leader" y="22" class="guide"/>
+    <text x="431" y="28">预留固定 VA 槽位，如早期 I/O 映射</text>
+  </g>
+  <g transform="translate(0 283)">
+    <rect x="157" width="236" height="82" class="row" fill="#e3eff9"/>
+    <text x="275" y="28" class="label">vmalloc 区</text>
+    <use href="#leader" y="22" class="guide"/>
+    <text x="431" y="28">动态建立映射，如 vmalloc / ioremap</text>
+    <rect x="176" y="41" width="203" height="30" rx="3" fill="#f5fafe" stroke="#64869a" stroke-dasharray="5 3"/>
+    <text x="278" y="62" class="label muted">内核镜像（位置示意）</text>
+    <path d="M379 56H417" class="guide"/>
+    <text x="431" y="62" class="small">占用区内一段，映射内核代码和数据</text>
+  </g>
+  <g transform="translate(0 365)">
+    <rect x="157" width="236" height="39" class="row" fill="#eeeaf6"/>
+    <text x="275" y="26" class="label">模块区</text>
+    <use href="#leader" y="20" class="guide"/>
+    <text x="431" y="26">模块代码与数据的名义分配窗口</text>
+  </g>
+  <g transform="translate(0 404)">
+    <rect x="157" width="236" height="39" class="row" fill="#fff2d9" stroke-dasharray="5 3"/>
+    <text x="275" y="26" class="label">KASAN 影子区（可选）</text>
+    <use href="#leader" y="20" class="guide"/>
+    <text x="431" y="26">存放软件检查所用的内存访问元数据</text>
+  </g>
+  <g transform="translate(0 443)">
+    <rect x="157" width="236" height="44" class="row" fill="#dff1e9"/>
+    <text x="275" y="29" class="label">线性映射区</text>
+    <use href="#leader" y="22" class="guide"/>
+    <text x="431" y="29">按固定偏移访问纳入直接映射的 RAM</text>
+  </g>
+
+  <rect x="157" y="495" width="236" height="44" rx="3" fill="url(#gap)" stroke="#b8c4ca" stroke-dasharray="5 3"/>
+  <text x="275" y="524" class="label">中间地址空洞</text>
+  <use href="#leader" y="517" class="guide"/>
+  <text x="431" y="524">不属于用户或内核可翻译的地址范围</text>
+
+  <rect x="48" y="543" width="784" height="332" rx="7" fill="#edf6ee" stroke="#9bb9a2" stroke-width="1.4"/>
+  <text x="101" y="689" class="group" text-anchor="middle">进程空间</text>
+  <text x="101" y="713" class="small" text-anchor="middle">用户态</text>
+  <text x="101" y="736" class="code" text-anchor="middle">TTBR0_EL1</text>
+
+  <g transform="translate(0 547)">
+    <rect x="157" width="236" height="45" class="row" fill="#e3eff9"/>
+    <text x="275" y="29" class="label">用户栈</text>
+    <path d="M370 12V33" class="axis"/>
+    <use href="#leader" y="23" class="guide"/>
+    <text x="431" y="29">存放调用帧等数据，向低地址增长</text>
+  </g>
+  <rect x="157" y="592" width="236" height="23" class="row" fill="url(#gap)"/>
+  <text x="275" y="609" class="label muted">未映射间隔</text>
+  <g transform="translate(0 615)">
+    <rect x="157" width="236" height="45" class="row" fill="#fff0dd"/>
+    <text x="275" y="29" class="label">文件与匿名映射区</text>
+    <use href="#leader" y="23" class="guide"/>
+    <text x="431" y="29">映射共享库、文件或匿名内存</text>
+  </g>
+  <rect x="157" y="660" width="236" height="23" class="row" fill="url(#gap)"/>
+  <text x="275" y="677" class="label muted">未映射间隔</text>
+  <g transform="translate(0 683)">
+    <rect x="157" width="236" height="45" class="row" fill="#e3eff9"/>
+    <text x="275" y="29" class="label">堆（brk）</text>
+    <path d="M370 33V12" class="axis"/>
+    <use href="#leader" y="23" class="guide"/>
+    <text x="431" y="29">用于动态内存分配，可向高地址扩展</text>
+  </g>
+  <g transform="translate(0 728)">
+    <rect x="157" width="236" height="37" class="row" fill="#e7f2ea"/>
+    <text x="275" y="25" class="label">BSS</text>
+    <use href="#leader" y="19" class="guide"/>
+    <text x="431" y="25">存放初值为零的全局和静态变量</text>
+  </g>
+  <g transform="translate(0 765)">
+    <rect x="157" width="236" height="37" class="row" fill="#e7f2ea"/>
+    <text x="275" y="25" class="label">数据段</text>
+    <use href="#leader" y="19" class="guide"/>
+    <text x="431" y="25">存放程序已初始化的可写全局和静态变量</text>
+  </g>
+  <g transform="translate(0 802)">
+    <rect x="157" width="236" height="37" class="row" fill="#eeeaf6"/>
+    <text x="275" y="25" class="label">代码段</text>
+    <use href="#leader" y="19" class="guide"/>
+    <text x="431" y="25">存放主程序的可执行指令</text>
+  </g>
+  <g transform="translate(0 839)">
+    <rect x="157" width="236" height="29" class="row" fill="url(#gap)"/>
+    <text x="275" y="20" class="label muted">低地址未映射段</text>
+    <use href="#leader" y="15" class="guide"/>
+    <text x="431" y="20" class="small">通常留空，零地址一般不映射</text>
+  </g>
+
+  <text x="157" y="899" class="small">用户区是典型进程示意，不表示 VMA 数量、固定地址或必然的相邻关系。</text>
+</svg>

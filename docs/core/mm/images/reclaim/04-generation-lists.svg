@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="728" viewBox="0 0 1120 728">
+<title>MGLRU代标记更新与实际列表搬移</title>
+<desc>固定文件类别和一个zone，min10/max12。F和G在槽2，aging把F代标记更新为0但可仍在槽2；eviction的sort按标记把F移到槽0，G仍候选。另一个代10例中tier2的J若超过选择tier1被推进代11槽3，H可隔离。窗口和不能交换匿名另按正文条件。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#506574"/></marker></defs>
+<style>text{font-family:Arial,"Microsoft YaHei",sans-serif;font-size:18px;fill:#23343e}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{fill:#f0f5f6;stroke:#7d929f;stroke-width:1.5}.arrow{fill:none;stroke:#506574;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="1120" height="728" fill="white"/>
+<text x="32" y="42" class="h">实际列表 folios[gen][type][zone]，标记与链节点分开更新</text>
+<text x="32" y="82">文件、zone Z；min_seq=10，max_seq=12；10%4=2，12%4=0。</text>
+<rect x="32" y="118" width="310" height="190" rx="4" class="b"/>
+<text x="50" y="150">初态</text><text x="50" y="188" class="s">槽2链：F → G</text><text x="50" y="226" class="s">F标记2；G标记2</text><text x="50" y="266" class="s">槽0链：空</text>
+<rect x="405" y="118" width="310" height="190" rx="4" class="b"/>
+<text x="423" y="150">aging观察F访问</text><text x="423" y="188" class="s">槽2链：F → G（可仍在此）</text><text x="423" y="226" class="s">F标记0；G标记2</text><text x="423" y="266" class="s">flags更新，协调批量统计</text>
+<rect x="778" y="118" width="310" height="190" rx="4" class="b"/>
+<text x="796" y="150">eviction先sort</text><text x="796" y="188" class="s">槽2链：G（后续资格判断）</text><text x="796" y="226" class="s">槽0链：F（已提升到12）</text><text x="796" y="266" class="s">不因F曾在旧链就淘汰它</text>
+<path d="M342 208 H405" class="arrow"/><path d="M715 208 H778" class="arrow"/>
+<text x="32" y="356">folio_update_gen：原子改标记；sort_folio：LRU保护下按标记搬链。</text>
+<text x="32" y="406" class="h">独立tier例：同一代链，不是每tier单独一条链</text>
+<rect x="32" y="438" width="480" height="108" rx="4" class="b"/>
+<text x="50" y="474">代10 / 槽2：H(tier0)、J(tier2)</text><text x="50" y="514" class="s">本轮tier_idx=1；H可继续资格判断</text>
+<rect x="656" y="438" width="432" height="108" rx="4" class="b"/>
+<text x="674" y="474">J被tier保护 → 下一代11 / 槽3</text><text x="674" y="514" class="s">标记/统计/链表按保护分支协调</text>
+<path d="M512 492 H656" class="arrow"/>
+<text x="32" y="580" class="s">仅10–11两代：scan_folios返回0；aging推进到12才有更老候选10。</text>
+<text x="32" y="620">文件/can_swap模型：10–13窗口满，旧10合法转移后槽2才复用给14。</text>
+<text x="32" y="658" class="s">can_swap=false匿名可保留物理槽内容推进逻辑边界；不能将代号无效等同链表空。</text>
+<text x="32" y="700" class="s">图中箭头为处理推进；老代或低tier只提供候选，不绕过保存、映射、锁与引用条件。</text>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="610" viewBox="0 0 940 610" role="img" aria-labelledby="title desc">
+  <title id="title">ASID rollover保留仍活跃的旧空间</title><desc id="desc">CPU0仍运行旧generation的A/X，CPU1触发rollover。软件active记录被摘取并保存reserved，位图保留X，pending不代表已失效。CPU1不能给不同B重用X；CPU0随后切换才处理pending再使用对应上下文。</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#475569"/></marker></defs>
+  <style>text{font-family:"Microsoft YaHei",sans-serif;font-size:18px;fill:#17232b;letter-spacing:0}.h{font-size:22px;font-weight:700}.s{font-size:16px}.b{stroke:#71838b;stroke-width:1.5;rx:5}.ar{fill:none;stroke:#475569;stroke-width:2;marker-end:url(#a)}</style>
+  <rect width="940" height="610" fill="#fff"/><text x="28" y="36" class="h">pending 延后flush，必须配合保留当前仍使用的ASID</text>
+  <rect x="35" y="84" width="390" height="99" fill="#eaf1fb" class="b"/><text x="57" y="118" class="h">CPU0继续运行 A / X</text><text x="57" y="158">硬件还使用旧generation关联的tag</text>
+  <rect x="515" y="84" width="390" height="99" fill="#fff0e7" class="b"/><text x="537" y="118" class="h">CPU1触发 G → G'</text><text x="537" y="158">为新mm分配上下文</text>
+  <path class="ar" d="M230 183V240"/><path class="ar" d="M710 183V240"/>
+  <rect x="35" y="240" width="390" height="131" fill="#eaf1fb" class="b"/><text x="57" y="274">active_asids摘取后置0</text><text x="57" y="311">reserved_asids保存A/X</text><text x="57" y="348">尚未切换，不表示X已不用</text>
+  <rect x="515" y="240" width="390" height="131" fill="#e6f4ef" class="b"/><text x="537" y="274">全局位图保留X</text><text x="537" y="311">不同新空间B不能取得该活跃tag</text><text x="537" y="348">各CPU设置flush_pending</text>
+  <path class="ar" d="M425 305H515"/><text x="452" y="287" class="s">协调</text>
+  <path class="ar" d="M230 371V429"/>
+  <rect x="35" y="429" width="870" height="111" fill="#eef1f4" class="b"/><text x="57" y="464" class="h">CPU0随后切换</text><text x="57" y="502">核对generation / 取得适用tag → 处理本CPU pending失效 → 更新活跃和翻译上下文</text>
+  <text x="28" y="585" class="s">两CPU简化场景，省略KPTI成对/pinned策略；软件generation不是硬件TLB自动失效。</text>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="636" viewBox="0 0 1120 636">
+<title>指标语义与vmstat记录通道是两条分类轴</title>
+<desc>SMP的zone/node统计维护CPU局部差和共享量，包含容量状态，也包含pin acquired/released、dirtied/written等累计量；VM-event通道另用all_vm_events。指标意义按具体key判断，不由桶或helper名称决定。临时输出数组不等原子快照，stat_refresh read另有主动成本。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#506574"/></marker></defs>
+<style>text{font-family:Arial,"Microsoft YaHei",sans-serif;font-size:18px;fill:#23343e}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{fill:#f0f6f6;stroke:#7d929f;stroke-width:1.5}.arrow{fill:none;stroke:#506574;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="1120" height="636" fill="white"/>
+<text x="32" y="40" class="h">同一文本里，不同记录通道的单位与时点不能互换</text>
+<rect x="32" y="82" width="300" height="118" rx="4" class="b"/><text x="50" y="116">zone / node统计更新</text><text x="50" y="152">CPU局部差 + 共享量</text><text x="50" y="186" class="s">可含状态，也可含累计量</text>
+<rect x="422" y="82" width="290" height="118" rx="4" class="b"/><text x="440" y="116">阈值 / 后台汇入</text><text x="440" y="152">共享vm_stat</text><text x="440" y="186" class="s">待合并差可能尚未纳入</text>
+<rect x="802" y="82" width="286" height="118" rx="4" class="b"/><text x="820" y="116">读取共享统计</text><text x="820" y="152">global_*_page_state</text><text x="820" y="186" class="s">helper名字不定义指标语义</text>
+<path d="M332 142H422" class="arrow"/><path d="M712 142H802" class="arrow"/>
+<rect x="32" y="278" width="300" height="112" rx="4" class="b"/><text x="50" y="312">VM事件发生</text><text x="50" y="346">perCPU vm_event_states</text><text x="50" y="378" class="s">累计计数，不是当前对象量</text>
+<rect x="422" y="278" width="290" height="112" rx="4" class="b"/><text x="440" y="312">all_vm_events合计</text><text x="440" y="346">各CPU当前事件量</text><text x="440" y="378" class="s">合计过程仍可有新事件</text>
+<path d="M332 334H422" class="arrow"/>
+<rect x="802" y="278" width="286" height="112" rx="4" class="b"/><text x="820" y="312">vmstat_start临时数组</text><text x="820" y="346">show按key输出文本</text><text x="820" y="378" class="s">遍历结束释放，不冻结内核</text>
+<path d="M946 200V278" class="arrow"/><path d="M712 334H802" class="arrow"/>
+<text x="32" y="446">pin累计量也走node-stat通道；具体key含义、单位与记录/汇总通道分别核对。</text>
+<text x="32" y="492">单zone模型：共享1000、CPU待合并-3/+2；普通读1000，snapshot加差得999。</text>
+<text x="32" y="544" class="s">snapshot也非同时快照；普通vmstat可fold NUMA事件，不等强制刷新全部状态。</text>
+<text x="32" y="594" class="s">stat_refresh连read也可安排CPU刷新工作；这里仅源码模型，未读取或刷新目标机。</text>
+</svg>

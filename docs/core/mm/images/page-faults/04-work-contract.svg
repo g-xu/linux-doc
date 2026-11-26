@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="610" viewBox="0 0 1100 610">
+<title>缺页工作状态与返回控制不是同一类数据</title>
+<desc>输入的WRITE和ALLOW_RETRY进入一次栈上vm_fault工作对象；B加S加128变成页地址B加S和文件页偏移5。来源及页表处理暂存页与原项，通用层返回VM_FAULT位，架构入口据合同处理锁、重查或错误，最后才回到原访问。来源LOCKED不是mmap锁释放。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#4e6370"/></marker></defs>
+<style>text{font-family:Arial,"Microsoft YaHei",sans-serif;font-size:18px;fill:#23343e}.h{font-size:23px;font-weight:700}.s{font-size:16px}.b{fill:#f1f6f5;stroke:#7c929e;stroke-width:1.5}.arrow{fill:none;stroke:#4e6370;stroke-width:2;marker-end:url(#a)}</style>
+<rect width="1100" height="610" fill="white"/>
+<text x="32" y="42" class="h">输入请求 → 本轮工作记录 → 输出协议</text>
+<rect x="32" y="82" width="264" height="156" rx="4" class="b"/>
+<text x="50" y="114">调用输入</text><text x="50" y="148">地址 B+S+128</text><text x="50" y="182">WRITE / ALLOW_RETRY</text><text x="50" y="216" class="s">VMA: 起点B，pgoff=4</text>
+<rect x="366" y="82" width="360" height="156" rx="4" class="b"/>
+<text x="384" y="114">一次栈上 vm_fault</text><text x="384" y="148">address=B+S，pgoff=5</text><text x="384" y="182">page / cow_page / orig_pte</text><text x="384" y="216" class="s">按分支取得资源、锁下重检</text>
+<rect x="796" y="82" width="272" height="156" rx="4" class="b"/>
+<text x="814" y="114">返回 vm_fault_t 位集合</text><text x="814" y="148">完成 / RETRY / 错误</text><text x="814" y="182">来源 LOCKED 的交接</text><text x="814" y="216" class="s">不是输入flags或errno</text>
+<path d="M296 155 H366" class="arrow"/><path d="M726 155 H796" class="arrow"/>
+<text x="32" y="284">LOCKED：来源页锁交给通用finish；不表示mmap锁已释放。</text>
+<text x="32" y="328" class="h">架构入口根据返回合同决定后续控制</text>
+<path d="M932 238 V354 H548 V380" class="arrow"/>
+<rect x="366" y="380" width="360" height="74" rx="4" class="b"/>
+<text x="384" y="410">arm64：检查信号 / 锁责任 / 重试</text><text x="384" y="438" class="s">普通结束、重新查询或错误分派</text>
+<rect x="32" y="498" width="280" height="74" rx="4" class="b"/>
+<text x="50" y="528">RETRY：重取布局保护</text><text x="50" y="556" class="s">重新查VMA，不复用旧指针</text>
+<rect x="410" y="498" width="280" height="74" rx="4" class="b"/>
+<text x="428" y="528">普通结束：尝试原访问</text><text x="428" y="556" class="s">不保证以后再无fault</text>
+<rect x="788" y="498" width="280" height="74" rx="4" class="b"/>
+<text x="806" y="528">错误：对应信号/OOM</text><text x="806" y="556" class="s">不靠盲目分配绕过语义</text>
+<path d="M430 454 V476 H172 V498" class="arrow"/><path d="M548 454 V498" class="arrow"/><path d="M662 454 V476 H928 V498" class="arrow"/>
+</svg>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="630" viewBox="0 0 1100 630">
+  <title>缺页恢复与COW的基本目的</title>
+  <desc>上行从合法匿名首次写到准备和安装，下行说明父子共享内容在子私有写后分离。只表示成功的普通基本页模型。</desc>
+  <defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9" fill="#566977"/></marker></defs>
+  <rect width="1100" height="630" fill="#fff"/>
+  <g font-family="Microsoft YaHei, sans-serif" fill="#243745">
+    <text x="36" y="46" font-size="25" font-weight="700">缺页接上按需准备；COW保持私有修改隔离</text>
+    <text x="36" y="81" font-size="17">合法普通匿名基本页，无特殊代理/大页；以下均为处理成功的模型</text>
+    <text x="36" y="130" font-size="20" font-weight="700">首次写：范围已允许，内容与转换尚未准备</text>
+    <rect x="36" y="155" width="220" height="125" rx="5" fill="#eaf0f9" stroke="#8c9daa"/>
+    <rect x="308" y="155" width="220" height="125" rx="5" fill="#e4f2eb" stroke="#8c9daa"/>
+    <rect x="580" y="155" width="220" height="125" rx="5" fill="#fff2d5" stroke="#8c9daa"/>
+    <rect x="852" y="155" width="212" height="125" rx="5" fill="#eaf0f9" stroke="#8c9daa"/>
+    <text x="52" y="188" font-size="20" font-weight="700">写V触发异常</text>
+    <text x="52" y="223" font-size="17">当前没有PTE</text>
+    <text x="52" y="254" font-size="17">不等于范围非法</text>
+    <text x="324" y="188" font-size="20" font-weight="700">核对规则与来源</text>
+    <text x="324" y="223" font-size="17">允许私有匿名写</text>
+    <text x="324" y="254" font-size="17">不允许就不能绕过</text>
+    <text x="596" y="188" font-size="20" font-weight="700">准备P并重检</text>
+    <text x="596" y="223" font-size="17">零初始化 / 收费</text>
+    <text x="596" y="254" font-size="17">锁下确认仍可安装</text>
+    <text x="868" y="188" font-size="20" font-weight="700">建立V→P</text>
+    <text x="868" y="223" font-size="17">重试原访问</text>
+    <text x="868" y="254" font-size="17">后续有效访问直接完成</text>
+    <text x="36" y="344" font-size="20" font-weight="700">COW：先共享读到的内容，私有写不能改变对方的数据</text>
+    <rect x="36" y="370" width="300" height="139" rx="5" fill="#eaf0f9" stroke="#8c9daa"/>
+    <rect x="410" y="370" width="280" height="139" rx="5" fill="#f8e7ed" stroke="#8c9daa"/>
+    <rect x="764" y="370" width="300" height="139" rx="5" fill="#e4f2eb" stroke="#8c9daa"/>
+    <text x="54" y="405" font-size="20" font-weight="700">父 / 子暂时都读P</text>
+    <text x="54" y="444" font-size="17">各自范围允许私有写</text>
+    <text x="54" y="478" font-size="17">PTE先写保护，捕获写需求</text>
+    <text x="428" y="405" font-size="20" font-weight="700">子写V，需要分离</text>
+    <text x="428" y="444" font-size="17">本例仍共享，不能独占P</text>
+    <text x="428" y="478" font-size="17">准备Q，复制并重检安装</text>
+    <text x="782" y="405" font-size="20" font-weight="700">父保留P，子改用Q</text>
+    <text x="782" y="444" font-size="17">子写Q不修改父的P</text>
+    <text x="782" y="478" font-size="17">能证明独占时可能复用而不复制</text>
+    <text x="36" y="562" font-size="18">VMA决定允许的语义；PTE表达当前转换；来源与资源协议决定怎样完成准备。</text>
+    <text x="36" y="596" font-size="17">失败、竞争和锁/引用交接另行处理；共享文件写不是这条私有复制模型。</text>
+  </g>
+  <g fill="none" stroke="#566977" stroke-width="2" marker-end="url(#a)">
+    <path d="M256 217 H296"/><path d="M528 217 H568"/><path d="M800 217 H840"/>
+    <path d="M336 440 H398"/><path d="M690 440 H752"/>
+  </g>
+</svg>

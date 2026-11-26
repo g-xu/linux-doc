@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="460" viewBox="0 0 1000 460" role="img" aria-labelledby="t d">
+<title id="t">执行位置、新页策略与已有页位置</title><desc id="d">任务在N0执行，已有页在N1。新分配策略影响之后页的候选位置，不能自动搬走既有页。cpuset和资源约束继续限制分配，迁移另需要合法协议。</desc>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker><style>text{font:20px "Microsoft YaHei",sans-serif;fill:#24323c}.h{font-size:26px;font-weight:bold}.s{font-size:17px}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}</style></defs>
+<rect width="1000" height="460" fill="white"/><text x="30" y="38" class="h">在哪里运行、优先放哪里、旧页在哪里分别判断</text>
+<rect x="30" y="90" width="400" height="100" rx="6" fill="#e8f0fa"/><text x="230" y="129" text-anchor="middle">任务当前在N0运行</text><text x="230" y="162" text-anchor="middle" class="s">新分配受策略、允许范围与资源影响</text>
+<rect x="570" y="90" width="400" height="100" rx="6" fill="#fff1dc"/><text x="770" y="129" text-anchor="middle">已有页仍驻留N1</text><text x="770" y="162" text-anchor="middle" class="s">改偏好不自动改变这些物理位置</text>
+<path d="M230 190V270" class="e"/><path d="M770 190V270" class="e"/>
+<rect x="30" y="278" width="400" height="100" rx="6" fill="#e2f2ec"/><text x="230" y="317" text-anchor="middle">适用候选 → 页分配</text><text x="230" y="350" text-anchor="middle" class="s">不将本地偏好当成跨约束许可</text>
+<rect x="570" y="278" width="400" height="100" rx="6" fill="#e2f2ec"/><text x="770" y="317" text-anchor="middle">适用移动请求 → 迁移协议</text><text x="770" y="350" text-anchor="middle" class="s">目的资源、引用、pin与失败都要处理</text>
+<text x="30" y="426" class="s">两节点只是模型；共享文件、大页、特殊分配和自动平衡需按实际配置与路径判断。</text>
+</svg>

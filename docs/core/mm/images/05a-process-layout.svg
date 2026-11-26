@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="900" viewBox="0 0 1320 900" role="img" aria-labelledby="title desc">
+  <title id="title">Linux 6.1.158 任务、地址空间、VMA 与用户地址布局</title>
+  <desc id="desc">task_struct 的 mm 指向 mm_struct，后者通过 mm_mt 中的 Maple Tree 按地址范围索引 VMA。VMA 用 vm_start 和 vm_end 描述范围，并通过 vm_mm 指回地址空间。右侧按高到低地址展示栈、映射、堆、数据和 BSS、代码及间隔。用途区域与 VMA 并非一一对应。内核地址另由内核映射管理。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#52616c"/></marker>
+    <marker id="back" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#927283"/></marker>
+    <pattern id="gap" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M0 10L10 0" stroke="#d1d8dd" stroke-width="1.5"/></pattern>
+    <style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#24323c;font-size:20px}.h{font-size:26px;font-weight:700}.s{font-size:17px;fill:#455561}.code{font-family:Consolas,"Microsoft YaHei",monospace;font-size:17px}.n{stroke:#b9c8d0;stroke-width:1.5;rx:6}.e{fill:none;stroke:#52616c;stroke-width:2;marker-end:url(#a)}.branch{fill:none;stroke:#52616c;stroke-width:2}.d{fill:none;stroke:#927283;stroke-width:2;stroke-dasharray:7 5;marker-end:url(#back)}</style>
+  </defs>
+  <rect width="1320" height="900" fill="#fff"/>
+  <text x="30" y="36" class="h">任务 → 地址空间 → VMA 索引 → 地址区间</text>
+  <text x="30" y="69" class="s">实现基线：Linux 6.1.158 / arm64。只画关键字段；地址位置不按比例，也不固定实际起止地址。</text>
+  <rect x="30" y="113" width="180" height="155" class="n" fill="#f2f6f8"/>
+  <text x="120" y="148" text-anchor="middle">task_struct</text>
+  <text x="51" y="185" class="code">pid / tgid</text>
+  <text x="51" y="221" class="code">mm *</text>
+  <text x="51" y="252" class="s">用户任务示例</text>
+  <path d="M210 216H272" class="e"/>
+  <rect x="277" y="113" width="240" height="269" class="n" fill="#e8f0fa"/>
+  <text x="397" y="149" text-anchor="middle">mm_struct</text>
+  <text x="297" y="190" class="code">mm_mt</text>
+  <text x="297" y="221" class="code">pgd</text>
+  <text x="297" y="254" class="code">start_code / end_code</text>
+  <text x="297" y="285" class="code">start_data / end_data</text>
+  <text x="297" y="316" class="code">start_brk / brk</text>
+  <text x="297" y="347" class="code">start_stack</text>
+  <path d="M397 382V424" class="e"/>
+  <text x="416" y="414" class="s">展开 mm_mt</text>
+  <rect x="277" y="429" width="240" height="125" class="n" fill="#e8f0fa"/>
+  <text x="397" y="466" text-anchor="middle">Maple Tree</text>
+  <text x="397" y="500" text-anchor="middle" class="s">mm_mt 的范围索引</text>
+  <text x="397" y="531" text-anchor="middle" class="s">按虚拟地址查找 VMA</text>
+  <path d="M517 490H554V160" class="branch"/>
+  <path d="M554 490V660" class="branch"/>
+  <text x="397" y="603" text-anchor="middle" class="s">索引分支示意</text>
+  <text x="730" y="104" text-anchor="middle">vm_area_struct（示例）</text>
+  <text x="1142" y="104" text-anchor="middle">用户地址布局：高地址在上</text>
+  <rect x="603" y="123" width="255" height="79" class="n" fill="#e8f0fa"/>
+  <text x="626" y="155">栈对应的 VMA</text>
+  <text x="626" y="185" class="code">vm_start / vm_end</text>
+  <rect x="603" y="246" width="255" height="79" class="n" fill="#fff1dc"/>
+  <text x="626" y="278">映射对应的 VMA</text>
+  <text x="626" y="308" class="code">vm_file / vm_flags</text>
+  <rect x="603" y="371" width="255" height="79" class="n" fill="#e2f2ec"/>
+  <text x="626" y="403">堆对应的 VMA</text>
+  <text x="626" y="433" class="code">vm_start / vm_end</text>
+  <rect x="603" y="496" width="255" height="79" class="n" fill="#fff1dc"/>
+  <text x="626" y="528">数据 / BSS 示例 VMA</text>
+  <text x="626" y="558" class="code">vm_start / vm_end</text>
+  <rect x="603" y="620" width="255" height="79" class="n" fill="#e8f0fa"/>
+  <text x="626" y="652">代码对应的 VMA</text>
+  <text x="626" y="682" class="code">vm_file / vm_flags</text>
+  <path d="M554 160H603" class="e"/>
+  <path d="M554 285H603" class="e"/>
+  <path d="M554 410H603" class="e"/>
+  <path d="M554 535H603" class="e"/>
+  <path d="M554 660H603" class="e"/>
+  <path d="M730 699V757H535V354H517" class="d"/>
+  <text x="297" y="789" class="s">各 VMA 的 vm_mm 回指同一 mm_struct</text>
+  <rect x="1000" y="123" width="285" height="79" fill="#e8f0fa" stroke="#9fb7d3"/>
+  <text x="1142" y="154" text-anchor="middle">栈</text>
+  <text x="1142" y="184" text-anchor="middle" class="s">含参数 / 环境等相关布局</text>
+  <rect x="1000" y="202" width="285" height="44" fill="url(#gap)" stroke="#c5ced5"/>
+  <text x="1142" y="231" text-anchor="middle" class="s">未映射间隔（示意）</text>
+  <rect x="1000" y="246" width="285" height="79" fill="#fff1dc" stroke="#c6b18b"/>
+  <text x="1142" y="278" text-anchor="middle">文件 / 匿名映射</text>
+  <text x="1142" y="308" text-anchor="middle" class="s">共享库等可占多个区间</text>
+  <rect x="1000" y="325" width="285" height="46" fill="url(#gap)" stroke="#c5ced5"/>
+  <text x="1142" y="356" text-anchor="middle" class="s">未映射间隔（示意）</text>
+  <rect x="1000" y="371" width="285" height="79" fill="#e2f2ec" stroke="#94b7a5"/>
+  <text x="1142" y="404" text-anchor="middle">堆</text>
+  <text x="1142" y="434" text-anchor="middle" class="s">brk 管理的区域示意</text>
+  <rect x="1000" y="450" width="285" height="46" fill="url(#gap)" stroke="#c5ced5"/>
+  <text x="1142" y="481" text-anchor="middle" class="s">省略其他区间</text>
+  <rect x="1000" y="496" width="285" height="79" fill="#fff1dc" stroke="#c6b18b"/>
+  <text x="1142" y="527" text-anchor="middle">数据段 / BSS</text>
+  <text x="1142" y="557" text-anchor="middle" class="s">可共享同一个 VMA</text>
+  <rect x="1000" y="575" width="285" height="45" fill="url(#gap)" stroke="#c5ced5"/>
+  <text x="1142" y="605" text-anchor="middle" class="s">省略其他区间</text>
+  <rect x="1000" y="620" width="285" height="79" fill="#e8f0fa" stroke="#9fb7d3"/>
+  <text x="1142" y="651" text-anchor="middle">代码段</text>
+  <text x="1142" y="681" text-anchor="middle" class="s">权限及来源由映射决定</text>
+  <path d="M858 140L995 123" class="e"/>
+  <path d="M858 188L995 202" class="e"/>
+  <text x="875" y="115" class="code">vm_end</text>
+  <text x="875" y="229" class="code">vm_start</text>
+  <path d="M858 285H995" class="e"/>
+  <path d="M858 410H995" class="e"/>
+  <path d="M858 535H995" class="e"/>
+  <path d="M858 660H995" class="e"/>
+  <text x="886" y="448" class="s">对应区间</text>
+  <text x="1142" y="733" text-anchor="middle" class="s">低地址方向</text>
+  <text x="1000" y="775" class="s">[vm_start, vm_end)</text>
+  <text x="1000" y="805" class="s">左闭右开的地址范围</text>
+  <text x="30" y="840" class="s">用途不与 VMA 一一对应：VMA 可以拆分 / 合并；图中不显示真实的 Maple Tree 节点布局。</text>
+  <text x="30" y="874" class="s">内核地址由内核映射管理，不通过这些用户 VMA 表示；地址随机化和装载方式会改变实际布局。</text>
+</svg>
